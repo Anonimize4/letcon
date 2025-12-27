@@ -1,35 +1,58 @@
 # Cybersecurity Training Platform
 
-A comprehensive platform for cybersecurity education with hands-on labs, challenges, and learning paths.
+A Docker-based cybersecurity training platform for beginners to advanced users.
 
-## Project Structure
+## Features
 
-```
-cybersecurity-training-platform/
-├── frontend/                              # React + TypeScript + Tailwind
-├── backend/                              # Node.js + Express + TypeScript
-├── lab-templates/                         # Pre-built lab templates
-├── docker-images/                         # Custom Docker image builds
-├── docker-compose/                        # Multi-container setups
-├── docker-host/                          # Docker host configuration
-├── infrastructure/                       # Infrastructure as Code
-├── scripts/                             # Deployment & maintenance
-├── docs/                                # Documentation
-├── tests/                               # Testing
-├── .github/                             # CI/CD
-├── .vscode/                             # Editor configuration
-```
+- **Docker-based labs**: Isolated lab environments using Docker containers
+- **Admin lab creation**: Create custom labs through admin panel
+- **Learning paths**: Structured paths for beginners, intermediate, and advanced
+- **CTF challenges**: Capture the Flag with flag submission
+- **Real-time terminals**: Web-based terminal access to labs
+- **Progress tracking**: Track user progress and achievements
 
 ## Quick Start
 
 1. Clone the repository
-2. Copy environment files: `cp .env.example .env`
-3. Run with Docker Compose: `docker-compose up -d`
-4. Access the platform at `http://localhost:3000`
+2. Copy `.env.example` to `.env` and configure
+3. Run: `docker-compose up -d`
+4. Access frontend at: http://localhost:3000
+5. Access backend at: http://localhost:3001
 
-## Documentation
+## For Development
 
-- [Setup Guide](docs/SETUP.md)
-- [Development Guide](docs/DEVELOPMENT.md)
-- [Deployment Guide](docs/DEPLOYMENT.md)
-- [API Documentation](docs/api/API.md)
+```bash
+# Install dependencies
+cd frontend && npm install
+cd backend && npm install
+
+# Run development servers
+cd backend && npm run dev
+cd frontend && npm run dev
+```
+
+## Admin Lab Creation
+
+1. Login as admin
+2. Navigate to Admin Panel → Lab Creation
+3. Use the Lab Wizard to:
+   - Select template or create from scratch
+   - Edit Dockerfile
+   - Define tasks and flags
+   - Build and test the lab
+   - Publish for users
+
+## Project Structure
+
+```
+cybersecurity-platform/
+├── frontend/           # React frontend
+├── backend/            # Node.js backend
+├── lab-templates/      # Pre-built lab templates
+├── docker-images/      # Custom Docker images
+├── docker-compose-labs/# Multi-container setups
+├── docker-host/        # Docker host config
+├── admin-tools/        # Admin management scripts
+├── docs/              # Documentation
+└── tests/             # Test files
+```
