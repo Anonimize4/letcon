@@ -7,7 +7,6 @@ import rateLimit from 'express-rate-limit'
 import slowDown from 'express-slow-down'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
-import connectRedis from 'connect-redis'
 import { createServer } from 'http'
 import { Server as SocketIOServer } from 'socket.io'
 
@@ -15,7 +14,6 @@ import dotenv from 'dotenv'
 import './config/env'
 
 import { connectDatabase } from './config/database'
-import { connectRedis as connectRedisClient } from './config/redis'
 import { setupDockerClient } from './config/docker'
 
 import { errorHandler } from './middleware/error.middleware'
@@ -98,9 +96,7 @@ if (NODE_ENV === 'production') {
   app.set('trust proxy', 1)
 }
 
-const RedisStore = connectRedis(session)
 app.use(session({
-  store: new RedisStore({ client: connectRedisClient() }),
   secret: process.env.SESSION_SECRET || 'session-secret',
   resave: false,
   saveUninitialized: false,
@@ -168,9 +164,6 @@ async function disconnectServices() {
     // Close database connections
     // await disconnectDatabase()
     
-    // Close Redis connections
-    // await disconnectRedis()
-    
     // Clean up Docker resources
     // await cleanupDockerResources()
     
@@ -186,10 +179,6 @@ async function initializeServices() {
     // Connect to database
     await connectDatabase()
     logger.info('Database connected')
-    
-    // Connect to Redis
-    await connectRedisClient()
-    logger.info('Redis connected')
     
     // Setup Docker client
     await setupDockerClient()

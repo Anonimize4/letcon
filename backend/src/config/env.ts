@@ -16,12 +16,6 @@ export interface Config {
   DB_USER: string
   DB_PASSWORD: string
   
-  // Redis
-  REDIS_URL: string
-  REDIS_HOST: string
-  REDIS_PORT: number
-  REDIS_PASSWORD: string
-  
   // JWT
   JWT_SECRET: string
   JWT_EXPIRES_IN: string
@@ -75,11 +69,6 @@ const config: Config = {
   DB_NAME: process.env.DB_NAME || 'cybersecurity_training',
   DB_USER: process.env.DB_USER || 'postgres',
   DB_PASSWORD: process.env.DB_PASSWORD || 'password',
-  
-  REDIS_URL: process.env.REDIS_URL || 'redis://localhost:6379',
-  REDIS_HOST: process.env.REDIS_HOST || 'localhost',
-  REDIS_PORT: parseInt(process.env.REDIS_PORT || '6379', 10),
-  REDIS_PASSWORD: process.env.REDIS_PASSWORD || '',
   
   JWT_SECRET: process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production',
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '24h',
