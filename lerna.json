@@ -1,0 +1,25 @@
+{
+  "npmClient": "npm",
+  "useWorkspaces": true,
+  "version": "1.0.0",
+  "command": {
+    "publish": {
+      "conventionalCommits": true,
+      "message": "chore(release): publish"
+    },
+    "version": {
+      "conventionalCommits": true,
+      "message": "chore(release): publish"
+    }
+  },
+  "packages": [
+    "frontend",
+    "backend"
+  ],
+  "ignoreChanges": [
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "**/__tests__/**/*",
+    "**/*.md"
+  ]
+}
