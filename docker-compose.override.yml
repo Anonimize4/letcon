@@ -27,10 +27,6 @@ services:
     ports:
       - "5433:5432"  # Different port to avoid conflicts
 
-  redis:
-    ports:
-      - "6380:6379"  # Different port to avoid conflicts
-
   nginx:
     volumes:
       - ./infrastructure/nginx/nginx.conf.dev:/etc/nginx/nginx.conf
