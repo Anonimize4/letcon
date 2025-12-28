@@ -1,7 +1,6 @@
 // Cybersecurity Training Platform - Frontend Entry Point
 // This file will contain the main React application component
 
-import React from 'react';
 import Header from './components/navigation/Header';
 
 export interface AppConfig {
