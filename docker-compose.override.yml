@@ -1,5 +1,3 @@
-version: '3.8'
-
 # Override configuration for development environment
 services:
   frontend:
