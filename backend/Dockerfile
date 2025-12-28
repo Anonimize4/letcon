@@ -7,7 +7,7 @@ WORKDIR /app
 COPY . .
 
 # Install dependencies
-RUN npm ci --only=production
+RUN npm ci --omit=dev
 
 # Build the backend
 RUN cd backend && npm run build
