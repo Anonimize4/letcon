@@ -11,7 +11,7 @@ export interface AppConfig {
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const appConfig: AppConfig = {
-  title: 'Cybersecurity Training Platform',
+  title: 'LETHCON',
   version: '1.0.0',
   environment: 'development'
 };
@@ -28,7 +28,7 @@ export const App = () => {
         <div className="max-w-md mx-auto bg-htb-background rounded-xl shadow-lg overflow-hidden border border-htb-selectionBackground">
           <div className="p-8">
             <div className="uppercase tracking-wide text-sm text-htb-blue font-semibold">
-              Cybersecurity Training Platform
+              LETHCON
             </div>
             <h1 className="block mt-1 text-lg leading-tight font-medium text-htb-foreground">
               Welcome!
