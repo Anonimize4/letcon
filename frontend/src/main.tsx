@@ -12,7 +12,6 @@ import { ThemeProvider } from './contexts/ThemeContext'
 import { NotificationProvider } from './contexts/NotificationContext'
 */
 
-import './styles/globals.css'
 import './styles/tailwind.css'
 
 // Create a client

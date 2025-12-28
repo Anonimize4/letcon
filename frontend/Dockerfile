@@ -7,8 +7,6 @@ WORKDIR /app
 COPY package*.json ./
 COPY tsconfig.json ./
 COPY vite.config.ts ./
-COPY tailwind.config.js ./
-COPY postcss.config.js ./
 
 # Install dependencies
 RUN npm ci
