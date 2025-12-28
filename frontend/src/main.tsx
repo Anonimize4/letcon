@@ -12,7 +12,7 @@ import { ThemeProvider } from './contexts/ThemeContext'
 import { NotificationProvider } from './contexts/NotificationContext'
 */
 
-import './styles/tailwind.css'
+import './styles/index.css'
 
 // Create a client
 const queryClient = new QueryClient({
