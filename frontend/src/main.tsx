@@ -6,9 +6,11 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Toaster } from 'react-hot-toast'
 
 import { App } from './App'
+/*
 import { AuthProvider } from './contexts/AuthContext'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { NotificationProvider } from './contexts/NotificationContext'
+*/
 
 import './styles/globals.css'
 import './styles/tailwind.css'
@@ -33,9 +35,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
-        <AuthProvider>
+        {/* <AuthProvider>
           <ThemeProvider>
-            <NotificationProvider>
+            <NotificationProvider> */}
               <App />
               <Toaster
                 position="top-right"
@@ -49,9 +51,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                 }}
               />
               <ReactQueryDevtools initialIsOpen={false} />
-            </NotificationProvider>
+            {/* </NotificationProvider>
           </ThemeProvider>
-        </AuthProvider>
+        </AuthProvider> */}
       </QueryClientProvider>
     </BrowserRouter>
   </React.StrictMode>,

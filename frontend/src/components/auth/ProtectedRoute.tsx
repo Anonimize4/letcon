@@ -1,3 +1,8 @@
 import React from 'react';
 
-export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => <>{children}</>;
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+  requiredRole?: string;
+}
+
+export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => <>{children}</>;

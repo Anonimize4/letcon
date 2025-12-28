@@ -1,3 +1,3 @@
 import React from 'react';
 
-export const ErrorBoundary = ({ children }: { children: React.ReactNode }) => <>{children}</>;
+export const ErrorBoundary: React.FC<{ children?: React.ReactNode }> = ({ children }) => <>{children}</>;
