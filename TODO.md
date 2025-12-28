@@ -1,48 +1,26 @@
-# Docker Configuration Improvement Plan
 
-## Critical Issues Identified
+# TODO: Remove Mega Menu
 
-### 1. Missing Services and Files
-- [x] Remove Redis references from docker-compose.override.yml
-- [x] Create development Dockerfiles (Dockerfile.dev for both frontend and backend)
-- [x] Add missing environment configuration files (.env.example)
-- [x] Create SSL certificate setup script
+## Files to Remove:
+- [x] `/frontend/src/components/navigation/MegaMenu.tsx` - Remove the main MegaMenu component
+- [x] `/frontend/src/pages/public/MegaMenuDemo.tsx` - Remove the demo page
+- [x] `/docs/MEGA-MENU.md` - Remove the documentation file
 
-### 2. Security and Configuration Issues
-- [x] Fix environment variable management (production secrets)
-- [x] Implement proper health checks for all services
-- [x] Add resource limits and security configurations
-- [x] Improve nginx configuration security
+## Files to Update:
+- [x] `/frontend/src/components/navigation/Header.tsx` - Replace MegaMenu with simple navigation
+- [x] `/frontend/src/App.tsx` - Replace MegaMenuDemo with a simple home page
 
-### 3. Development vs Production Configuration
-- [x] Fix port mapping inconsistencies
-- [x] Ensure development overrides work properly
-- [x] Add proper volume mounts for development
-- [x] Implement proper service dependencies
+## Steps:
+1. [x] Remove MegaMenu component file
+2. [x] Remove MegaMenuDemo page
+3. [x] Remove mega-menu documentation file
+4. [x] Update Header.tsx to use simple navigation without MegaMenu
+5. [x] Update App.tsx to show a basic home page instead of MegaMenuDemo
+6. [x] Test the changes by running lint
 
-### 4. Infrastructure and Monitoring
-- [x] Add comprehensive logging configuration
-- [x] Implement proper networking setup
-- [x] Add monitoring and alerting (health checks)
-- [x] Create backup and recovery procedures
+## Expected Result:
+- No MegaMenu component or references
+- Simple navigation in Header
+- Basic home page in App
+- Clean lint check
 
-### 5. Documentation and Scripts
-- [x] Update setup documentation
-- [x] Create Docker management scripts
-- [x] Add troubleshooting guides
-
-## Implementation Steps
-
-1. **Fix Core Docker Compose Issues**
-2. **Create Missing Configuration Files**
-3. **Implement Security Improvements**
-4. **Add Health Checks and Monitoring**
-5. **Update Documentation and Scripts**
-6. **Test Complete Setup**
-
-## Success Criteria
-- All services start without errors
-- Development and production configurations work correctly
-- Security best practices implemented
-- Proper monitoring and logging in place
-- Clear documentation for setup and maintenance
