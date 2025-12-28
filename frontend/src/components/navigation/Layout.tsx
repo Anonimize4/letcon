@@ -12,7 +12,7 @@ const Layout: React.FC<LayoutProps> = ({
   className = ''
 }) => {
   return (
-    <div className={`min-h-screen flex flex-col ${className}`}>
+    <div className={`min-h-screen flex flex-col bg-htb-background text-htb-bright-white ${className}`}>
       {/* Header */}
       <Header />
 

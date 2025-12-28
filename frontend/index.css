@@ -1,7 +1,6 @@
 @import "tailwindcss";
 
 @theme {
-  /* Custom HTB theme colors */
   --color-htb-background: #1a2332;
   --color-htb-foreground: #a4b1cd;
   --color-htb-black: #000000;
@@ -24,16 +23,12 @@
   --color-htb-cursor-color: #313f55;
 }
 
-@layer base {
-  * {
-    @apply border-htb-selection-background;
-  }
-  body {
-    @apply bg-htb-background text-htb-bright-white;
-    font-feature-settings: "rlig" 1, "calt" 1;
-  }
+body {
+  background-color: var(--color-htb-background);
+  color: var(--color-htb-bright-white);
+  font-feature-settings: "rlig" 1, "calt" 1;
 }
 
-@layer components {
-  /* Custom component styles can be added here */
+* {
+  border-color: var(--color-htb-selection-background);
 }
