@@ -10,12 +10,12 @@ const Header: React.FC<HeaderProps> = ({
   className = '' 
 }) => {
   return (
-    <header className={`bg-white shadow-sm border-b border-gray-200 ${className}`}>
+    <header className={`bg-htb-background border-b border-htb-selectionBackground ${className}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo/Title */}
           <div className="flex items-center">
-            <h1 className="text-xl font-semibold text-gray-900">{title}</h1>
+            <h1 className="text-xl font-semibold text-htb-foreground">{title}</h1>
           </div>
 
           {/* Navigation/Empty List Section */}
@@ -31,7 +31,7 @@ const Header: React.FC<HeaderProps> = ({
           {/* Right side actions */}
           <div className="flex items-center space-x-4">
             {/* Placeholder for user menu or actions */}
-            <div className="w-8 h-8 bg-gray-200 rounded-full"></div>
+            <div className="w-8 h-8 bg-htb-selectionBackground rounded-full"></div>
           </div>
         </div>
       </div>
