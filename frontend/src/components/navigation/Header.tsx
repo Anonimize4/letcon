@@ -15,6 +15,10 @@ const Header: React.FC<HeaderProps> = ({
       href: '#'
     },
     {
+      name: 'Platform',
+      href: '/platform'
+    },
+    {
       name: 'Labs',
       href: '#'
     },
@@ -24,7 +28,7 @@ const Header: React.FC<HeaderProps> = ({
     },
     {
       name: 'Pricing',
-      href: '#'
+      href: '/pricing'
     }
   ];
 

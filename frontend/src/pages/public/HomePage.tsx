@@ -14,17 +14,155 @@ export const appConfig: AppConfig = {
 };
 
 const HomePage = () => {
+  // Featured learning paths data
+  const featuredPaths = [
+    {
+      id: 1,
+      title: "Web Exploitation Fundamentals",
+      description: "Master the art of finding and exploiting web vulnerabilities",
+      difficulty: "Beginner",
+      duration: "6 weeks",
+      modules: 24,
+      students: 15420,
+      rating: 4.8,
+      icon: "🌐",
+      color: "from-htb-blue/20 to-htb-blue/10",
+      borderColor: "border-htb-blue/30",
+      hoverBorder: "hover:border-htb-blue",
+      buttonColor: "bg-htb-blue hover:bg-htb-bright-blue"
+    },
+    {
+      id: 2,
+      title: "Penetration Testing Pro",
+      description: "Advanced techniques for comprehensive security assessments",
+      difficulty: "Advanced",
+      duration: "8 weeks",
+      modules: 32,
+      students: 8930,
+      rating: 4.9,
+      icon: "🔐",
+      color: "from-htb-red/20 to-htb-red/10",
+      borderColor: "border-htb-red/30",
+      hoverBorder: "hover:border-htb-red",
+      buttonColor: "bg-htb-red hover:bg-htb-bright-red"
+    },
+    {
+      id: 3,
+      title: "Network Security Essentials",
+      description: "Build a strong foundation in network security and defense",
+      difficulty: "Intermediate",
+      duration: "5 weeks",
+      modules: 20,
+      students: 12350,
+      rating: 4.7,
+      icon: "🛡️",
+      color: "from-htb-green/20 to-htb-green/10",
+      borderColor: "border-htb-green/30",
+      hoverBorder: "hover:border-htb-green",
+      buttonColor: "bg-htb-green hover:bg-htb-bright-green"
+    }
+  ];
+
+  // Platform statistics
+  const platformStats = [
+    { label: "Active Users", value: "45.2K+", change: "+12%" },
+    { label: "Hands-on Labs", value: "280+", change: "+8" },
+    { label: "CTF Challenges", value: "150+", change: "+15" },
+    { label: "Success Rate", value: "92%", change: "+3%" }
+  ];
+
   return (
     <Layout>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="space-y-8">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold text-htb-bright-white mb-4">
-              Welcome to LETHCON
+        <div className="space-y-16">
+          {/* Hero Section */}
+          <div className="text-center space-y-6">
+            <h1 className="text-5xl md:text-6xl font-bold text-htb-bright-white mb-6">
+              Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-htb-red to-htb-blue">LETHCON</span>
             </h1>
-            <p className="text-xl text-htb-bright-white max-w-2xl mx-auto">
-              Your comprehensive cybersecurity training platform for hands-on learning and skill development.
+            <p className="text-xl text-htb-bright-white max-w-3xl mx-auto leading-relaxed">
+              Master cybersecurity through hands-on learning, real-world scenarios, and a community of ethical hackers. 
+              From beginner to expert, build your skills in our interactive virtual labs.
             </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+              <button className="bg-htb-red hover:bg-htb-bright-red text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-htb-red/30 transform hover:-translate-y-1">
+                Start Learning Free
+              </button>
+              <button className="border-2 border-htb-bright-white text-htb-bright-white hover:bg-htb-bright-white hover:text-htb-background font-bold py-3 px-8 rounded-lg transition-all duration-300">
+                View Platform Tour
+              </button>
+            </div>
+          </div>
+
+          {/* Platform Statistics */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 bg-htb-selection-background/10 rounded-xl p-8 border border-htb-selection-background">
+            {platformStats.map((stat, index) => (
+              <div key={index} className="text-center">
+                <div className="text-3xl font-bold text-htb-bright-white mb-1">{stat.value}</div>
+                <div className="text-sm text-htb-bright-white/70 mb-2">{stat.label}</div>
+                <div className="text-xs text-htb-bright-green font-medium">{stat.change}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* Featured Learning Paths */}
+          <div className="space-y-8">
+            <div className="text-center">
+              <h2 className="text-3xl font-bold text-htb-bright-white mb-4">Featured Learning Paths</h2>
+              <p className="text-lg text-htb-bright-white/80 max-w-2xl mx-auto">
+                Structured curriculum designed by industry experts to take your skills to the next level
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {featuredPaths.map((path) => (
+                <div key={path.id} className={`bg-gradient-to-br ${path.color} rounded-xl p-6 border ${path.borderColor} ${path.hoverBorder} hover:shadow-lg transition-all duration-500 hover:scale-105 cursor-pointer group`}>
+                  <div className="flex items-start justify-between mb-4">
+                    <div className="text-4xl">{path.icon}</div>
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                      path.difficulty === 'Beginner' ? 'bg-htb-green/20 text-htb-bright-green' :
+                      path.difficulty === 'Intermediate' ? 'bg-htb-yellow/20 text-htb-yellow' :
+                      'bg-htb-red/20 text-htb-bright-red'
+                    }`}>
+                      {path.difficulty}
+                    </span>
+                  </div>
+                  
+                  <h3 className="text-xl font-semibold text-htb-bright-white mb-3 group-hover:text-htb-bright-white transition-colors">
+                    {path.title}
+                  </h3>
+                  
+                  <p className="text-htb-bright-white/80 text-sm mb-4 line-clamp-2">
+                    {path.description}
+                  </p>
+                  
+                  <div className="flex items-center justify-between text-xs text-htb-bright-white/60 mb-4">
+                    <span>⏱️ {path.duration}</span>
+                    <span>📚 {path.modules} modules</span>
+                  </div>
+                  
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center space-x-1">
+                      <span className="text-yellow-400">⭐</span>
+                      <span className="text-sm text-htb-bright-white">{path.rating}</span>
+                    </div>
+                    <div className="text-sm text-htb-bright-white/60">
+                      {path.students.toLocaleString()} students
+                    </div>
+                  </div>
+                  
+                  <button className={`w-full ${path.buttonColor} text-white font-medium py-2 px-4 rounded-lg transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1`}>
+                    Start Path
+                  </button>
+                </div>
+              ))}
+            </div>
+            
+            <div className="text-center">
+              <button className="text-htb-bright-white hover:text-htb-bright-white/80 font-medium underline underline-offset-4 transition-colors">
+                View All Learning Paths →
+              </button>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">

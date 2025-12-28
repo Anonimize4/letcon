@@ -7,6 +7,7 @@ import { ErrorBoundary } from './pages/error/ErrorBoundary';
 import HomePage from './pages/public/HomePage';
 import PricingPage from './pages/public/PricingPage';
 import AboutPage from './pages/public/AboutPage';
+import PlatformPage from './pages/public/PlatformPage';
 
 // Auth Pages
 import LoginPage from './pages/auth/LoginPage';
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
   {
     path: '/about',
     element: <AboutPage />,
+  },
+  {
+    path: '/platform',
+    element: <PlatformPage />,
   },
   {
     path: '/login',
