@@ -1,7 +1,7 @@
 // Cybersecurity Training Platform - Frontend Entry Point
 // This file will contain main React application component
 
-import Header from './components/navigation/Header';
+import Layout from './components/navigation/Layout';
 
 export interface AppConfig {
   title: string;
@@ -19,10 +19,8 @@ export const appConfig: AppConfig = {
 // Main App component
 export const App = () => {
   return (
-    <div className="min-h-screen bg-htb-background">
-      <Header />
-      
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <Layout>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="space-y-8">
           <div className="text-center">
             <h1 className="text-4xl font-bold text-htb-bright-white mb-4">
@@ -82,7 +80,7 @@ export const App = () => {
             </ul>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </Layout>
   );
 };
