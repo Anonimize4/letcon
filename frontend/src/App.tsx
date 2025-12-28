@@ -1,5 +1,5 @@
 // Cybersecurity Training Platform - Frontend Entry Point
-// This file will contain the main React application component
+// This file will contain main React application component
 
 import Header from './components/navigation/Header';
 
@@ -20,23 +20,66 @@ export const appConfig: AppConfig = {
 export const App = () => {
   return (
     <div className="min-h-screen bg-htb-background">
-      {/* Header with empty list */}
       <Header />
       
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="max-w-md mx-auto bg-htb-background rounded-xl shadow-lg overflow-hidden border border-htb-selectionBackground">
-          <div className="p-8">
-            <div className="uppercase tracking-wide text-sm text-htb-blue font-semibold">
-              LETHCON
-            </div>
-            <h1 className="block mt-1 text-lg leading-tight font-medium text-htb-foreground">
-              Welcome!
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="space-y-8">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold text-htb-foreground mb-4">
+              Welcome to LETHCON
             </h1>
-            <p className="mt-2 text-htb-brightBlack">
-              Your cybersecurity training platform is now running successfully.
-              This is a welcome message to confirm the interface is working.
+            <p className="text-xl text-htb-bright-black max-w-2xl mx-auto">
+              Your comprehensive cybersecurity training platform for hands-on learning and skill development.
             </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
+            <div className="bg-htb-selection-background/20 rounded-lg p-6 border border-htb-selection-background">
+              <h3 className="text-lg font-semibold text-htb-bright-green mb-3">Hands-on Labs</h3>
+              <p className="text-htb-bright-black">
+                Practice cybersecurity techniques in realistic, isolated virtual environments.
+              </p>
+            </div>
+
+            <div className="bg-htb-selection-background/20 rounded-lg p-6 border border-htb-selection-background">
+              <h3 className="text-lg font-semibold text-htb-bright-green mb-3">CTF Challenges</h3>
+              <p className="text-htb-bright-black">
+                Compete in capture-the-flag challenges with players from around the world.
+              </p>
+            </div>
+
+            <div className="bg-htb-selection-background/20 rounded-lg p-6 border border-htb-selection-background">
+              <h3 className="text-lg font-semibold text-htb-bright-green mb-3">Learning Paths</h3>
+              <p className="text-htb-bright-black">
+                Structured curriculum from beginner to advanced cybersecurity concepts.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-12 bg-htb-selection-background/10 rounded-lg p-8 border border-htb-selection-background">
+            <h2 className="text-2xl font-bold text-htb-foreground mb-4">Why Choose LETHCON?</h2>
+            <ul className="space-y-3 text-htb-bright-black">
+              <li className="flex items-center space-x-3">
+                <div className="w-2 h-2 bg-htb-bright-green rounded-full"></div>
+                <span>Realistic virtual environments for hands-on learning</span>
+              </li>
+              <li className="flex items-center space-x-3">
+                <div className="w-2 h-2 bg-htb-bright-green rounded-full"></div>
+                <span>Comprehensive learning paths for all skill levels</span>
+              </li>
+              <li className="flex items-center space-x-3">
+                <div className="w-2 h-2 bg-htb-bright-green rounded-full"></div>
+                <span>Community-driven challenges and competitions</span>
+              </li>
+              <li className="flex items-center space-x-3">
+                <div className="w-2 h-2 bg-htb-bright-green rounded-full"></div>
+                <span>Expert-designed lab scenarios based on real-world threats</span>
+              </li>
+              <li className="flex items-center space-x-3">
+                <div className="w-2 h-2 bg-htb-bright-green rounded-full"></div>
+                <span>Progress tracking and performance analytics</span>
+              </li>
+            </ul>
           </div>
         </div>
       </main>
