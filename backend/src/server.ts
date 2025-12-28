@@ -13,7 +13,7 @@ import { Server as SocketIOServer } from 'socket.io'
 import dotenv from 'dotenv'
 import './config/env'
 
-import { connectDatabase } from './config/database'
+import { connectDatabase, disconnectDatabase } from './config/database'
 import { setupDockerClient } from './config/docker'
 
 import { errorHandler } from './middleware/error.middleware'
@@ -162,7 +162,7 @@ process.on('SIGINT', async () => {
 async function disconnectServices() {
   try {
     // Close database connections
-    // await disconnectDatabase()
+    await disconnectDatabase()
     
     // Clean up Docker resources
     // await cleanupDockerResources()
