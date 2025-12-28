@@ -3,18 +3,14 @@ FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
-COPY tsconfig.json ./
+# Copy all files for monorepo
+COPY . .
 
 # Install dependencies
 RUN npm ci --only=production
 
-# Copy source code
-COPY src/ ./src/
-
-# Build the application
-RUN npm run build
+# Build the backend
+RUN cd backend && npm run build
 
 # Production stage
 FROM node:18-alpine AS production
@@ -26,9 +22,9 @@ RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nodejs -u 1001
 
 # Copy built application
-COPY --from=builder --chown=nodejs:nodejs /app/dist ./dist
-COPY --from=builder --chown=nodejs:nodejs /app/node_modules ./node_modules
-COPY --from=builder --chown=nodejs:nodejs /app/package*.json ./
+COPY --from=builder --chown=nodejs:nodejs /app/backend/dist ./dist
+COPY --from=builder --chown=nodejs:nodejs /app/backend/node_modules ./node_modules
+COPY --from=builder --chown=nodejs:nodejs /app/backend/package*.json ./
 
 # Create uploads directory
 RUN mkdir -p uploads && chown nodejs:nodejs uploads
