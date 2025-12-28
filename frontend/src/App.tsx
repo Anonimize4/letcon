@@ -14,7 +14,24 @@ export const appConfig: AppConfig = {
   environment: 'development'
 };
 
-// Main App component placeholder
+// Main App component
 export const App = () => {
-  return null;
+  return (
+    <div className="min-h-screen bg-htb-background flex items-center justify-center">
+      <div className="max-w-md mx-auto bg-htb-black rounded-xl shadow-md overflow-hidden border border-htb-blue">
+        <div className="p-8">
+          <div className="uppercase tracking-wide text-sm text-htb-blue font-semibold">
+            Cybersecurity Training Platform
+          </div>
+          <h1 className="block mt-1 text-lg leading-tight font-medium text-htb-foreground">
+            Welcome!
+          </h1>
+          <p className="mt-2 text-htb-brightBlack">
+            Your cybersecurity training platform is now running successfully.
+            This is a welcome message to confirm the interface is working.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
 };
