@@ -9,15 +9,15 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status, className = '' }) => 
   const statusConfig = {
     'not-started': {
       label: 'Not Started',
-      className: 'bg-gray-100 text-gray-800 border-gray-200',
+      className: 'bg-gray-100 text-htb-bright-white border-gray-200',
     },
     'in-progress': {
       label: 'In Progress',
-      className: 'bg-blue-100 text-blue-800 border-blue-200',
+      className: 'bg-blue-100 text-htb-bright-white border-blue-200',
     },
     completed: {
       label: 'Completed',
-      className: 'bg-green-100 text-green-800 border-green-200',
+      className: 'bg-green-100 text-htb-bright-white border-green-200',
     },
   };
 

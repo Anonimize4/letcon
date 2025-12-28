@@ -39,7 +39,7 @@ const Header: React.FC<HeaderProps> = ({
               <span className="text-white font-bold text-lg">L</span>
             </div>
             {/* Title */}
-            <h1 className="text-xl font-semibold text-htb-foreground">{title}</h1>
+            <h1 className="text-xl font-semibold text-htb-bright-white">{title}</h1>
           </div>
 
           {/* Navigation */}
@@ -48,7 +48,7 @@ const Header: React.FC<HeaderProps> = ({
               <a
                 key={item.name}
                 href={item.href}
-                className="text-htb-foreground hover:text-htb-bright-green px-3 py-2 text-sm font-medium transition-all duration-200"
+                className="text-htb-bright-white hover:text-htb-bright-green px-3 py-2 text-sm font-medium transition-all duration-200"
               >
                 {item.name}
               </a>

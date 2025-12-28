@@ -29,7 +29,7 @@
     @apply border-htb-selection-background;
   }
   body {
-    @apply bg-htb-background text-htb-foreground;
+    @apply bg-htb-background text-htb-bright-white;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 }

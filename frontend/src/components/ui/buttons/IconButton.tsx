@@ -12,8 +12,8 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
     
     const variantClasses = {
       primary: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
-      secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500',
-      ghost: 'text-gray-600 hover:bg-gray-100 hover:text-gray-900 focus:ring-gray-500',
+      secondary: 'bg-gray-200 text-htb-bright-white hover:bg-gray-300 focus:ring-gray-500',
+      ghost: 'text-htb-bright-white hover:bg-gray-100 hover:text-htb-bright-white focus:ring-gray-500',
     };
 
     const sizeClasses = {
