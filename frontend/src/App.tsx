@@ -7,6 +7,7 @@ export interface AppConfig {
   environment: string;
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const appConfig: AppConfig = {
   title: 'Cybersecurity Training Platform',
   version: '1.0.0',
@@ -15,6 +16,5 @@ export const appConfig: AppConfig = {
 
 // Main App component placeholder
 export const App = () => {
-  console.log(`Starting ${appConfig.title} v${appConfig.version}`);
   return null;
 };

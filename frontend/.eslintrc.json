@@ -2,27 +2,34 @@
   "root": true,
   "env": {
     "browser": true,
-    "es2020": true,
-    "node": true
+    "es2020": true
   },
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
-    "prettier"
+    "plugin:react-hooks/recommended",
+    "plugin:react/recommended",
+    "plugin:react/jsx-runtime"
   ],
   "ignorePatterns": [
     "dist",
-    ".eslintrc.js",
     "node_modules/",
     "build/",
-    "coverage/",
-    "uploads/"
+    "coverage/"
   ],
   "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
   "plugins": [
     "@typescript-eslint",
     "react-hooks",
-    "react"
+    "react",
+    "react-refresh"
   ],
   "rules": {
     "@typescript-eslint/no-unused-vars": "error",
@@ -36,7 +43,11 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "react/prop-types": "off",
-    "react/react-in-jsx-scope": "off"
+    "react/react-in-jsx-scope": "off",
+    "react-refresh/only-export-components": [
+      "warn",
+      { "allowConstantExport": true }
+    ]
   },
   "settings": {
     "react": {

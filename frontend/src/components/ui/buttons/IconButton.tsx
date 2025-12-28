@@ -1,4 +1,3 @@
-import React from 'react';
 import { ButtonHTMLAttributes, forwardRef } from 'react';
 
 interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {

@@ -3,7 +3,6 @@ import DifficultyBadge from '../badges/DifficultyBadge';
 import StatusBadge from '../badges/StatusBadge';
 
 interface ChallengeCardProps {
-  id: string;
   title: string;
   description: string;
   difficulty: 'beginner' | 'intermediate' | 'advanced' | 'expert';
@@ -16,7 +15,6 @@ interface ChallengeCardProps {
 }
 
 const ChallengeCard: React.FC<ChallengeCardProps> = ({
-  id,
   title,
   description,
   difficulty,
