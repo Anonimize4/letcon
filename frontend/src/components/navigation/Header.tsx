@@ -15,12 +15,12 @@ const Header: React.FC<HeaderProps> = ({
       href: '#'
     },
     {
-      name: 'Platform',
-      href: '/platform'
+      name: 'Solutions',
+      href: '/solutions'
     },
     {
-      name: 'Labs',
-      href: '#'
+      name: 'Resources',
+      href: '/resources'
     },
     {
       name: 'Community',
@@ -59,10 +59,13 @@ const Header: React.FC<HeaderProps> = ({
             ))}
           </nav>
 
-          {/* CTA Button */}
+          {/* CTA Buttons */}
           <div className="flex items-center space-x-4">
+            <button className="border border-htb-bright-green text-htb-bright-green hover:bg-htb-bright-green hover:text-htb-black px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 transform">
+              Login
+            </button>
             <button className="bg-htb-bright-green hover:bg-htb-bright-green/90 hover:scale-105 text-htb-black px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 transform">
-              Start Learning
+              Get Started
             </button>
             {/* Placeholder for user menu or actions */}
             <div className="w-8 h-8 bg-htb-selection-background rounded-full"></div>
