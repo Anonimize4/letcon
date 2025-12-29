@@ -16,8 +16,16 @@ A Docker-based cybersecurity training platform for beginners to advanced users.
 1. Clone the repository
 2. Copy `.env.example` to `.env` and configure
 3. Run: `docker-compose up -d`
-4. Access frontend at: http://localhost:3000
-5. Access backend at: http://localhost:3001
+4. Access frontend at: https://localhost (SSL enabled)
+5. Access backend API at: https://localhost/api/
+
+## Infrastructure Features
+
+- **SSL/TLS Encryption**: HTTPS enabled with self-signed certificates for development
+- **Load Balancing**: Nginx load balancer with multiple backend instances for horizontal scaling
+- **Automated Backups**: Daily PostgreSQL database backups with retention
+- **Security Hardening**: Rate limiting, security headers, HSTS, and more
+- **Health Checks**: Container health monitoring and automatic restarts
 
 ## For Development
 
