@@ -78,7 +78,7 @@ const HomePage = () => {
           {/* Hero Section */}
           <div className="text-center space-y-6">
             <h1 className="text-5xl md:text-6xl font-bold text-htb-bright-white mb-6">
-              Welcome to <span className="text-transparent bg-clip-text bg-gradient-to-r from-htb-red to-htb-blue">LETHCON</span>
+              Anyone can learn <span className="text-transparent bg-clip-text bg-gradient-to-r from-htb-red to-htb-blue">cyber security with LETHCON</span>
             </h1>
             <p className="text-xl text-htb-bright-white max-w-3xl mx-auto leading-relaxed">
               Master cybersecurity through hands-on learning, real-world scenarios, and a community of ethical hackers. 

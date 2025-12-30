@@ -9,38 +9,52 @@ const Header: React.FC<HeaderProps> = ({
   title = 'LETHCON',
   className = ''
 }) => {
-  const [isProductsDropdownOpen, setIsProductsDropdownOpen] = useState(false);
-  const [isSolutionsDropdownOpen, setIsSolutionsDropdownOpen] = useState(false);
-  const [isResourcesDropdownOpen, setIsResourcesDropdownOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [dropdownTimeout, setDropdownTimeout] = useState<NodeJS.Timeout | null>(null);
+
+  const clearDropdownTimeout = () => {
+    if (dropdownTimeout) {
+      clearTimeout(dropdownTimeout);
+      setDropdownTimeout(null);
+    }
+  };
+
+  const handleDropdownClose = () => {
+    clearDropdownTimeout();
+    setDropdownTimeout(setTimeout(() => {
+      setActiveDropdown(null);
+    }, 150));
+  };
 
   const navItems = [
     {
-      name: 'Products',
+      name: 'product',
       href: '#',
       hasDropdown: true,
       dropdownSections: [
         {
-          title: 'For Teams',
+          title: 'solution for ',
           items: [
-            { name: 'Enterprise Security', href: '/products/enterprise' },
-            { name: 'Team Training', href: '/products/team-training' },
-            { name: 'Corporate Labs', href: '/products/corporate-labs' }
+            { name: 'teams', href: '/solutions/teams' },
+            { name: 'schools', href: '/solutions/schools' },
+            { name: 'individuals', href: '/solutions/individuals' }
           ]
         },
         {
-          title: 'For Schools',
+          title: 'product we offer',
           items: [
-            { name: 'Educational Platform', href: '/products/education' },
-            { name: 'Student Programs', href: '/products/students' },
-            { name: 'Teacher Resources', href: '/products/teachers' }
+            { name: 'courses&certifications', href: '/products/courses-certifications' },
+            { name: 'Enterprise attack simulations', href: '/products/enterprise-attack-simulations' },
+            { name: 'Gamified team assessment', href: '/products/gamified-team-assessment' },
+            { name: 'talent sourcing and mentoring service', href: '/products/talent-sourcing-mentoring' }
           ]
         },
         {
-          title: 'Certifications',
+          title: 'academy for business',
           items: [
-            { name: 'Security+', href: '/certifications/security-plus' },
-            { name: 'Network+', href: '/certifications/network-plus' },
-            { name: 'Ethical Hacking', href: '/certifications/ethical-hacking' }
+            { name: 'Corporate Training', href: '/academy/corporate' },
+            { name: 'Team Certification', href: '/academy/certification' },
+            { name: 'Business Workshops', href: '/academy/workshops' }
           ]
         }
       ]
@@ -113,6 +127,11 @@ const Header: React.FC<HeaderProps> = ({
     }
   ];
 
+  const getActiveDropdownContent = () => {
+    const activeItem = navItems.find(item => item.name === activeDropdown);
+    return activeItem?.dropdownSections || [];
+  };
+
   return (
     <>
       <header className={`bg-htb-background border-b border-htb-selection-background ${className}`}>
@@ -120,12 +139,12 @@ const Header: React.FC<HeaderProps> = ({
           <div className="flex items-center justify-between h-16">
             {/* Brand/Logo */}
             <div className="flex items-center space-x-3">
-              {/* Logo/Brand Icon */}
-              <div className="flex items-center justify-center w-10 h-10 bg-htb-blue rounded-lg">
-                <span className="text-white font-bold text-lg">L</span>
+              {/* Logo */}
+              <div className="flex items-center justify-center w-8 h-8 bg-htb-blue rounded-lg">
+                <span className="text-white font-bold text-sm">LC</span>
               </div>
-              {/* Title */}
-              <h1 className="text-xl font-semibold text-htb-bright-white">{title}</h1>
+              {/* Brand Name */}
+              <span className="text-xl font-semibold text-htb-bright-white">LETHCON</span>
             </div>
 
             {/* Navigation */}
@@ -135,34 +154,20 @@ const Header: React.FC<HeaderProps> = ({
                   key={item.name}
                   className="relative"
                   onMouseEnter={() => {
-                    if (item.name === 'Products') setIsProductsDropdownOpen(true);
-                    if (item.name === 'Solutions') setIsSolutionsDropdownOpen(true);
-                    if (item.name === 'Resources') setIsResourcesDropdownOpen(true);
+                    clearDropdownTimeout();
+                    if (item.hasDropdown) {
+                      setActiveDropdown(item.name);
+                    }
                   }}
-                  onMouseLeave={() => {
-                    if (item.name === 'Products') setIsProductsDropdownOpen(false);
-                    if (item.name === 'Solutions') setIsSolutionsDropdownOpen(false);
-                    if (item.name === 'Resources') setIsResourcesDropdownOpen(false);
-                  }}
+                  onMouseLeave={handleDropdownClose}
                 >
                   <a
                     href={item.href}
-                    className="text-htb-bright-white hover:text-htb-bright-green px-3 py-2 text-sm font-medium transition-all duration-200 flex items-center"
+                    className={`text-htb-bright-white hover:text-htb-bright-green px-3 py-2 text-sm font-medium transition-all duration-200 ${
+                      activeDropdown === item.name ? 'text-htb-bright-green' : ''
+                    }`}
                   >
                     {item.name}
-                    {item.hasDropdown && (
-                      <svg
-                        className="ml-1 h-4 w-4"
-                        fill="none"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path d="M19 9l-7 7-7-7"></path>
-                      </svg>
-                    )}
                   </a>
                 </div>
               ))}
@@ -183,59 +188,42 @@ const Header: React.FC<HeaderProps> = ({
         </div>
       </header>
 
-      {/* Dropdown Menus - Rendered outside header container for full width */}
-      {navItems.map((item) => {
-        if (!item.hasDropdown) return null;
-        
-        return (
-          <div
-            key={`${item.name}-dropdown`}
-            className={`absolute top-16 left-0 right-0 bg-htb-background border border-htb-selection-background shadow-lg z-50 ${
-              (item.name === 'Products' && isProductsDropdownOpen) || 
-              (item.name === 'Solutions' && isSolutionsDropdownOpen) ||
-              (item.name === 'Resources' && isResourcesDropdownOpen)
-                ? 'block' : 'hidden'
-            }`}
-            onMouseEnter={() => {
-              if (item.name === 'Products') setIsProductsDropdownOpen(true);
-              if (item.name === 'Solutions') setIsSolutionsDropdownOpen(true);
-              if (item.name === 'Resources') setIsResourcesDropdownOpen(true);
-            }}
-            onMouseLeave={() => {
-              if (item.name === 'Products') setIsProductsDropdownOpen(false);
-              if (item.name === 'Solutions') setIsSolutionsDropdownOpen(false);
-              if (item.name === 'Resources') setIsResourcesDropdownOpen(false);
-            }}
-          >
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="py-6">
-                {item.dropdownSections && (
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    {item.dropdownSections.map((section) => (
-                      <div key={section.title}>
-                        <h3 className="text-htb-bright-green font-semibold text-sm mb-3 uppercase tracking-wider">
-                          {section.title}
-                        </h3>
-                        <div className="space-y-1">
-                          {section.items.map((sectionItem) => (
-                            <a
-                              key={sectionItem.name}
-                              href={sectionItem.href}
-                              className="block px-4 py-2 text-sm text-htb-bright-white hover:bg-htb-selection-background hover:text-htb-bright-green transition-all duration-200 rounded"
-                            >
-                              {sectionItem.name}
-                            </a>
-                          ))}
-                        </div>
-                      </div>
+      {/* Dropdown Panel */}
+      <div
+        className={`absolute top-16 left-0 right-0 bg-htb-background border border-htb-selection-background shadow-lg z-50 transition-all duration-300 ${
+          activeDropdown ? 'block' : 'hidden'
+        }`}
+        onMouseEnter={clearDropdownTimeout}
+        onMouseLeave={handleDropdownClose}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="py-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {getActiveDropdownContent().map((section: any, index: number) => (
+                <div key={section.title} className="relative">
+                  {index < getActiveDropdownContent().length - 1 && (
+                    <div className="hidden md:block absolute right-0 top-0 bottom-0 w-px bg-htb-selection-background" style={{right: '-16px'}}></div>
+                  )}
+                  <h3 className="text-htb-bright-green font-semibold text-sm mb-3 uppercase tracking-wider">
+                    {section.title}
+                  </h3>
+                  <div className="space-y-1">
+                    {section.items.map((sectionItem: any) => (
+                      <a
+                        key={sectionItem.name}
+                        href={sectionItem.href}
+                        className="block px-4 py-2 text-sm text-htb-bright-white hover:bg-htb-selection-background hover:text-htb-bright-green transition-all duration-200 rounded"
+                      >
+                        {sectionItem.name}
+                      </a>
                     ))}
                   </div>
-                )}
-              </div>
+                </div>
+              ))}
             </div>
           </div>
-        );
-      })}
+        </div>
+      </div>
     </>
   );
 };
