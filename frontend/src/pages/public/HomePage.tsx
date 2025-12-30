@@ -77,13 +77,9 @@ const HomePage = () => {
         <div className="space-y-16">
           {/* Hero Section */}
           <div className="text-center space-y-6">
-            <h1 className="text-5xl md:text-6xl font-bold text-htb-bright-white mb-6">
-              Anyone can learn <span className="text-transparent bg-clip-text bg-gradient-to-r from-htb-red to-htb-blue">cyber security with LETHCON</span>
+            <h1 className="text-4xl md:text-5xl font-bold text-white text-left mb-6">
+              Anyone can learn cyber security with<br />LETHCON
             </h1>
-            <p className="text-xl text-htb-bright-white max-w-3xl mx-auto leading-relaxed">
-              Master cybersecurity through hands-on learning, real-world scenarios, and a community of ethical hackers. 
-              From beginner to expert, build your skills in our interactive virtual labs.
-            </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
               <button className="bg-htb-red hover:bg-htb-bright-red text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-htb-red/30 transform hover:-translate-y-1">
                 Start Learning Free
@@ -95,12 +91,12 @@ const HomePage = () => {
           </div>
 
           {/* Platform Statistics */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 bg-htb-selection-background/10 rounded-xl p-8 border border-htb-selection-background">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 bg-htb-selection-background/10 rounded-xl p-6 border border-htb-selection-background">
             {platformStats.map((stat, index) => (
               <div key={index} className="text-center">
-                <div className="text-3xl font-bold text-htb-bright-white mb-1">{stat.value}</div>
-                <div className="text-sm text-htb-bright-white/70 mb-2">{stat.label}</div>
-                <div className="text-xs text-htb-bright-green font-medium">{stat.change}</div>
+                <div className="text-3xl font-bold text-white mb-1">{stat.value}</div>
+                <div className="text-sm text-white/80 mb-2">{stat.label}</div>
+                <div className="text-xs text-green-400 font-medium">{stat.change}</div>
               </div>
             ))}
           </div>
@@ -108,10 +104,7 @@ const HomePage = () => {
           {/* Featured Learning Paths */}
           <div className="space-y-8">
             <div className="text-center">
-              <h2 className="text-3xl font-bold text-htb-bright-white mb-4">Featured Learning Paths</h2>
-              <p className="text-lg text-htb-bright-white/80 max-w-2xl mx-auto">
-                Structured curriculum designed by industry experts to take your skills to the next level
-              </p>
+              <h2 className="text-3xl font-bold text-white mb-4">Featured Learning Paths</h2>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -120,23 +113,23 @@ const HomePage = () => {
                   <div className="flex items-start justify-between mb-4">
                     <div className="text-4xl">{path.icon}</div>
                     <span className={`px-3 py-1 rounded-full text-xs font-medium ${
-                      path.difficulty === 'Beginner' ? 'bg-htb-green/20 text-htb-bright-green' :
-                      path.difficulty === 'Intermediate' ? 'bg-htb-yellow/20 text-htb-yellow' :
-                      'bg-htb-red/20 text-htb-bright-red'
+                      path.difficulty === 'Beginner' ? 'bg-green-500 text-white' :
+                      path.difficulty === 'Intermediate' ? 'bg-yellow-500 text-black' :
+                      'bg-red-500 text-white'
                     }`}>
                       {path.difficulty}
                     </span>
                   </div>
                   
-                  <h3 className="text-xl font-semibold text-htb-bright-white mb-3 group-hover:text-htb-bright-white transition-colors">
+                  <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-white transition-colors">
                     {path.title}
                   </h3>
                   
-                  <p className="text-htb-bright-white/80 text-sm mb-4 line-clamp-2">
+                  <p className="text-white/80 text-sm mb-4 line-clamp-2">
                     {path.description}
                   </p>
                   
-                  <div className="flex items-center justify-between text-xs text-htb-bright-white/60 mb-4">
+                  <div className="flex items-center justify-between text-xs text-white/60 mb-4">
                     <span>⏱️ {path.duration}</span>
                     <span>📚 {path.modules} modules</span>
                   </div>
@@ -144,9 +137,9 @@ const HomePage = () => {
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center space-x-1">
                       <span className="text-yellow-400">⭐</span>
-                      <span className="text-sm text-htb-bright-white">{path.rating}</span>
+                      <span className="text-sm text-white">{path.rating}</span>
                     </div>
-                    <div className="text-sm text-htb-bright-white/60">
+                    <div className="text-sm text-white/60">
                       {path.students.toLocaleString()} students
                     </div>
                   </div>
@@ -167,23 +160,16 @@ const HomePage = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12">
             <div className="bg-htb-selection-background/20 rounded-lg p-6 border border-htb-selection-background">
-              <h3 className="text-lg font-semibold text-htb-bright-white mb-3">Hands-on Labs</h3>
-              <p className="text-htb-bright-white">
-                Practice cybersecurity techniques in realistic, isolated virtual environments.
+              <h3 className="text-lg font-semibold text-white mb-3">Hands-on Labs</h3>
+              <p className="text-white">
+                Practice cybersecurity in realistic virtual environments.
               </p>
             </div>
 
             <div className="bg-htb-selection-background/20 rounded-lg p-6 border border-htb-selection-background">
-              <h3 className="text-lg font-semibold text-htb-bright-white mb-3">CTF Challenges</h3>
-              <p className="text-htb-bright-white">
-                Compete in capture-the-flag challenges with players from around the world.
-              </p>
-            </div>
-
-            <div className="bg-htb-selection-background/20 rounded-lg p-6 border border-htb-selection-background">
-              <h3 className="text-lg font-semibold text-htb-bright-white mb-3">Learning Paths</h3>
-              <p className="text-htb-bright-white">
-                Structured curriculum from beginner to advanced cybersecurity concepts.
+              <h3 className="text-lg font-semibold text-white mb-3">CTF Challenges</h3>
+              <p className="text-white">
+                Compete in capture-the-flag challenges.
               </p>
             </div>
           </div>
@@ -216,15 +202,13 @@ const HomePage = () => {
 
           {/* Call-To-Action Section */}
           <div className="mt-12 relative overflow-hidden">
-            {/* Animated Background Elements */}
+            {/* Simplified Animated Background Elements */}
             <div className="absolute inset-0 opacity-10">
-              <div className="absolute top-10 left-10 w-20 h-20 bg-htb-red rounded-full animate-pulse"></div>
-              <div className="absolute top-20 right-20 w-16 h-16 bg-htb-blue rounded-full animate-bounce" style={{animationDelay: '1s'}}></div>
-              <div className="absolute bottom-20 left-1/4 w-12 h-12 bg-htb-green rounded-full animate-ping" style={{animationDelay: '2s'}}></div>
-              <div className="absolute bottom-10 right-10 w-24 h-24 bg-htb-purple rounded-full animate-pulse" style={{animationDelay: '0.5s'}}></div>
+              <div className="absolute top-10 left-10 w-20 h-20 bg-red-500 rounded-full animate-pulse"></div>
+              <div className="absolute top-20 right-20 w-16 h-16 bg-blue-500 rounded-full animate-bounce" style={{animationDelay: '1s'}}></div>
             </div>
 
-            <h2 className="text-3xl font-bold text-htb-bright-white text-center mb-8 relative z-10">Master Cybersecurity Skills</h2>
+            <h2 className="text-3xl font-bold text-white text-center mb-8 relative z-10">Master Cybersecurity Skills</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
               {/* Red Team Card */}
               <div className="bg-gradient-to-br from-htb-red/20 to-htb-red/10 rounded-xl p-6 border border-htb-red/30 hover:border-htb-red hover:shadow-lg hover:shadow-htb-red/20 transition-all duration-500 hover:scale-105 cursor-pointer group">
