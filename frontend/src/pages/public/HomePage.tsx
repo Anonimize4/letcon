@@ -80,13 +80,25 @@ const HomePage = () => {
             <h1 className="text-4xl md:text-5xl font-bold text-white text-left mb-6">
               Anyone can learn cyber security with<br />LETHCON
             </h1>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
-              <button className="bg-htb-red hover:bg-htb-bright-red text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-htb-red/30 transform hover:-translate-y-1">
-                Start Learning Free
+            <p className="text-xl text-white max-w-3xl leading-relaxed text-left mb-4">
+              Hands-on cyber security training through real-world scenarios
+            </p>
+            <p className="text-xl text-white max-w-3xl leading-relaxed text-left mb-4">
+              Get your mentor and grow your Ethical hacking skills
+            </p>
+            <div className="mt-8 flex gap-4">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="w-64 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-htb-blue text-black"
+              />
+              <button className="bg-htb-red hover:bg-htb-bright-red text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1">
+                Join for Free
               </button>
-              <button className="border-2 border-htb-bright-white text-htb-bright-white hover:bg-htb-bright-white hover:text-htb-background font-bold py-3 px-8 rounded-lg transition-all duration-300">
-                View Platform Tour
-              </button>
+            </div>
+            <div className="mt-4 flex gap-4 text-white">
+              <span>✓ Beginner friendly</span>
+              <span>✓ Guides and challenges</span>
             </div>
           </div>
 
