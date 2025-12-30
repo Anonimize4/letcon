@@ -108,10 +108,6 @@ const Header: React.FC<HeaderProps> = ({
       ]
     },
     {
-      name: 'Community',
-      href: '#'
-    },
-    {
       name: 'Pricing',
       href: '/pricing'
     }
