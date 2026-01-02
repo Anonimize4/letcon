@@ -182,7 +182,7 @@ const DockerTerminal: React.FC<DockerTerminalProps> = ({
           });
           terminal.writeln('\x1b[32mChanged to parent directory\x1b[0m');
         } else if (args[0]) {
-          setCurrentDirectory(prev => prev === '~' ? args[0] : `${prev}/${args[0]}`);
+          setCurrentDirectory(prev => prev === '~' ? args[0]! : `${prev}/${args[0]}`);
           terminal.writeln(`\x1b[32mChanged to ${args[0]}\x1b[0m`);
         }
         break;
