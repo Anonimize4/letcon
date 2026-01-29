@@ -187,7 +187,7 @@ const HomePage = () => {
           </div>
 
           <div className="mt-12 bg-htb-selection-background/10 rounded-lg p-8 border border-htb-selection-background">
-            <h2 className="text-2xl font-bold text-htb-bright-white mb-4">Why Choose LETHCON?</h2>
+            <h2 className="text-2xl font-bold text-htb-bright-white mb-4">Why  LETHCON?</h2>
             <ul className="space-y-3 text-htb-bright-white">
               <li className="flex items-center space-x-3">
                 <div className="w-2 h-2 bg-htb-bright-green rounded-full"></div>

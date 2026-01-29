@@ -21,8 +21,7 @@ The goal of this platform is to help learners **practice real-world cybersecurit
 - Community engagement
 - Gamified progression
 
-The platform is designed to be **scalable**, **cloud-ready**, and **developer-friendly**, with a strong emphasis on user experience.
-
+The platform is designed to be **scalable**, **cloud-ready**, and **developer-friendly**, with a strong emphasis on user experience
 ## 1️⃣ Project Overview
 
 Cybersecurity learning often lacks:
