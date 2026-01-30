@@ -37,7 +37,7 @@ import WriteUpsPage from './pages/community/WriteUpsPage';
 import LeaderboardPage from './pages/community/LeaderboardPage';
 
 // Admin Pages
-import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminWelcomePage from './pages/admin/AdminWelcomePage';
 import UserManagementPage from './pages/admin/UserManagementPage';
 import ContentManagementPage from './pages/admin/ContentManagementPage';
 import LabCreationPage from './pages/admin/LabCreationPage';
@@ -176,7 +176,7 @@ const router = createBrowserRouter([
     path: '/admin',
     element: (
       <ProtectedRoute requiredRole="admin">
-        <AdminDashboard />
+        <AdminWelcomePage />
       </ProtectedRoute>
     ),
   },
