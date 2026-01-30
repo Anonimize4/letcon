@@ -5,9 +5,11 @@ import { ErrorBoundary } from './pages/error/ErrorBoundary';
 
 // Public Pages
 import HomePage from './pages/public/HomePage';
-import PricingPage from './pages/public/PricingPage';
 import AboutPage from './pages/public/AboutPage';
 import PlatformPage from './pages/public/PlatformPage';
+
+// Payment Pages
+import PricingPage from './pages/payment/PricingPage';
 
 // Auth Pages
 import LoginPage from './pages/auth/LoginPage';
