@@ -1,6 +1,8 @@
 // Cybersecurity Training Platform - Frontend Entry Point
 // This file will contain main React application component
 
+import React from 'react';
+import { AuthProvider } from './contexts/AuthContext';
 import { AppRouter } from './routes';
 
 export interface AppConfig {
@@ -18,5 +20,9 @@ export const appConfig: AppConfig = {
 
 // Main App component
 export const App = () => {
-  return <AppRouter />;
+  return (
+    <AuthProvider>
+      <AppRouter />
+    </AuthProvider>
+  );
 };
