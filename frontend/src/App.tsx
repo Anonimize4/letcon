@@ -1,6 +1,3 @@
-// Cybersecurity Training Platform - Frontend Entry Point
-// This file will contain main React application component
-
 import React from 'react';
 import { AuthProvider } from './contexts/AuthContext';
 import { AppRouter } from './routes';
@@ -26,3 +23,6 @@ export const App = () => {
     </AuthProvider>
   );
 };
+
+export default App;
+

@@ -1,5 +1,10 @@
+import tailwindcss from '@tailwindcss/vite';
+
 /** @type {import('tailwindcss').Config} */
 export default {
+  plugins: [
+    tailwindcss(),
+  ],
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -33,3 +38,4 @@ export default {
   },
   plugins: [],
 }
+

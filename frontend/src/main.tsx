@@ -5,12 +5,6 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { Toaster } from 'react-hot-toast'
 
 import { App } from './App'
-/*
-import { AuthProvider } from './contexts/AuthContext'
-import { ThemeProvider } from './contexts/ThemeContext'
-import { NotificationProvider } from './contexts/NotificationContext'
-*/
-
 import './styles/globals.css'
 
 // Create a client
@@ -32,9 +26,6 @@ const queryClient = new QueryClient({
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
-      {/* <AuthProvider>
-          <ThemeProvider>
-            <NotificationProvider> */}
       <App />
       <Toaster
         position="top-right"
@@ -48,9 +39,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         }}
       />
       <ReactQueryDevtools initialIsOpen={false} />
-      {/* </NotificationProvider>
-          </ThemeProvider>
-        </AuthProvider> */}
     </QueryClientProvider>
   </React.StrictMode>
 );
+
