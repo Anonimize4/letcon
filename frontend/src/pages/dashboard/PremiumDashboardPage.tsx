@@ -11,7 +11,7 @@ const PremiumDashboardPage: React.FC = () => {
           <div className="flex items-center justify-center space-x-3 mb-4">
             <Crown className="h-8 w-8 text-yellow-400" />
             <h1 className="text-4xl font-bold text-htb-bright-white">
-              Premium Dashboard
+              Premium User Dashboard
             </h1>
           </div>
           <p className="text-lg text-htb-foreground">
@@ -19,16 +19,17 @@ const PremiumDashboardPage: React.FC = () => {
           </p>
         </div>
 
-        {/* Premium Features Card */}
+        {/* Welcome Card */}
         <div className="gradient-bg rounded-lg p-8 mb-8">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-2xl font-bold text-htb-bright-white mb-2">
-                Premium Member Benefits
+                Welcome Premium User
               </h2>
               <p className="text-htb-foreground max-w-2xl">
                 Enjoy exclusive premium features with enhanced learning experience, 
                 advanced labs, priority support, and unrestricted access to all platform content.
+                This dashboard is designed for one premium user.
               </p>
             </div>
             <div className="hidden lg:block">
@@ -37,15 +38,15 @@ const PremiumDashboardPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Premium Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {/* Premium Features */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <div className="bg-htb-selection-background/10 border border-htb-selection-background rounded-lg p-6">
             <div className="flex items-center space-x-3 mb-4">
               <Star className="h-6 w-6 text-yellow-400" />
               <h3 className="text-lg font-semibold text-htb-bright-white">Premium Labs</h3>
             </div>
             <div className="text-2xl font-bold text-htb-bright-white mb-2">Unlimited</div>
-            <p className="text-sm text-htb-foreground">Access to all labs</p>
+            <p className="text-sm text-htb-foreground">Access to all premium labs</p>
           </div>
 
           <div className="bg-htb-selection-background/10 border border-htb-selection-background rounded-lg p-6">
@@ -65,14 +66,28 @@ const PremiumDashboardPage: React.FC = () => {
             <div className="text-2xl font-bold text-htb-bright-white mb-2">500+</div>
             <p className="text-sm text-htb-foreground">Exclusive challenges</p>
           </div>
+        </div>
 
-          <div className="bg-htb-selection-background/10 border border-htb-selection-background rounded-lg p-6">
-            <div className="flex items-center space-x-3 mb-4">
-              <Crown className="h-6 w-6 text-orange-400" />
-              <h3 className="text-lg font-semibold text-htb-bright-white">No Ads</h3>
+        {/* User Info */}
+        <div className="bg-htb-selection-background/10 border border-htb-selection-background rounded-lg p-6 mb-8">
+          <h3 className="text-xl font-semibold text-htb-bright-white mb-4">Your Premium Account</h3>
+          <div className="space-y-4">
+            <div className="flex justify-between">
+              <span className="text-htb-foreground">Account Status:</span>
+              <span className="text-green-400">Active</span>
             </div>
-            <div className="text-2xl font-bold text-htb-bright-white mb-2">Ad-Free</div>
-            <p className="text-sm text-htb-foreground">Uninterrupted experience</p>
+            <div className="flex justify-between">
+              <span className="text-htb-foreground">Member Since:</span>
+              <span className="text-htb-bright-white">January 2024</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-htb-foreground">Subscription:</span>
+              <span className="text-htb-bright-white">Premium Plan</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-htb-foreground">Next Billing:</span>
+              <span className="text-htb-bright-white">March 1, 2024</span>
+            </div>
           </div>
         </div>
 
@@ -80,10 +95,11 @@ const PremiumDashboardPage: React.FC = () => {
         <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-4">
           <div className="flex items-center space-x-2">
             <div className="w-3 h-3 rounded-full bg-green-400 animate-pulse"></div>
-            <p className="text-green-400 font-medium">Premium Dashboard is Operational</p>
+            <p className="text-green-400 font-medium">Premium User Dashboard is Operational</p>
           </div>
           <p className="text-htb-foreground text-sm mt-1">
             All premium features are working correctly. This is a placeholder page to confirm that routing is functional.
+            Welcome premium user!
           </p>
         </div>
       </div>
