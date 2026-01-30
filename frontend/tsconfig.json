@@ -1,32 +1,6 @@
 {
+  "extends": "../tsconfig.base.json",
   "compilerOptions": {
-    "target": "ES2020",
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "ESNext",
-    "skipLibCheck": true,
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "outDir": "./dist",
-    "removeComments": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    "strictFunctionTypes": true,
-    "noImplicitThis": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "noUncheckedIndexedAccess": true,
-    "noImplicitOverride": true,
-    "allowUnusedLabels": false,
-    "allowUnreachableCode": false,
-    "exactOptionalPropertyTypes": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "moduleResolution": "node",
     "baseUrl": "./",
     "paths": {
       "@/*": ["./src/*"],
@@ -41,16 +15,15 @@
       "@/assets/*": ["./src/assets/*"],
       "@/styles/*": ["./src/styles/*"]
     },
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": false,
     "jsx": "react-jsx",
-    "incremental": true
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext"
   },
   "include": [
     "src/**/*",
     "tests/**/*",
-    "*.d.ts"
+    "*.d.ts",
+    "vite.config.ts"
   ],
   "exclude": [
     "node_modules",
