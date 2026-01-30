@@ -1,10 +1,5 @@
-import tailwindcss from '@tailwindcss/vite';
-
 /** @type {import('tailwindcss').Config} */
 export default {
-  plugins: [
-    tailwindcss(),
-  ],
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -33,9 +28,11 @@ export default {
         'htb-bright-cyan': '#5cecc6',
         'htb-selection-background': '#313f55',
         'htb-cursor-color': '#313f55',
-      }
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'Avenir', 'Helvetica', 'Arial', 'sans-serif'],
+      },
     },
   },
   plugins: [],
 }
-
