@@ -8,7 +8,7 @@ import {
   refreshToken,
   logout,
   logoutAll
-} from '../../controllers/authController';
+} from '../../controllers/auth';
 import {
   registerValidation,
   loginValidation,
