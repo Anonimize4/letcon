@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,44 +7,195 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// User model for authentication and user management
 model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  username  String   @unique
-  password  String
-  firstName String?
-  lastName  String?
-  role      UserRole @default(USER)
-
-  // Profile information
-  avatar   String?
-  bio      String?
-  company  String?
-  location String?
-  website  String?
-
-  // Subscription and billing
-  subscriptionPlan   String    @default("FREE")
-  subscriptionStatus String    @default("ACTIVE")
-  subscriptionEndsAt DateTime?
-
-  // Timestamps
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  lastLoginAt DateTime?
-
-  // Relations
-  labSessions  LabSession[]
-  progress     UserProgress[]
-  certificates Certificate[]
-  enrollments  Enrollment[]
-  apiKeys      ApiKey[]
+  id            String         @id @default(cuid())
+  email         String         @unique
+  username      String         @unique
+  password      String
+  firstName     String?
+  lastName      String?
+  role          UserRole       @default(USER)
+  avatar        String?
+  bio           String?
+  company       String?
+  location      String?
+  website       String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  lastLoginAt   DateTime?
+  apiKeys       ApiKey[]
+  certificates  Certificate[]
+  enrollments   Enrollment[]
+  labSessions   LabSession[]
+  refreshTokens RefreshToken[]
+  tokens        Token[]
+  progress      UserProgress[]
 
   @@map("users")
 }
 
-// User roles for authorization
+model LabCategory {
+  id          String  @id @default(cuid())
+  name        String  @unique
+  description String?
+  icon        String?
+  color       String?
+  labs        Lab[]
+
+  @@map("lab_categories")
+}
+
+model Lab {
+  id            String         @id @default(cuid())
+  title         String
+  description   String
+  difficulty    Difficulty     @default(BEGINNER)
+  dockerImage   String
+  port          Int?
+  environment   Json?
+  instructions  String?
+  hints         String[]
+  flag          String?
+  estimatedTime Int?
+  tags          String[]
+  categoryId    String
+  objectives    String[]
+  prerequisites String[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  isActive      Boolean        @default(true)
+  certificates  Certificate[]
+  enrollments   Enrollment[]
+  labSessions   LabSession[]
+  category      LabCategory    @relation(fields: [categoryId], references: [id])
+  progress      UserProgress[]
+
+  @@map("labs")
+}
+
+model LabSession {
+  id          String        @id @default(cuid())
+  userId      String
+  labId       String
+  containerId String?
+  status      SessionStatus @default(RUNNING)
+  startedAt   DateTime      @default(now())
+  endedAt     DateTime?
+  completedAt DateTime?
+  progress    Float         @default(0)
+  hintsUsed   Int           @default(0)
+  timeSpent   Int           @default(0)
+  ipAddress   String?
+  userAgent   String?
+  lab         Lab           @relation(fields: [labId], references: [id])
+  user        User          @relation(fields: [userId], references: [id])
+
+  @@map("lab_sessions")
+}
+
+model UserProgress {
+  id             String         @id @default(cuid())
+  userId         String
+  labId          String
+  status         ProgressStatus @default(NOT_STARTED)
+  score          Float          @default(0)
+  attempts       Int            @default(0)
+  bestTime       Int?
+  totalTime      Int            @default(0)
+  firstAttemptAt DateTime?
+  lastAttemptAt  DateTime?
+  completedAt    DateTime?
+  lab            Lab            @relation(fields: [labId], references: [id])
+  user           User           @relation(fields: [userId], references: [id])
+
+  @@unique([userId, labId])
+  @@map("user_progress")
+}
+
+model Certificate {
+  id               String   @id @default(cuid())
+  userId           String
+  labId            String
+  certificateUrl   String
+  verificationCode String   @unique
+  issuedAt         DateTime @default(now())
+  lab              Lab      @relation(fields: [labId], references: [id])
+  user             User     @relation(fields: [userId], references: [id])
+
+  @@map("certificates")
+}
+
+model Enrollment {
+  id         String    @id @default(cuid())
+  userId     String
+  labId      String
+  enrolledAt DateTime  @default(now())
+  expiresAt  DateTime?
+  isActive   Boolean   @default(true)
+  lab        Lab       @relation(fields: [labId], references: [id])
+  user       User      @relation(fields: [userId], references: [id])
+
+  @@unique([userId, labId])
+  @@map("enrollments")
+}
+
+model SystemLog {
+  id        String   @id @default(cuid())
+  level     LogLevel
+  message   String
+  metadata  Json?
+  userId    String?
+  action    String?
+  resource  String?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  @@map("system_logs")
+}
+
+model ApiKey {
+  id         String    @id @default(cuid())
+  name       String
+  key        String    @unique
+  scopes     String[]
+  userId     String?
+  isActive   Boolean   @default(true)
+  expiresAt  DateTime?
+  lastUsedAt DateTime?
+  usageCount Int       @default(0)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  user       User?     @relation(fields: [userId], references: [id])
+
+  @@map("api_keys")
+}
+
+model Token {
+  id        String    @id @default(cuid())
+  token     String    @unique
+  type      TokenType
+  userId    String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("tokens")
+}
+
+model RefreshToken {
+  id        String    @id @default(cuid())
+  token     String    @unique
+  userId    String
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+}
+
 enum UserRole {
   USER
   ADMIN
@@ -55,96 +203,11 @@ enum UserRole {
   MODERATOR
 }
 
-// Lab categories for organizing challenges
-model LabCategory {
-  id          String  @id @default(cuid())
-  name        String  @unique
-  description String?
-  icon        String?
-  color       String?
-
-  // Relations
-  labs Lab[]
-
-  @@map("lab_categories")
-}
-
-// Lab/Challenge model
-model Lab {
-  id          String     @id @default(cuid())
-  title       String
-  description String
-  difficulty  Difficulty @default(BEGINNER)
-
-  // Technical details
-  dockerImage  String
-  port         Int?
-  environment  Json?
-  instructions String?
-  hints        String[]
-  flag         String?
-
-  // Metadata
-  estimatedTime Int? // in minutes
-  tags          String[]
-
-  // Relations
-  categoryId String
-  category   LabCategory @relation(fields: [categoryId], references: [id])
-
-  // Learning objectives and prerequisites
-  objectives    String[]
-  prerequisites String[]
-
-  // Timestamps
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  isActive  Boolean  @default(true)
-
-  // Relations
-  labSessions  LabSession[]
-  progress     UserProgress[]
-  enrollments  Enrollment[]
-  certificates Certificate[]
-
-  @@map("labs")
-}
-
 enum Difficulty {
   BEGINNER
   INTERMEDIATE
   ADVANCED
   EXPERT
-}
-
-// Lab sessions for tracking user interactions
-model LabSession {
-  id String @id @default(cuid())
-
-  // Relations
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-
-  labId String
-  lab   Lab    @relation(fields: [labId], references: [id])
-
-  // Session details
-  containerId String?
-  status      SessionStatus @default(RUNNING)
-  startedAt   DateTime      @default(now())
-  endedAt     DateTime?
-  completedAt DateTime?
-
-  // Progress tracking
-  progress  Float @default(0)
-  hintsUsed Int   @default(0)
-  timeSpent Int   @default(0) // in minutes
-
-  // Session data
-  ipAddress String?
-  userAgent String?
-
-  @@map("lab_sessions")
 }
 
 enum SessionStatus {
@@ -155,99 +218,11 @@ enum SessionStatus {
   TERMINATED
 }
 
-// User progress tracking
-model UserProgress {
-  id String @id @default(cuid())
-
-  // Relations
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-
-  labId String
-  lab   Lab    @relation(fields: [labId], references: [id])
-
-  // Progress details
-  status    ProgressStatus @default(NOT_STARTED)
-  score     Float          @default(0)
-  attempts  Int            @default(0)
-  bestTime  Int? // in minutes
-  totalTime Int            @default(0) // cumulative time in minutes
-
-  // Timestamps
-  firstAttemptAt DateTime?
-  lastAttemptAt  DateTime?
-  completedAt    DateTime?
-
-  @@unique([userId, labId])
-  @@map("user_progress")
-}
-
 enum ProgressStatus {
   NOT_STARTED
   IN_PROGRESS
   COMPLETED
   FAILED
-}
-
-// Certificates for completed labs
-model Certificate {
-  id String @id @default(cuid())
-
-  // Relations
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-
-  labId String
-  lab   Lab    @relation(fields: [labId], references: [id])
-
-  // Certificate details
-  certificateUrl   String
-  verificationCode String   @unique
-  issuedAt         DateTime @default(now())
-
-  @@map("certificates")
-}
-
-// Course/Lab enrollments
-model Enrollment {
-  id String @id @default(cuid())
-
-  // Relations
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-
-  labId String
-  lab   Lab    @relation(fields: [labId], references: [id])
-
-  // Enrollment details
-  enrolledAt DateTime  @default(now())
-  expiresAt  DateTime?
-  isActive   Boolean   @default(true)
-
-  @@unique([userId, labId])
-  @@map("enrollments")
-}
-
-// System logs for auditing
-model SystemLog {
-  id String @id @default(cuid())
-
-  // Log details
-  level    LogLevel
-  message  String
-  metadata Json?
-
-  // Context
-  userId    String?
-  action    String?
-  resource  String?
-  ipAddress String?
-  userAgent String?
-
-  // Timestamps
-  createdAt DateTime @default(now())
-
-  @@map("system_logs")
 }
 
 enum LogLevel {
@@ -258,28 +233,8 @@ enum LogLevel {
   FATAL
 }
 
-// API keys for external integrations
-model ApiKey {
-  id     String   @id @default(cuid())
-  name   String
-  key    String   @unique
-  scopes String[]
-
-  // Relations
-  userId String?
-  user   User?   @relation(fields: [userId], references: [id])
-
-  // Status and limits
-  isActive   Boolean   @default(true)
-  expiresAt  DateTime?
-  lastUsedAt DateTime?
-
-  // Usage tracking
-  usageCount Int @default(0)
-
-  // Timestamps
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("api_keys")
+enum TokenType {
+  EMAIL_VERIFICATION
+  PASSWORD_RESET
+  ACCOUNT_ACTIVATION
 }
