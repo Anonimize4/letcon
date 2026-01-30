@@ -1,3 +1,5 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Layout from '../../components/navigation/Layout';
 
 export interface AppConfig {
@@ -14,6 +16,8 @@ export const appConfig: AppConfig = {
 };
 
 const HomePage = () => {
+  const navigate = useNavigate();
+  
   // Featured learning paths data
   const featuredPaths = [
     {
@@ -92,13 +96,22 @@ const HomePage = () => {
                 placeholder="Enter your email"
                 className="w-64 px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-htb-blue text-black"
               />
-              <button className="bg-htb-red hover:bg-htb-bright-red text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1">
+              <button 
+                onClick={() => navigate('/register')}
+                className="bg-htb-red hover:bg-htb-bright-red text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1"
+              >
                 Join for Free
               </button>
             </div>
-            <div className="mt-4 flex gap-4 text-white">
-              <span>✓ Beginner friendly</span>
-              <span>✓ Guides and challenges</span>
+            <div className="mt-4 flex gap-4 items-center">
+              <button 
+                onClick={() => navigate('/login')}
+                className="border border-htb-bright-green text-htb-bright-green hover:bg-htb-bright-green hover:text-htb-black px-6 py-2 rounded-lg text-sm font-medium transition-all duration-200 transform"
+              >
+                Login
+              </button>
+              <span className="text-white">✓ Beginner friendly</span>
+              <span className="text-white">✓ Guides and challenges</span>
             </div>
           </div>
 

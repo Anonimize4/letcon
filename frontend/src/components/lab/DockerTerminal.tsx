@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Terminal } from 'xterm';
 import { FitAddon } from 'xterm-addon-fit';
 import { WebLinksAddon } from 'xterm-addon-web-links';
@@ -23,6 +23,89 @@ const DockerTerminal: React.FC<DockerTerminalProps> = ({
   const [isMaximized, setIsMaximized] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
   const [currentDirectory, setCurrentDirectory] = useState('~');
+
+  const handleCommand = useCallback((command: string) => {
+    const terminal = terminalInstanceRef.current;
+    if (!terminal) return;
+
+    // Notify parent component
+    onCommand?.(command);
+
+    // Simulate command responses
+    const parts = command.split(' ');
+    const cmd = parts[0];
+    const args = parts.slice(1);
+
+    switch (cmd) {
+      case 'help':
+        terminal.writeln('\x1b[36mAvailable commands:\x1b[0m');
+        terminal.writeln('  \x1b[32mls\x1b[0m           - List directory contents');
+        terminal.writeln('  \x1b[32mcd <dir>\x1b[0m     - Change directory');
+        terminal.writeln('  \x1b[32mpwd\x1b[0m          - Print working directory');
+        terminal.writeln('  \x1b[32mcat <file>\x1b[0m   - Display file contents');
+        terminal.writeln('  \x1b[32mwhoami\x1b[0m       - Display current user');
+        terminal.writeln('  \x1b[32mifconfig\x1b[0m     - Show network interfaces');
+        terminal.writeln('  \x1b[32mnetstat\x1b[0m      - Show network connections');
+        terminal.writeln('  \x1b[32mps aux\x1b[0m       - Show running processes');
+        terminal.writeln('  \x1b[32mclear\x1b[0m        - Clear terminal screen');
+        break;
+
+      case 'ls':
+        terminal.writeln('\x1b[32mflag.txt\x1b[0m    \x1b[36mindex.html\x1b[0m    \x1b[34mconfig.php\x1b[0m');
+        terminal.writeln('\x1b[35mdatabase.sql\x1b[0m  \x1b[33mreadme.md\x1b[0m     \x1b[37mlogs/\x1b[0m');
+        break;
+
+      case 'pwd':
+        terminal.writeln('\x1b[32m/home/user/challenges/web-1\x1b[0m');
+        break;
+
+      case 'cd':
+        if (args[0] === '..') {
+          setCurrentDirectory(prev => {
+            if (prev.includes('/') && prev !== '/') {
+              const parts = prev.split('/');
+              parts.pop();
+              const newDir = parts.join('/') || '~';
+              return newDir;
+            }
+            return '~';
+          });
+          terminal.writeln('\x1b[32mChanged to parent directory\x1b[0m');
+        } else if (args[0]) {
+          setCurrentDirectory(prev => prev === '~' ? args[0]! : `${prev}/${args[0]}`);
+          terminal.writeln(`\x1b[32mChanged to ${args[0]}\x1b[0m`);
+        }
+        break;
+
+      case 'cat':
+        if (args[0] === 'flag.txt') {
+          terminal.writeln('\x1b[31mHTB{fake_flag_for_demo_purposes}\x1b[0m');
+        } else if (args[0]) {
+          terminal.writeln(`\x1b[33mcat: ${args[0]}: No such file or directory\x1b[0m`);
+        } else {
+          terminal.writeln('\x1b[33mcat: missing file operand\x1b[0m');
+        }
+        break;
+
+      case 'whoami':
+        terminal.writeln('\x1b[32muser\x1b[0m');
+        break;
+
+      case 'ifconfig':
+        terminal.writeln('\x1b[36meth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500\x1b[0m');
+        terminal.writeln('        \x1b[32minet 10.10.10.5\x1b[0m  netmask 255.255.255.0  broadcast 10.10.10.255');
+        terminal.writeln('        \x1b[32minet6 fe80::a00:27ff:fe4e:66a1\x1b[0m  prefixlen 64  scopeid 0x20<link>');
+        break;
+
+      case 'clear':
+        terminal.clear();
+        break;
+
+      default:
+        terminal.writeln(`\x1b[31m${cmd}: command not found\x1b[0m`);
+        break;
+    }
+  }, [onCommand]);
 
   useEffect(() => {
     if (!terminalRef.current) return;
@@ -132,90 +215,7 @@ const DockerTerminal: React.FC<DockerTerminalProps> = ({
       window.removeEventListener('resize', handleResize);
       terminal.dispose();
     };
-  }, [containerId, currentDirectory]);
-
-  const handleCommand = (command: string) => {
-    const terminal = terminalInstanceRef.current;
-    if (!terminal) return;
-
-    // Notify parent component
-    onCommand?.(command);
-
-    // Simulate command responses
-    const parts = command.split(' ');
-    const cmd = parts[0];
-    const args = parts.slice(1);
-
-    switch (cmd) {
-      case 'help':
-        terminal.writeln('\x1b[36mAvailable commands:\x1b[0m');
-        terminal.writeln('  \x1b[32mls\x1b[0m           - List directory contents');
-        terminal.writeln('  \x1b[32mcd <dir>\x1b[0m     - Change directory');
-        terminal.writeln('  \x1b[32mpwd\x1b[0m          - Print working directory');
-        terminal.writeln('  \x1b[32mcat <file>\x1b[0m   - Display file contents');
-        terminal.writeln('  \x1b[32mwhoami\x1b[0m       - Display current user');
-        terminal.writeln('  \x1b[32mifconfig\x1b[0m     - Show network interfaces');
-        terminal.writeln('  \x1b[32mnetstat\x1b[0m      - Show network connections');
-        terminal.writeln('  \x1b[32mps aux\x1b[0m       - Show running processes');
-        terminal.writeln('  \x1b[32mclear\x1b[0m        - Clear terminal screen');
-        break;
-
-      case 'ls':
-        terminal.writeln('\x1b[32mflag.txt\x1b[0m    \x1b[36mindex.html\x1b[0m    \x1b[34mconfig.php\x1b[0m');
-        terminal.writeln('\x1b[35mdatabase.sql\x1b[0m  \x1b[33mreadme.md\x1b[0m     \x1b[37mlogs/\x1b[0m');
-        break;
-
-      case 'pwd':
-        terminal.writeln('\x1b[32m/home/user/challenges/web-1\x1b[0m');
-        break;
-
-      case 'cd':
-        if (args[0] === '..') {
-          setCurrentDirectory(prev => {
-            if (prev.includes('/') && prev !== '/') {
-              const parts = prev.split('/');
-              parts.pop();
-              const newDir = parts.join('/') || '~';
-              return newDir;
-            }
-            return '~';
-          });
-          terminal.writeln('\x1b[32mChanged to parent directory\x1b[0m');
-        } else if (args[0]) {
-          setCurrentDirectory(prev => prev === '~' ? args[0]! : `${prev}/${args[0]}`);
-          terminal.writeln(`\x1b[32mChanged to ${args[0]}\x1b[0m`);
-        }
-        break;
-
-      case 'cat':
-        if (args[0] === 'flag.txt') {
-          terminal.writeln('\x1b[31mHTB{fake_flag_for_demo_purposes}\x1b[0m');
-        } else if (args[0]) {
-          terminal.writeln(`\x1b[33mcat: ${args[0]}: No such file or directory\x1b[0m`);
-        } else {
-          terminal.writeln('\x1b[33mcat: missing file operand\x1b[0m');
-        }
-        break;
-
-      case 'whoami':
-        terminal.writeln('\x1b[32muser\x1b[0m');
-        break;
-
-      case 'ifconfig':
-        terminal.writeln('\x1b[36meth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500\x1b[0m');
-        terminal.writeln('        \x1b[32minet 10.10.10.5\x1b[0m  netmask 255.255.255.0  broadcast 10.10.10.255');
-        terminal.writeln('        \x1b[32minet6 fe80::a00:27ff:fe4e:66a1\x1b[0m  prefixlen 64  scopeid 0x20<link>');
-        break;
-
-      case 'clear':
-        terminal.clear();
-        break;
-
-      default:
-        terminal.writeln(`\x1b[31m${cmd}: command not found\x1b[0m`);
-        break;
-    }
-  };
+  }, [containerId, currentDirectory, handleCommand]);
 
   const copyTerminalContent = () => {
     const terminal = terminalInstanceRef.current;

@@ -67,7 +67,7 @@ const ForgotPasswordPage: React.FC = () => {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       setIsSuccess(true);
-    } catch (error) {
+    } catch {
       setFormErrors({ general: 'An error occurred. Please try again.' });
     } finally {
       setIsSubmitting(false);
@@ -163,4 +163,3 @@ const ForgotPasswordPage: React.FC = () => {
 };
 
 export default ForgotPasswordPage;
-

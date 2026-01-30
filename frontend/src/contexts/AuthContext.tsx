@@ -119,7 +119,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             dispatch({ type: 'AUTH_SUCCESS', payload: { id: tokenData.userId, email: tokenData.email, username: tokenData.username, role: tokenData.role || 'USER' } });
           }
         } catch (error) {
-          console.error('Auth check failed:', error);
+          // console.error('Auth check failed:', error);
           localStorage.removeItem('accessToken');
           localStorage.removeItem('refreshToken');
         }

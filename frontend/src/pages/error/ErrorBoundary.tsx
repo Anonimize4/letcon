@@ -32,9 +32,9 @@ export class ErrorBoundary extends Component<Props, State> {
     };
   }
 
-  public componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    console.error('Error caught by ErrorBoundary:', error);
-    console.error('Error info:', errorInfo);
+  public override componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+    // console.error('Error caught by ErrorBoundary:', error);
+    // console.error('Error info:', errorInfo);
     
     this.setState({
       error,
@@ -46,7 +46,7 @@ export class ErrorBoundary extends Component<Props, State> {
     window.location.reload();
   };
 
-  public render(): ReactNode {
+  public override render(): ReactNode {
     if (this.state.hasError) {
       // Custom error fallback UI
       return (
@@ -119,4 +119,3 @@ export class ErrorBoundary extends Component<Props, State> {
 }
 
 export default ErrorBoundary;
-

@@ -1,14 +1,27 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface HeaderProps {
   title?: string;
   className?: string;
 }
 
+interface NavItem {
+  name: string;
+  href: string;
+  hasDropdown?: boolean;
+  dropdownSections?: DropdownSection[];
+}
+
+interface DropdownSection {
+  title: string;
+  items: NavItem[];
+}
+
 const Header: React.FC<HeaderProps> = ({
-  title = 'LETHCON',
   className = ''
 }) => {
+  const navigate = useNavigate();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [dropdownTimeout, setDropdownTimeout] = useState<NodeJS.Timeout | null>(null);
 
@@ -26,7 +39,7 @@ const Header: React.FC<HeaderProps> = ({
     }, 150));
   };
 
-  const navItems = [
+  const navItems: NavItem[] = [
     {
       name: 'product',
       href: '#',
@@ -127,7 +140,7 @@ const Header: React.FC<HeaderProps> = ({
     }
   ];
 
-  const getActiveDropdownContent = () => {
+  const getActiveDropdownContent = (): DropdownSection[] => {
     const activeItem = navItems.find(item => item.name === activeDropdown);
     return activeItem?.dropdownSections || [];
   };
@@ -175,10 +188,16 @@ const Header: React.FC<HeaderProps> = ({
 
             {/* CTA Buttons */}
             <div className="flex items-center space-x-4">
-              <button className="border border-htb-bright-green text-htb-bright-green hover:bg-htb-bright-green hover:text-htb-black px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 transform">
+              <button 
+                onClick={() => navigate('/login')}
+                className="border border-htb-bright-green text-htb-bright-green hover:bg-htb-bright-green hover:text-htb-black px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 transform"
+              >
                 Login
               </button>
-              <button className="bg-htb-bright-green hover:bg-htb-bright-green/90 hover:scale-105 text-htb-black px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 transform">
+              <button 
+                onClick={() => navigate('/register')}
+                className="bg-htb-bright-green hover:bg-htb-bright-green/90 hover:scale-105 text-htb-black px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 transform"
+              >
                 Get Started
               </button>
               {/* Placeholder for user menu or actions */}
@@ -199,7 +218,7 @@ const Header: React.FC<HeaderProps> = ({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="py-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {getActiveDropdownContent().map((section: any, index: number) => (
+              {getActiveDropdownContent().map((section: DropdownSection, index: number) => (
                 <div key={section.title} className="relative">
                   {index < getActiveDropdownContent().length - 1 && (
                     <div className="hidden md:block absolute right-0 top-0 bottom-0 w-px bg-htb-selection-background" style={{right: '-16px'}}></div>
@@ -208,7 +227,7 @@ const Header: React.FC<HeaderProps> = ({
                     {section.title}
                   </h3>
                   <div className="space-y-1">
-                    {section.items.map((sectionItem: any) => (
+                    {section.items.map((sectionItem: NavItem) => (
                       <a
                         key={sectionItem.name}
                         href={sectionItem.href}
