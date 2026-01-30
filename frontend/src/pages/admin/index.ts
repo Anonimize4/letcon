@@ -1,2 +1,13 @@
 export { AdminWelcomePage } from './AdminWelcomePage';
 export { default as AdminWelcomePageDefault } from './AdminWelcomePage';
+export { default as UserManagementPage } from './UserManagementPage';
+export { default as ContentManagementPage } from './ContentManagementPage';
+export { default as LabCreationPage } from './LabCreationPage';
+export { default as SystemMonitorPage } from './SystemMonitorPage';
+export { default as AdminSettingsPage } from './AdminSettingsPage';
+export { default as SecurityCenterPage } from './SecurityCenterPage';
+export { default as AnalyticsDashboardPage } from './AnalyticsDashboardPage';
+export { default as DatabaseManagementPage } from './DatabaseManagementPage';
+export { default as AuditLogsPage } from './AuditLogsPage';
+export { default as DockerManagementPage } from './DockerManagementPage';
+export { default as AdminDashboard } from './AdminDashboard';

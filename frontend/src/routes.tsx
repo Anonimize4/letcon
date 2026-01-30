@@ -42,6 +42,12 @@ import UserManagementPage from './pages/admin/UserManagementPage';
 import ContentManagementPage from './pages/admin/ContentManagementPage';
 import LabCreationPage from './pages/admin/LabCreationPage';
 import SystemMonitorPage from './pages/admin/SystemMonitorPage';
+import AdminSettingsPage from './pages/admin/AdminSettingsPage';
+import SecurityCenterPage from './pages/admin/SecurityCenterPage';
+import AnalyticsDashboardPage from './pages/admin/AnalyticsDashboardPage';
+import DatabaseManagementPage from './pages/admin/DatabaseManagementPage';
+import AuditLogsPage from './pages/admin/AuditLogsPage';
+import DockerManagementPage from './pages/admin/DockerManagementPage';
 
 // Error Pages
 import NotFoundPage from './pages/error/NotFoundPage';
@@ -209,6 +215,54 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute requiredRole="admin">
         <SystemMonitorPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/admin/settings',
+    element: (
+      <ProtectedRoute requiredRole="admin">
+        <AdminSettingsPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/admin/security',
+    element: (
+      <ProtectedRoute requiredRole="admin">
+        <SecurityCenterPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/admin/analytics',
+    element: (
+      <ProtectedRoute requiredRole="admin">
+        <AnalyticsDashboardPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/admin/database',
+    element: (
+      <ProtectedRoute requiredRole="admin">
+        <DatabaseManagementPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/admin/audit',
+    element: (
+      <ProtectedRoute requiredRole="admin">
+        <AuditLogsPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/admin/docker',
+    element: (
+      <ProtectedRoute requiredRole="admin">
+        <DockerManagementPage />
       </ProtectedRoute>
     ),
   },
