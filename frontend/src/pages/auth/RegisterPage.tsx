@@ -8,8 +8,6 @@ interface FormData {
   username: string;
   password: string;
   confirmPassword: string;
-  firstName: string;
-  lastName: string;
 }
 
 interface FormErrors {
@@ -17,8 +15,6 @@ interface FormErrors {
   username?: string;
   password?: string;
   confirmPassword?: string;
-  firstName?: string;
-  lastName?: string;
   general?: string;
 }
 
@@ -32,8 +28,6 @@ const RegisterPage: React.FC = () => {
     username: '',
     password: '',
     confirmPassword: '',
-    firstName: '',
-    lastName: '',
   });
 
   const [formErrors, setFormErrors] = useState<FormErrors>({});
@@ -93,15 +87,6 @@ const RegisterPage: React.FC = () => {
       errors.confirmPassword = 'Passwords do not match';
     }
 
-    // First name validation (optional but if provided, must be valid)
-    if (formData.firstName && formData.firstName.length > 50) {
-      errors.firstName = 'First name must be less than 50 characters';
-    }
-
-    // Last name validation (optional but if provided, must be valid)
-    if (formData.lastName && formData.lastName.length > 50) {
-      errors.lastName = 'Last name must be less than 50 characters';
-    }
 
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
@@ -146,13 +131,6 @@ const RegisterPage: React.FC = () => {
         password: formData.password,
       };
 
-      // Only include optional fields if they have values
-      if (formData.firstName.trim()) {
-        registerData.firstName = formData.firstName;
-      }
-      if (formData.lastName.trim()) {
-        registerData.lastName = formData.lastName;
-      }
 
       await register(registerData);
       
@@ -282,54 +260,6 @@ const RegisterPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Name Fields */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
-                  First name
-                </label>
-                <div className="mt-1">
-                  <input
-                    id="firstName"
-                    name="firstName"
-                    type="text"
-                    autoComplete="given-name"
-                    className={`appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
-                      formErrors.firstName ? 'border-red-300' : 'border-gray-300'
-                    }`}
-                    value={formData.firstName}
-                    onChange={handleInputChange}
-                    disabled={isSubmitting}
-                  />
-                  {formErrors.firstName && (
-                    <p className="mt-2 text-sm text-red-600">{formErrors.firstName}</p>
-                  )}
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
-                  Last name
-                </label>
-                <div className="mt-1">
-                  <input
-                    id="lastName"
-                    name="lastName"
-                    type="text"
-                    autoComplete="family-name"
-                    className={`appearance-none block w-full px-3 py-2 border rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm ${
-                      formErrors.lastName ? 'border-red-300' : 'border-gray-300'
-                    }`}
-                    value={formData.lastName}
-                    onChange={handleInputChange}
-                    disabled={isSubmitting}
-                  />
-                  {formErrors.lastName && (
-                    <p className="mt-2 text-sm text-red-600">{formErrors.lastName}</p>
-                  )}
-                </div>
-              </div>
-            </div>
 
             {/* Password Field */}
             <div>
