@@ -23,8 +23,8 @@ const RegisterPage: React.FC = () => {
       setTimeout(() => {
         navigate('/login');
       }, 2000);
-    } catch (error) {
-      console.error('Registration failed:', error);
+    } catch {
+      // Registration failed
     } finally {
       setIsSubmitting(false);
     }

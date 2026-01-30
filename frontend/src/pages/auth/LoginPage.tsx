@@ -37,7 +37,7 @@ const LoginPage: React.FC = () => {
         navigate('/dashboard');
       }, 2000);
       
-    } catch (error) {
+    } catch {
       setErrorMessage('Invalid email or password. Please try again.');
     } finally {
       setIsSubmitting(false);
