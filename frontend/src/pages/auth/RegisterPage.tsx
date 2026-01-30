@@ -1,76 +1,33 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-interface FormData {
-  email: string;
-  username: string;
-  password: string;
-  confirmPassword: string;
-}
-
-interface FormErrors {
-  email?: string;
-  username?: string;
-  password?: string;
-  confirmPassword?: string;
-  general?: string;
-}
-
 const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
-  
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState({
     email: '',
     username: '',
     password: '',
     confirmPassword: '',
   });
-
-  const [formErrors, setFormErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
 
-  const validateForm = (): boolean => {
-    const errors: FormErrors = {};
-
-    // Email validation
-    if (!formData.email) {
-      errors.email = 'Email is required';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      errors.email = 'Email is invalid';
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    try {
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      setSuccessMessage('Registration successful! Redirecting to login...');
+      
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
+    } catch (error) {
+      console.error('Registration failed:', error);
+    } finally {
+      setIsSubmitting(false);
     }
-
-    // Username validation
-    if (!formData.username) {
-      errors.username = 'Username is required';
-    } else if (formData.username.length < 3) {
-      errors.username = 'Username must be at least 3 characters';
-    } else if (formData.username.length > 30) {
-      errors.username = 'Username must be less than 30 characters';
-    } else if (!/^[a-zA-Z0-9_]+$/.test(formData.username)) {
-      errors.username = 'Username can only contain letters, numbers, and underscores';
-    }
-
-    // Password validation
-    if (!formData.password) {
-      errors.password = 'Password is required';
-    } else if (formData.password.length < 6) {
-      errors.password = 'Password must be at least 6 characters';
-    } else if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(formData.password)) {
-      errors.password = 'Password must contain at least one uppercase letter, one lowercase letter, and one number';
-    }
-
-    // Confirm password validation
-    if (!formData.confirmPassword) {
-      errors.confirmPassword = 'Please confirm your password';
-    } else if (formData.password !== formData.confirmPassword) {
-      errors.confirmPassword = 'Passwords do not match';
-    }
-
-    setFormErrors(errors);
-    return Object.keys(errors).length === 0;
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,69 +36,11 @@ const RegisterPage: React.FC = () => {
       ...prev,
       [name]: value
     }));
-
-    // Clear specific field error when user starts typing
-    if (formErrors[name as keyof FormErrors]) {
-      const newErrors = { ...formErrors };
-      delete newErrors[name as keyof FormErrors];
-      setFormErrors(newErrors);
-    }
-
-    // Clear general error when user starts typing
-    if (formErrors.general) {
-      const newErrors = { ...formErrors };
-      delete newErrors.general;
-      setFormErrors(newErrors);
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!validateForm()) {
-      return;
-    }
-
-    setIsSubmitting(true);
-    setFormErrors({});
-
-    try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Show success message
-      setSuccessMessage('Registration successful! Please check your email to verify your account.');
-      
-      // Clear form
-      setFormData({
-        email: '',
-        username: '',
-        password: '',
-        confirmPassword: '',
-      });
-      
-      // Redirect to login after delay
-      setTimeout(() => {
-        navigate('/login', { 
-          state: { 
-            message: 'Registration successful! Please check your email to verify your account.' 
-          } 
-        });
-      }, 2000);
-      
-    } catch (error) {
-      setFormErrors({
-        general: 'Registration failed. Please try again.'
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
   };
 
   return (
     <div className="min-h-screen bg-htb-background flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full">
-        {/* Header */}
         <div className="text-center mb-8">
           <div className="mx-auto h-16 w-16 flex items-center justify-center rounded-full bg-gradient-to-br from-htb-red/20 to-htb-red/10 border border-htb-red/30 mb-4">
             <svg className="h-8 w-8 text-htb-red" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -162,10 +61,124 @@ const RegisterPage: React.FC = () => {
           </p>
         </div>
 
-        {/* Success Message */}
         {successMessage && (
           <div className="mb-6 rounded-lg bg-green-500/10 border border-green-500/30 p-4">
             <div className="flex">
               <div className="flex-shrink-0">
                 <svg className="h-5 w-5 text-htb-green" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <p className="text-sm font-medium text-htb-green">{successMessage}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          <div className="bg-htb-selection-background/10 rounded-xl p-6 border border-htb-selection-background">
+            <div className="space-y-4">
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-htb-bright-white mb-2">
+                  Email Address
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  autoComplete="email"
+                  required
+                  className="w-full px-4 py-3 rounded-lg border bg-htb-background text-htb-bright-white placeholder-htb-foreground focus:outline-none focus:ring-2 focus:ring-htb-blue focus:border-transparent transition-all border-htb-selection-background"
+                  placeholder="Enter your email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  disabled={isSubmitting}
+                />
+              </div>
+
+              <div>
+                <label htmlFor="username" className="block text-sm font-medium text-htb-bright-white mb-2">
+                  Username
+                </label>
+                <input
+                  id="username"
+                  name="username"
+                  type="text"
+                  autoComplete="username"
+                  required
+                  className="w-full px-4 py-3 rounded-lg border bg-htb-background text-htb-bright-white placeholder-htb-foreground focus:outline-none focus:ring-2 focus:ring-htb-blue focus:border-transparent transition-all border-htb-selection-background"
+                  placeholder="Choose a username"
+                  value={formData.username}
+                  onChange={handleInputChange}
+                  disabled={isSubmitting}
+                />
+              </div>
+
+              <div>
+                <label htmlFor="password" className="block text-sm font-medium text-htb-bright-white mb-2">
+                  Password
+                </label>
+                <input
+                  id="password"
+                  name="password"
+                  type="password"
+                  autoComplete="new-password"
+                  required
+                  className="w-full px-4 py-3 rounded-lg border bg-htb-background text-htb-bright-white placeholder-htb-foreground focus:outline-none focus:ring-2 focus:ring-htb-blue focus:border-transparent transition-all border-htb-selection-background"
+                  placeholder="Create a password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  disabled={isSubmitting}
+                />
+              </div>
+
+              <div>
+                <label htmlFor="confirmPassword" className="block text-sm font-medium text-htb-bright-white mb-2">
+                  Confirm Password
+                </label>
+                <input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type="password"
+                  autoComplete="new-password"
+                  required
+                  className="w-full px-4 py-3 rounded-lg border bg-htb-background text-htb-bright-white placeholder-htb-foreground focus:outline-none focus:ring-2 focus:ring-htb-blue focus:border-transparent transition-all border-htb-selection-background"
+                  placeholder="Confirm your password"
+                  value={formData.confirmPassword}
+                  onChange={handleInputChange}
+                  disabled={isSubmitting}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full bg-htb-red hover:bg-htb-bright-red text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 hover:shadow-lg transform hover:-translate-y-1 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isSubmitting ? 'Creating Account...' : 'Create Account'}
+            </button>
+          </div>
+
+          <div className="text-center">
+            <p className="text-sm text-htb-foreground">
+              By creating an account, you agree to our{' '}
+              <Link to="/terms" className="font-medium text-htb-blue hover:text-htb-bright-blue transition-colors">
+                Terms of Service
+              </Link>{' '}
+              and{' '}
+              <Link to="/privacy" className="font-medium text-htb-blue hover:text-htb-bright-blue transition-colors">
+                Privacy Policy
+              </Link>
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default RegisterPage;
