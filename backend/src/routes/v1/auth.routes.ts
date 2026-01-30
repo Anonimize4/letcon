@@ -1,19 +1,48 @@
-import express from 'express';
 import { Router } from 'express';
+import {
+  register,
+  login,
+  verifyEmail,
+  forgotPassword,
+  resetPassword,
+  refreshToken,
+  logout,
+  logoutAll
+} from '../../controllers/authController';
+import {
+  registerValidation,
+  loginValidation,
+  forgotPasswordValidation,
+  resetPasswordValidation,
+  refreshTokenValidation,
+  logoutValidation,
+  tokenParamValidation
+} from '../../schemas/auth.validation';
 
 const router = Router();
 
-// Auth routes
-router.post('/login', (req, res) => {
-  res.json({ message: 'Login endpoint' });
-});
+// Register new user
+router.post('/register', registerValidation, register);
 
-router.post('/register', (req, res) => {
-  res.json({ message: 'Register endpoint' });
-});
+// Login user
+router.post('/login', loginValidation, login);
 
-router.post('/logout', (req, res) => {
-  res.json({ message: 'Logout endpoint' });
-});
+// Verify email
+router.get('/verify-email/:token', tokenParamValidation, verifyEmail);
+
+// Forgot password
+router.post('/forgot-password', forgotPasswordValidation, forgotPassword);
+
+// Reset password
+router.post('/reset-password', resetPasswordValidation, resetPassword);
+
+// Refresh access token
+router.post('/refresh-token', refreshTokenValidation, refreshToken);
+
+// Logout (revoke refresh token)
+router.post('/logout', logoutValidation, logout);
+
+// Logout from all devices
+router.post('/logout-all', logoutAll);
 
 export default router;
