@@ -20,6 +20,8 @@ export default {
         'htb-bright-green': '#c5f467',
         'htb-yellow': '#ffaf00',
         'htb-bright-yellow': '#ffcc5c',
+        'htb-gold': '#ffd700',
+        'htb-bright-gold': '#ffed4e',
         'htb-blue': '#004cff',
         'htb-bright-blue': '#5cb2ff',
         'htb-purple': '#9f00ff',

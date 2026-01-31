@@ -63,7 +63,7 @@ const PlatformPage = () => {
               <button className="bg-htb-green hover:bg-htb-bright-green text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-htb-green/30 transform hover:-translate-y-1">
                 Sign Up for Free
               </button>
-              <button className="bg-transparent border-2 border-htb-bright-white text-htb-bright-white font-bold py-3 px-8 rounded-lg hover:bg-htb-bright-white hover:text-htb-deep-dark-blue transition-all duration-300">
+              <button className="bg-transparent border-2 border-htb-bright-white text-htb-bright-white font-bold py-3 px-8 rounded-lg hover:bg-htb-bright-white hover:text-htb-black transition-all duration-300">
                 Explore All Labs
               </button>
             </div>

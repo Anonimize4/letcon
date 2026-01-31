@@ -11,6 +11,9 @@ import PlatformPage from './pages/public/PlatformPage';
 // Payment Pages
 import PricingPage from './pages/payment/PricingPage';
 
+// Premium Pages
+import { PremiumPage } from './pages/premium';
+
 // Auth Pages
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
@@ -62,6 +65,10 @@ const router = createBrowserRouter([
   {
     path: '/pricing',
     element: <PricingPage />,
+  },
+  {
+    path: '/premium',
+    element: <PremiumPage />,
   },
   {
     path: '/about',
