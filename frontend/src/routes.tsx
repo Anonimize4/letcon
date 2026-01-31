@@ -19,6 +19,7 @@ import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
 // Dashboard Pages
 import DashboardPage from './pages/dashboard/DashboardPage';
 import ProfilePage from './pages/dashboard/ProfilePage';
+import ProDashboardPage from './pages/dashboard/ProDashboardPage';
 
 // Learning Pages
 import LearningPathsPage from './pages/learning/LearningPathsPage';
@@ -95,6 +96,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <ProfilePage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/pro',
+    element: (
+      <ProtectedRoute>
+        <ProDashboardPage />
       </ProtectedRoute>
     ),
   },

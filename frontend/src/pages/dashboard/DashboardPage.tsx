@@ -1,6 +1,6 @@
 import React from 'react';
 import Layout from '../../components/navigation/Layout';
-
+mr
 const DashboardPage: React.FC = () => {
   return (
     <Layout>
@@ -12,11 +12,11 @@ const DashboardPage: React.FC = () => {
           <p className="text-lg text-htb-foreground">
             You have successfully logged in.
           </p>
-          <button 
+          <button
             className="mt-4 px-6 py-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg text-yellow-400 hover:bg-yellow-500/20 transition-colors"
-            onClick={() => window.location.href = '/premium'}
+            onClick={() => window.location.href = '/pro'}
           >
-            Upgrade to Premium
+            Upgrade to Pro
           </button>
         </div>
       </div>
