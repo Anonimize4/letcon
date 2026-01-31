@@ -1,4 +1,5 @@
-/** @type {import('tailwindcss').Config} */
+import { type Config } from 'tailwindcss';
+
 export default {
   content: [
     "./index.html",
@@ -35,6 +36,4 @@ export default {
         sans: ['Inter', 'system-ui', 'Avenir', 'Helvetica', 'Arial', 'sans-serif'],
       },
     },
-  },
-  plugins: [],
-};
+  } satisfies Config;
