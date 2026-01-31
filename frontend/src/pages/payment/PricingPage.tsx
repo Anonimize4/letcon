@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../../components/navigation/Layout';
+import { Check, X, Crown, Zap, Shield, Users, BookOpen, Terminal, Award } from 'lucide-react';
 
 const PricingPage = () => {
   const navigate = useNavigate();
@@ -51,6 +52,81 @@ const PricingPage = () => {
       buttonText: 'Contact Sales',
       buttonClass: 'bg-htb-purple hover:bg-htb-bright-purple',
       popular: false
+    }
+  ];
+
+  // Comparison data for Free vs Premium
+  const comparisonData = [
+    {
+      category: 'Learning Content',
+      icon: <BookOpen className="h-5 w-5" />,
+      items: [
+        { feature: 'Basic Learning Paths', free: true, premium: true },
+        { feature: 'Advanced Learning Paths', free: false, premium: true },
+        { feature: 'Premium-Only Modules', free: false, premium: true },
+        { feature: 'Real-World Scenarios', free: false, premium: true },
+        { feature: 'Career Guidance', free: false, premium: true },
+      ]
+    },
+    {
+      category: 'Hands-On Labs',
+      icon: <Terminal className="h-5 w-5" />,
+      items: [
+        { feature: 'Basic Lab Access', free: true, premium: true },
+        { feature: 'Unlimited Lab Time', free: false, premium: true },
+        { feature: 'Private Lab Environments', free: false, premium: true },
+        { feature: 'Custom Lab Builder', free: false, premium: true },
+        { feature: 'Advanced Docker Labs', free: false, premium: true },
+        { feature: 'Real-World Exploitation', free: false, premium: true },
+      ]
+    },
+    {
+      category: 'Challenges',
+      icon: <Zap className="h-5 w-5" />,
+      items: [
+        { feature: 'Basic Challenges', free: true, premium: true },
+        { feature: 'Intermediate Challenges', free: true, premium: true },
+        { feature: 'Advanced/Hard Challenges', free: false, premium: true },
+        { feature: 'CTF Competitions', free: false, premium: true },
+        { feature: 'Bug Bounty Preparation', free: false, premium: true },
+        { feature: 'OSCP-style Exams', free: false, premium: true },
+      ]
+    },
+    {
+      category: 'Support & Community',
+      icon: <Users className="h-5 w-5" />,
+      items: [
+        { feature: 'Community Forum', free: true, premium: true },
+        { feature: 'Discord Community', free: true, premium: true },
+        { feature: '1-on-1 Mentorship', free: false, premium: true },
+        { feature: 'Priority Support', free: false, premium: true },
+        { feature: 'Live Sessions', free: false, premium: true },
+        { feature: 'Direct Mentor Chat', free: false, premium: true },
+      ]
+    },
+    {
+      category: 'Certifications & Rewards',
+      icon: <Award className="h-5 w-5" />,
+      items: [
+        { feature: 'Progress Tracking', free: true, premium: true },
+        { feature: 'Completion Badges', free: true, premium: true },
+        { feature: 'Free Certificate of Completion', free: false, premium: true },
+        { feature: 'Industry-Recognized Certs', free: false, premium: true },
+        { feature: 'LinkedIn Certifications', free: false, premium: true },
+        { feature: 'Job Placement Support', free: false, premium: true },
+      ]
+    },
+    {
+      category: 'Platform Benefits',
+      icon: <Shield className="h-5 w-5" />,
+      items: [
+        { feature: 'Web-based Lab Access', free: true, premium: true },
+        { feature: 'Browser-based Terminal', free: true, premium: true },
+        { feature: 'No VPN Required', free: true, premium: true },
+        { feature: 'API Access', free: false, premium: true },
+        { feature: 'Team Collaboration', free: false, premium: true },
+        { feature: 'Custom Learning Paths', free: false, premium: true },
+      ]
     }
   ];
 
@@ -107,6 +183,100 @@ const PricingPage = () => {
                 </div>
               </div>
             ))}
+          </div>
+
+          {/* Comparison Section - Free vs Premium */}
+          <div className="text-center">
+            <div className="flex items-center justify-center space-x-3 mb-4">
+              <Crown className="h-8 w-8 text-htb-gold" />
+              <h2 className="text-3xl md:text-4xl font-bold text-white">
+                Free vs Premium
+              </h2>
+            </div>
+            <p className="text-xl text-white/80 max-w-3xl mx-auto mb-8">
+              See what's included in each plan and unlock your full cybersecurity potential
+            </p>
+            
+            <div className="bg-htb-selection-background/20 rounded-xl border border-htb-selection-background overflow-hidden">
+              {/* Table Header */}
+              <div className="grid grid-cols-12 bg-htb-selection-background/30 border-b border-htb-selection-background">
+                <div className="col-span-6 p-4 text-left">
+                  <span className="text-lg font-bold text-white">Feature Comparison</span>
+                </div>
+                <div className="col-span-3 p-4 text-center">
+                  <span className="text-lg font-bold text-gray-300">Free</span>
+                </div>
+                <div className="col-span-3 p-4 text-center">
+                  <div className="flex items-center justify-center space-x-2">
+                    <Crown className="h-5 w-5 text-htb-gold" />
+                    <span className="text-lg font-bold text-htb-gold">Premium</span>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Comparison Categories */}
+              {comparisonData.map((category, categoryIndex) => (
+                <div key={categoryIndex}>
+                  {/* Category Header */}
+                  <div className="grid grid-cols-12 bg-htb-selection-background/10 border-b border-htb-selection-background">
+                    <div className="col-span-12 p-4 flex items-center space-x-3">
+                      <div className="text-htb-cyan">{category.icon}</div>
+                      <span className="text-lg font-semibold text-white">{category.category}</span>
+                    </div>
+                  </div>
+                  
+                  {/* Category Items */}
+                  {category.items.map((item, itemIndex) => (
+                    <div 
+                      key={itemIndex} 
+                      className={`grid grid-cols-12 border-b border-htb-selection-background/30 last:border-0 ${
+                        itemIndex % 2 === 0 ? 'bg-transparent' : 'bg-htb-selection-background/5'
+                      }`}
+                    >
+                      <div className="col-span-6 p-4 text-left">
+                        <span className="text-white/90">{item.feature}</span>
+                      </div>
+                      <div className="col-span-3 p-4 flex items-center justify-center">
+                        {item.free ? (
+                          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-htb-green/20">
+                            <Check className="h-5 w-5 text-htb-green" />
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-red-500/20">
+                            <X className="h-5 w-5 text-red-400" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="col-span-3 p-4 flex items-center justify-center">
+                        {item.premium ? (
+                          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-htb-gold/20">
+                            <Check className="h-5 w-5 text-htb-gold" />
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-red-500/20">
+                            <X className="h-5 w-5 text-red-400" />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+            
+            {/* CTA After Comparison */}
+            <div className="mt-8 p-6 bg-gradient-to-r from-htb-gold/10 to-htb-cyan/10 rounded-lg border border-htb-gold/30">
+              <p className="text-white text-lg">
+                <span className="font-bold text-htb-gold">Ready to level up?</span>{' '}
+                <span className="text-white/80">Upgrade to Premium and get unlimited access to all features!</span>
+              </p>
+              <button
+                onClick={() => navigate('/register')}
+                className="mt-4 bg-htb-gold hover:bg-htb-bright-gold text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-htb-gold/25 transform hover:-translate-y-1"
+              >
+                Start Free Trial
+              </button>
+            </div>
           </div>
 
           {/* FAQ Section */}
