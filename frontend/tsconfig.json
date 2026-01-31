@@ -2,6 +2,7 @@
   "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": "./",
+    "moduleResolution": "bundler",
     "paths": {
       "@/*": ["./src/*"],
       "@/components/*": ["./src/components/*"],

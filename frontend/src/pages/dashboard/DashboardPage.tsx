@@ -1,6 +1,6 @@
 import React from 'react';
 import Layout from '../../components/navigation/Layout';
-mr
+
 const DashboardPage: React.FC = () => {
   return (
     <Layout>
