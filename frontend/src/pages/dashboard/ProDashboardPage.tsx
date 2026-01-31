@@ -14,9 +14,12 @@ const ProDashboardPage: React.FC = () => {
               Pro Dashboard
             </h1>
           </div>
-          <p className="text-lg text-htb-foreground">
+          <p className="text-lg text-htb-foreground font-medium">
             Welcome to Pro Dashboard - This page works!
           </p>
+          <div className="mt-4 px-4 py-2 bg-green-500/10 border border-green-500/30 rounded-lg">
+            <p className="text-green-400 font-semibold">✓ Pro user welcome message is rendered</p>
+          </div>
         </div>
 
         {/* Welcome Card */}
