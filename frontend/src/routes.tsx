@@ -22,7 +22,7 @@ import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
 // Dashboard Pages
 import DashboardPage from './pages/dashboard/DashboardPage';
 import ProfilePage from './pages/dashboard/ProfilePage';
-import ProDashboardPage from './pages/dashboard/ProDashboardPage';
+import { PremiumDashboard } from './pages/dashboard/premium';
 
 // Learning Pages
 import LearningPathsPage from './pages/learning/LearningPathsPage';
@@ -107,10 +107,10 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/pro',
+    path: '/dashboard/premium',
     element: (
       <ProtectedRoute>
-        <ProDashboardPage />
+        <PremiumDashboard />
       </ProtectedRoute>
     ),
   },
