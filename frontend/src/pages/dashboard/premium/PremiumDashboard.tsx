@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { 
   Crown, Star, Zap, Shield, TrendingUp, Users, Clock,
   Shield as ShieldIcon, Target, Network, Zap as ZapIcon, Flag,
-  BarChart3, BookOpen, MessageCircle, Trophy, Home
+  BarChart3, BookOpen, MessageCircle, Trophy, Home, Bot
 } from 'lucide-react';
 
 interface SidebarItemProps {
@@ -71,6 +71,12 @@ const PremiumDashboard: React.FC = () => {
               icon={<MessageCircle className="h-5 w-5" />} 
               label="Mentoring"
               onClick={() => navigate('/dashboard/premium/mentoring')}
+            />
+            
+            <SidebarItem 
+              icon={<Bot className="h-5 w-5 text-purple-400" />} 
+              label="Ask AI"
+              onClick={() => navigate('/dashboard/premium/ask-ai')}
             />
             
             <div className="mt-6 pt-6 border-t border-htb-selection-background">
