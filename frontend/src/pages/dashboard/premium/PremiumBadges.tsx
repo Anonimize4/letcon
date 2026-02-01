@@ -94,7 +94,7 @@ const PremiumBadges: React.FC = () => {
 
           <div className="mt-6 pt-6 border-t border-htb-selection-background">
             <p className="px-4 text-xs text-htb-foreground uppercase tracking-wider mb-2">
-              Training
+              Explore
             </p>
             <SidebarItem
               icon={<Target className="h-5 w-5" />}

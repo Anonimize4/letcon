@@ -2,9 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Crown, Star, Zap, Shield, TrendingUp, Users, Clock,
-  Shield as ShieldIcon, Target, Network, Zap as ZapIcon, Flag,
   BarChart3, BookOpen, MessageCircle, Trophy, Home, Bot,
-  Award, Medal, FileCheck
+  Award, Medal, FileCheck, Flag
 } from 'lucide-react';
 
 interface SidebarItemProps {
@@ -100,28 +99,11 @@ const PremiumDashboard: React.FC = () => {
             />
           </div>
 
+          {/* Other Pages Section */}
           <div className="mt-6 pt-6 border-t border-htb-selection-background">
             <p className="px-4 text-xs text-htb-foreground uppercase tracking-wider mb-2">
-              Training
+              Explore
             </p>
-            <SidebarItem
-              icon={<Target className="h-5 w-5" />}
-              label="Red Team"
-              onClick={() => navigate('/dashboard/red-team')}
-            />
-
-            <SidebarItem
-              icon={<ShieldIcon className="h-5 w-5" />}
-              label="Blue Team"
-              onClick={() => navigate('/dashboard/blue-team')}
-            />
-
-            <SidebarItem
-              icon={<Network className="h-5 w-5" />}
-              label="Networking"
-              onClick={() => navigate('/dashboard/networking')}
-            />
-
             <SidebarItem
               icon={<Trophy className="h-5 w-5" />}
               label="Challenges"

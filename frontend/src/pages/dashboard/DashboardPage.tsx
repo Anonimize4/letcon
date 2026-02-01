@@ -1,9 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  Shield,
-  Target,
-  Network,
   Crown,
   Flag,
   TrendingUp,
@@ -55,24 +52,6 @@ const DashboardPage: React.FC = () => {
           />
 
           <SidebarItem
-            icon={<Target className="h-5 w-5" />}
-            label="Red Team"
-            onClick={() => navigate('/dashboard/red-team')}
-          />
-
-          <SidebarItem
-            icon={<Shield className="h-5 w-5" />}
-            label="Blue Team"
-            onClick={() => navigate('/dashboard/blue-team')}
-          />
-
-          <SidebarItem
-            icon={<Network className="h-5 w-5" />}
-            label="Networking"
-            onClick={() => navigate('/dashboard/networking')}
-          />
-
-          <SidebarItem
             icon={<Trophy className="h-5 w-5" />}
             label="Challenges"
             onClick={() => navigate('/challenges')}
@@ -113,7 +92,7 @@ const DashboardPage: React.FC = () => {
               onClick={() => navigate('/dashboard/premium')}
             />
             <SidebarItem
-              icon={<Target className="h-5 w-5" />}
+              icon={<BookOpen className="h-5 w-5" />}
               label="Premium Labs"
               onClick={() => navigate('/dashboard/premium/labs')}
             />
