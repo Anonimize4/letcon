@@ -8,7 +8,9 @@ import {
   Crown,
   Flag,
   TrendingUp,
-  Users
+  Users,
+  Trophy,
+  BookOpen
 } from 'lucide-react';
 
 interface SidebarItemProps {
@@ -59,6 +61,18 @@ const DashboardPage: React.FC = () => {
               icon={<Network className="h-5 w-5" />} 
               label="Networking"
               onClick={() => navigate('/dashboard/networking')}
+            />
+            
+            <SidebarItem 
+              icon={<Trophy className="h-5 w-5" />} 
+              label="Challenges"
+              onClick={() => navigate('/challenges')}
+            />
+            
+            <SidebarItem 
+              icon={<BookOpen className="h-5 w-5" />} 
+              label="Academy"
+              onClick={() => navigate('/learning')}
             />
             
             <SidebarItem 

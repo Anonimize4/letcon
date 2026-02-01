@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { 
   Crown, Star, Zap, Shield, TrendingUp, Users, Clock,
   Shield as ShieldIcon, Target, Network, Zap as ZapIcon, Flag,
-  BarChart3, BookOpen, MessageCircle
+  BarChart3, BookOpen, MessageCircle, Trophy
 } from 'lucide-react';
 
 interface SidebarItemProps {
@@ -87,6 +87,18 @@ const PremiumDashboard: React.FC = () => {
                 icon={<Network className="h-5 w-5" />} 
                 label="Networking"
                 onClick={() => navigate('/dashboard/networking')}
+              />
+              
+              <SidebarItem 
+                icon={<Trophy className="h-5 w-5" />} 
+                label="Challenges"
+                onClick={() => navigate('/challenges')}
+              />
+              
+              <SidebarItem 
+                icon={<BookOpen className="h-5 w-5" />} 
+                label="Academy"
+                onClick={() => navigate('/learning')}
               />
               
               <SidebarItem 
