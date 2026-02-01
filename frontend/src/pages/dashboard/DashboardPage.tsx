@@ -5,7 +5,10 @@ import {
   Shield, 
   Target, 
   Network,
-  Crown
+  Crown,
+  Flag,
+  TrendingUp,
+  Users
 } from 'lucide-react';
 
 interface SidebarItemProps {
@@ -57,6 +60,39 @@ const DashboardPage: React.FC = () => {
               label="Networking"
               onClick={() => navigate('/dashboard/networking')}
             />
+            
+            <SidebarItem 
+              icon={<Flag className="h-5 w-5" />} 
+              label="CTF"
+              onClick={() => navigate('/ctf')}
+            />
+
+            {/* Premium Section */}
+            <div className="mt-6 pt-6 border-t border-htb-selection-background">
+              <p className="px-4 text-xs text-htb-foreground uppercase tracking-wider mb-2">
+                Premium
+              </p>
+              <SidebarItem 
+                icon={<Crown className="h-5 w-5 text-yellow-400" />} 
+                label="Premium Dashboard"
+                onClick={() => navigate('/dashboard/premium')}
+              />
+              <SidebarItem 
+                icon={<Target className="h-5 w-5" />} 
+                label="Premium Labs"
+                onClick={() => navigate('/dashboard/premium/labs')}
+              />
+              <SidebarItem 
+                icon={<TrendingUp className="h-5 w-5" />} 
+                label="Analytics"
+                onClick={() => navigate('/dashboard/premium/analytics')}
+              />
+              <SidebarItem 
+                icon={<Users className="h-5 w-5" />} 
+                label="Mentoring"
+                onClick={() => navigate('/dashboard/premium/mentoring')}
+              />
+            </div>
 
             {/* Upgrade to Pro Button */}
             <div className="mt-8 px-4">
@@ -65,7 +101,7 @@ const DashboardPage: React.FC = () => {
                 className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-gradient-to-r from-yellow-500/20 to-amber-500/20 border border-yellow-500/50 rounded-lg text-yellow-400 hover:from-yellow-500/30 hover:to-amber-500/30 hover:border-yellow-400 transition-all duration-200"
               >
                 <Crown className="h-5 w-5" />
-                <span className="font-semibold">Upgrade to Pro</span>
+                <span className="font-semibold">Go to Pro</span>
               </button>
             </div>
           </div>
@@ -88,3 +124,4 @@ const DashboardPage: React.FC = () => {
 };
 
 export default DashboardPage;
+

@@ -3,7 +3,8 @@ import Layout from '../../../components/navigation/Layout';
 import { useNavigate } from 'react-router-dom';
 import { 
   Crown, Star, Zap, Shield, TrendingUp, Users, Clock,
-  Shield as ShieldIcon, Target, Network, Zap as ZapIcon
+  Shield as ShieldIcon, Target, Network, Zap as ZapIcon, Flag,
+  BarChart3, BookOpen, MessageCircle
 } from 'lucide-react';
 
 interface SidebarItemProps {
@@ -42,22 +43,58 @@ const PremiumDashboard: React.FC = () => {
             </div>
             
             <SidebarItem 
-              icon={<Target className="h-5 w-5" />} 
-              label="Red Team"
-              onClick={() => navigate('/pro/red-team')}
+              icon={<Crown className="h-5 w-5 text-yellow-400" />} 
+              label="Dashboard"
+              active
+              onClick={() => navigate('/dashboard/premium')}
             />
             
             <SidebarItem 
-              icon={<ShieldIcon className="h-5 w-5" />} 
-              label="Blue Team"
-              onClick={() => navigate('/pro/blue-team')}
+              icon={<BookOpen className="h-5 w-5" />} 
+              label="Labs"
+              onClick={() => navigate('/dashboard/premium/labs')}
             />
             
             <SidebarItem 
-              icon={<Network className="h-5 w-5" />} 
-              label="Networking"
-              onClick={() => navigate('/pro/networking')}
+              icon={<BarChart3 className="h-5 w-5" />} 
+              label="Analytics"
+              onClick={() => navigate('/dashboard/premium/analytics')}
             />
+            
+            <SidebarItem 
+              icon={<MessageCircle className="h-5 w-5" />} 
+              label="Mentoring"
+              onClick={() => navigate('/dashboard/premium/mentoring')}
+            />
+            
+            <div className="mt-6 pt-6 border-t border-htb-selection-background">
+              <p className="px-4 text-xs text-htb-foreground uppercase tracking-wider mb-2">
+                Training
+              </p>
+              <SidebarItem 
+                icon={<Target className="h-5 w-5" />} 
+                label="Red Team"
+                onClick={() => navigate('/dashboard/red-team')}
+              />
+              
+              <SidebarItem 
+                icon={<ShieldIcon className="h-5 w-5" />} 
+                label="Blue Team"
+                onClick={() => navigate('/dashboard/blue-team')}
+              />
+              
+              <SidebarItem 
+                icon={<Network className="h-5 w-5" />} 
+                label="Networking"
+                onClick={() => navigate('/dashboard/networking')}
+              />
+              
+              <SidebarItem 
+                icon={<Flag className="h-5 w-5" />} 
+                label="CTF"
+                onClick={() => navigate('/ctf')}
+              />
+            </div>
           </div>
         </div>
 

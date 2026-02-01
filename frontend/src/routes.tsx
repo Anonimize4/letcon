@@ -11,9 +11,6 @@ import PlatformPage from './pages/public/PlatformPage';
 // Payment Pages
 import PricingPage from './pages/payment/PricingPage';
 
-// Premium Pages
-import { PremiumPage } from './pages/premium';
-
 // Auth Pages
 import LoginPage from './pages/auth/LoginPage';
 import RegisterPage from './pages/auth/RegisterPage';
@@ -22,7 +19,12 @@ import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
 // Dashboard Pages
 import DashboardPage from './pages/dashboard/DashboardPage';
 import ProfilePage from './pages/dashboard/ProfilePage';
+
+// Premium Dashboard Pages
 import { PremiumDashboard } from './pages/dashboard/premium';
+import PremiumLabs from './pages/dashboard/premium/PremiumLabs';
+import PremiumAnalytics from './pages/dashboard/premium/PremiumAnalytics';
+import PremiumMentoring from './pages/dashboard/premium/PremiumMentoring';
 
 // Learning Pages
 import LearningPathsPage from './pages/learning/LearningPathsPage';
@@ -67,10 +69,6 @@ const router = createBrowserRouter([
     element: <PricingPage />,
   },
   {
-    path: '/premium',
-    element: <PremiumPage />,
-  },
-  {
     path: '/about',
     element: <AboutPage />,
   },
@@ -95,6 +93,38 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <DashboardPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/dashboard/premium',
+    element: (
+      <ProtectedRoute>
+        <PremiumDashboard />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/dashboard/premium/labs',
+    element: (
+      <ProtectedRoute>
+        <PremiumLabs />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/dashboard/premium/analytics',
+    element: (
+      <ProtectedRoute>
+        <PremiumAnalytics />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/dashboard/premium/mentoring',
+    element: (
+      <ProtectedRoute>
+        <PremiumMentoring />
       </ProtectedRoute>
     ),
   },
