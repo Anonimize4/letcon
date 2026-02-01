@@ -107,7 +107,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/dashboard/premium',
+    path: '/pro',
     element: (
       <ProtectedRoute>
         <PremiumDashboard />
