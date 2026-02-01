@@ -4,12 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { 
   Shield, 
   Target, 
-  Network, 
-  Zap, 
-  Lock, 
-  Search,
-  Terminal,
-  Activity
+  Network,
+  Crown
 } from 'lucide-react';
 
 interface SidebarItemProps {
@@ -44,71 +40,33 @@ const DashboardPage: React.FC = () => {
           <div className="p-6">
             <h2 className="text-xl font-bold text-htb-bright-white mb-6">Dashboard</h2>
             
-            {/* Red Team Section */}
-            <div className="mb-6">
-              <h3 className="text-xs font-semibold text-htb-cyan uppercase tracking-wider mb-3 px-4">
-                Red Team
-              </h3>
-              <div className="space-y-1">
-                <SidebarItem 
-                  icon={<Target className="h-5 w-5" />} 
-                  label="Attack Simulations"
-                  onClick={() => navigate('/dashboard/red-team')}
-                />
-                <SidebarItem 
-                  icon={<Terminal className="h-5 w-5" />} 
-                  label="Exploitation Labs"
-                  onClick={() => navigate('/dashboard/red-team/labs')}
-                />
-                <SidebarItem 
-                  icon={<Lock className="h-5 w-5" />} 
-                  label="Vulnerability Testing"
-                  onClick={() => navigate('/dashboard/red-team/vulnerabilities')}
-                />
-              </div>
-            </div>
+            <SidebarItem 
+              icon={<Target className="h-5 w-5" />} 
+              label="Red Team"
+              onClick={() => navigate('/dashboard/red-team')}
+            />
+            
+            <SidebarItem 
+              icon={<Shield className="h-5 w-5" />} 
+              label="Blue Team"
+              onClick={() => navigate('/dashboard/blue-team')}
+            />
+            
+            <SidebarItem 
+              icon={<Network className="h-5 w-5" />} 
+              label="Networking"
+              onClick={() => navigate('/dashboard/networking')}
+            />
 
-            {/* Blue Team Section */}
-            <div className="mb-6">
-              <h3 className="text-xs font-semibold text-htb-bright-green uppercase tracking-wider mb-3 px-4">
-                Blue Team
-              </h3>
-              <div className="space-y-1">
-                <SidebarItem 
-                  icon={<Shield className="h-5 w-5" />} 
-                  label="Defense Operations"
-                  onClick={() => navigate('/dashboard/blue-team')}
-                />
-                <SidebarItem 
-                  icon={<Search className="h-5 w-5" />} 
-                  label="Incident Response"
-                  onClick={() => navigate('/dashboard/blue-team/incidents')}
-                />
-                <SidebarItem 
-                  icon={<Activity className="h-5 w-5" />} 
-                  label="Threat Monitoring"
-                  onClick={() => navigate('/dashboard/blue-team/monitoring')}
-                />
-              </div>
-            </div>
-
-            {/* Networking Section */}
-            <div className="mb-6">
-              <h3 className="text-xs font-semibold text-purple-400 uppercase tracking-wider mb-3 px-4">
-                Networking
-              </h3>
-              <div className="space-y-1">
-                <SidebarItem 
-                  icon={<Network className="h-5 w-5" />} 
-                  label="Network Security"
-                  onClick={() => navigate('/dashboard/networking')}
-                />
-                <SidebarItem 
-                  icon={<Zap className="h-5 w-5" />} 
-                  label="Protocol Analysis"
-                  onClick={() => navigate('/dashboard/networking/protocols')}
-                />
-              </div>
+            {/* Upgrade to Pro Button */}
+            <div className="mt-8 px-4">
+              <button
+                onClick={() => navigate('/pro')}
+                className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-gradient-to-r from-yellow-500/20 to-amber-500/20 border border-yellow-500/50 rounded-lg text-yellow-400 hover:from-yellow-500/30 hover:to-amber-500/30 hover:border-yellow-400 transition-all duration-200"
+              >
+                <Crown className="h-5 w-5" />
+                <span className="font-semibold">Upgrade to Pro</span>
+              </button>
             </div>
           </div>
         </div>
@@ -122,12 +80,6 @@ const DashboardPage: React.FC = () => {
             <p className="text-lg text-htb-foreground mb-8">
               Select a category from the sidebar to get started with your cybersecurity training.
             </p>
-            <button
-              className="px-6 py-3 bg-yellow-500/10 border border-yellow-500/30 rounded-lg text-yellow-400 hover:bg-yellow-500/20 transition-colors"
-              onClick={() => navigate('/pro')}
-            >
-              Upgrade to Pro
-            </button>
           </div>
         </div>
       </div>
