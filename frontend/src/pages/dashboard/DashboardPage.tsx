@@ -10,7 +10,9 @@ import {
   TrendingUp,
   Users,
   Trophy,
-  BookOpen
+  BookOpen,
+  Home,
+  Trophy as TrophyIcon
 } from 'lucide-react';
 
 interface SidebarItemProps {
@@ -43,7 +45,13 @@ const DashboardPage: React.FC = () => {
         {/* Sidebar */}
         <div className="w-64 bg-htb-background border-r border-htb-selection-background flex-shrink-0">
           <div className="p-6">
-            <h2 className="text-xl font-bold text-htb-bright-white mb-6">Dashboard</h2>
+          <h2 className="text-xl font-bold text-htb-bright-white mb-6">Dashboard</h2>
+            
+            <SidebarItem 
+              icon={<Home className="h-5 w-5" />} 
+              label="Home"
+              onClick={() => navigate('/')}
+            />
             
             <SidebarItem 
               icon={<Target className="h-5 w-5" />} 
@@ -80,6 +88,18 @@ const DashboardPage: React.FC = () => {
               label="CTF"
               onClick={() => navigate('/ctf')}
             />
+
+            {/* Scoreboard Section */}
+            <div className="mt-6 pt-6 border-t border-htb-selection-background">
+              <p className="px-4 text-xs text-htb-foreground uppercase tracking-wider mb-2">
+                Community
+              </p>
+              <SidebarItem 
+                icon={<TrophyIcon className="h-5 w-5" />} 
+                label="Scoreboard"
+                onClick={() => navigate('/community/leaderboard')}
+              />
+            </div>
 
             {/* Premium Section */}
             <div className="mt-6 pt-6 border-t border-htb-selection-background">

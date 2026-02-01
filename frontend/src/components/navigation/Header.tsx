@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface HeaderProps {
   title?: string;
@@ -22,6 +23,7 @@ const Header: React.FC<HeaderProps> = ({
   className = ''
 }) => {
   const navigate = useNavigate();
+  const { isAuthenticated, user, logout } = useAuth();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [dropdownTimeout, setDropdownTimeout] = useState<NodeJS.Timeout | null>(null);
 
@@ -186,22 +188,46 @@ const Header: React.FC<HeaderProps> = ({
               ))}
             </nav>
 
-            {/* CTA Buttons */}
+            {/* CTA Buttons / User Menu */}
             <div className="flex items-center space-x-4">
-              <button 
-                onClick={() => navigate('/login')}
-                className="border border-htb-bright-green text-htb-bright-green hover:bg-htb-bright-green hover:text-htb-black px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 transform"
-              >
-                Login
-              </button>
-              <button 
-                onClick={() => navigate('/register')}
-                className="bg-htb-bright-green hover:bg-htb-bright-green/90 hover:scale-105 text-htb-black px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 transform"
-              >
-                Get Started
-              </button>
-              {/* Placeholder for user menu or actions */}
-              <div className="w-8 h-8 bg-htb-selection-background rounded-full"></div>
+              {!isAuthenticated ? (
+                <>
+                  <button 
+                    onClick={() => navigate('/login')}
+                    className="border border-htb-bright-green text-htb-bright-green hover:bg-htb-bright-green hover:text-htb-black px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 transform"
+                  >
+                    Login
+                  </button>
+                  <button 
+                    onClick={() => navigate('/register')}
+                    className="bg-htb-bright-green hover:bg-htb-bright-green/90 hover:scale-105 text-htb-black px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 transform"
+                  >
+                    Get Started
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button 
+                    onClick={() => navigate('/dashboard')}
+                    className="text-htb-bright-white hover:text-htb-bright-green px-4 py-2 rounded-md text-sm font-medium transition-all duration-200"
+                  >
+                    Dashboard
+                  </button>
+                  <button 
+                    onClick={logout}
+                    className="border border-htb-red text-htb-red hover:bg-htb-red hover:text-white px-4 py-2 rounded-md text-sm font-medium transition-all duration-200"
+                  >
+                    Logout
+                  </button>
+                  <div 
+                    className="w-8 h-8 bg-htb-blue rounded-full flex items-center justify-center text-white text-sm font-bold cursor-pointer"
+                    onClick={() => navigate('/profile')}
+                    title={user?.username || 'User'}
+                  >
+                    {user?.username?.charAt(0).toUpperCase() || 'U'}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

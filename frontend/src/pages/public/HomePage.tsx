@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import Layout from '../../components/navigation/Layout';
+import { useAuth } from '../../contexts/AuthContext';
 
 export interface AppConfig {
   title: string;
@@ -17,6 +18,20 @@ export const appConfig: AppConfig = {
 
 const HomePage = () => {
   const navigate = useNavigate();
+  const { isAuthenticated, user } = useAuth();
+  
+  // Redirect logged-in users to their appropriate dashboard
+  React.useEffect(() => {
+    if (isAuthenticated && user) {
+      if (user.role === 'admin') {
+        navigate('/admin');
+      } else if (user.role === 'premium' || user.username?.includes('premium')) {
+        navigate('/dashboard/premium');
+      } else {
+        navigate('/dashboard');
+      }
+    }
+  }, [isAuthenticated, user, navigate]);
   
   // Featured learning paths data
   const featuredPaths = [
