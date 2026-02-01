@@ -11,7 +11,10 @@ import {
   Trophy,
   BookOpen,
   Home,
-  Trophy as TrophyIcon
+  Trophy as TrophyIcon,
+  Award,
+  Medal,
+  Star
 } from 'lucide-react';
 
 interface SidebarItemProps {
@@ -123,6 +126,21 @@ const DashboardPage: React.FC = () => {
               icon={<Users className="h-5 w-5" />}
               label="Mentoring"
               onClick={() => navigate('/dashboard/premium/mentoring')}
+            />
+            <SidebarItem
+              icon={<Award className="h-5 w-5 text-yellow-400" />}
+              label="Badges"
+              onClick={() => navigate('/dashboard/premium/badges')}
+            />
+            <SidebarItem
+              icon={<Medal className="h-5 w-5 text-amber-400" />}
+              label="Achievements"
+              onClick={() => navigate('/dashboard/premium/achievements')}
+            />
+            <SidebarItem
+              icon={<Star className="h-5 w-5 text-green-400" />}
+              label="Certificates"
+              onClick={() => navigate('/dashboard/premium/certificates')}
             />
           </div>
 

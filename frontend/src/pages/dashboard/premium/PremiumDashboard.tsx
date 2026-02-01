@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import {
   Crown, Star, Zap, Shield, TrendingUp, Users, Clock,
   Shield as ShieldIcon, Target, Network, Zap as ZapIcon, Flag,
-  BarChart3, BookOpen, MessageCircle, Trophy, Home, Bot
+  BarChart3, BookOpen, MessageCircle, Trophy, Home, Bot,
+  Award, Medal, FileCheck
 } from 'lucide-react';
 
 interface SidebarItemProps {
@@ -76,6 +77,28 @@ const PremiumDashboard: React.FC = () => {
             label="Ask AI"
             onClick={() => navigate('/dashboard/premium/ask-ai')}
           />
+
+          {/* Achievements Section */}
+          <div className="mt-6 pt-6 border-t border-htb-selection-background">
+            <p className="px-4 text-xs text-htb-foreground uppercase tracking-wider mb-2">
+              Achievements
+            </p>
+            <SidebarItem
+              icon={<Award className="h-5 w-5 text-yellow-400" />}
+              label="Badges"
+              onClick={() => navigate('/dashboard/premium/badges')}
+            />
+            <SidebarItem
+              icon={<Medal className="h-5 w-5 text-amber-400" />}
+              label="Achievements"
+              onClick={() => navigate('/dashboard/premium/achievements')}
+            />
+            <SidebarItem
+              icon={<FileCheck className="h-5 w-5 text-green-400" />}
+              label="Certificates"
+              onClick={() => navigate('/dashboard/premium/certificates')}
+            />
+          </div>
 
           <div className="mt-6 pt-6 border-t border-htb-selection-background">
             <p className="px-4 text-xs text-htb-foreground uppercase tracking-wider mb-2">

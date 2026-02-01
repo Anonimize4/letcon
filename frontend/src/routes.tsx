@@ -21,10 +21,15 @@ import DashboardPage from './pages/dashboard/DashboardPage';
 import ProfilePage from './pages/dashboard/ProfilePage';
 
 // Premium Dashboard Pages
-import { PremiumDashboard } from './pages/dashboard/premium';
-import PremiumLabs from './pages/dashboard/premium/PremiumLabs';
-import PremiumAnalytics from './pages/dashboard/premium/PremiumAnalytics';
-import PremiumMentoring from './pages/dashboard/premium/PremiumMentoring';
+import {
+  PremiumDashboard,
+  PremiumLabs,
+  PremiumAnalytics,
+  PremiumMentoring,
+  PremiumBadges,
+  PremiumAchievements,
+  PremiumCertificates
+} from './pages/dashboard/premium';
 
 // Learning Pages
 import LearningPathsPage from './pages/learning/LearningPathsPage';
@@ -125,6 +130,30 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <PremiumMentoring />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/dashboard/premium/badges',
+    element: (
+      <ProtectedRoute>
+        <PremiumBadges />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/dashboard/premium/achievements',
+    element: (
+      <ProtectedRoute>
+        <PremiumAchievements />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/dashboard/premium/certificates',
+    element: (
+      <ProtectedRoute>
+        <PremiumCertificates />
       </ProtectedRoute>
     ),
   },
