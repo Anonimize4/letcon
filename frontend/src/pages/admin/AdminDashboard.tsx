@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LayoutDashboard, BarChart3, Users, Settings, Activity, Search, Shield } from 'lucide-react';
+import { LayoutDashboard, BarChart3, Users, Settings, Activity, Search, Shield, Cpu, Wifi } from 'lucide-react';
 import AdminSidebar, { AdminSidebarToggle } from '../../components/navigation/AdminSidebar';
 
 const AdminDashboard: React.FC = () => {
@@ -98,6 +98,81 @@ const AdminDashboard: React.FC = () => {
               </div>
               <div className="text-2xl font-bold text-htb-bright-white mb-2">12</div>
               <p className="text-sm text-htb-foreground">Pending actions</p>
+            </div>
+          </div>
+
+          {/* INFRASTRUCTURE Group */}
+          <div className="mb-8">
+            <h3 className="text-xl font-semibold text-htb-bright-white mb-6 flex items-center space-x-2">
+              <Activity className="h-5 w-5 text-htb-blue" />
+              <span>INFRASTRUCTURE</span>
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Docker Instances */}
+              <div className="bg-htb-selection-background/10 border border-htb-selection-background rounded-lg p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <Cpu className="h-6 w-6 text-blue-400" />
+                  <h4 className="text-lg font-semibold text-htb-bright-white">Docker Instances</h4>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-htb-foreground text-sm">Running</span>
+                    <span className="text-green-400 font-medium">24</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-htb-foreground text-sm">Stopped</span>
+                    <span className="text-red-400 font-medium">3</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-htb-foreground text-sm">Total</span>
+                    <span className="text-htb-bright-white font-medium">27</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* System Health */}
+              <div className="bg-htb-selection-background/10 border border-htb-selection-background rounded-lg p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <Activity className="h-6 w-6 text-green-400" />
+                  <h4 className="text-lg font-semibold text-htb-bright-white">System Health</h4>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-htb-foreground text-sm">CPU Usage</span>
+                    <span className="text-htb-bright-white font-medium">45%</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-htb-foreground text-sm">Memory</span>
+                    <span className="text-htb-bright-white font-medium">67%</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-htb-foreground text-sm">Uptime</span>
+                    <span className="text-htb-bright-white font-medium">99.9%</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Network Map */}
+              <div className="bg-htb-selection-background/10 border border-htb-selection-background rounded-lg p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <Wifi className="h-6 w-6 text-purple-400" />
+                  <h4 className="text-lg font-semibold text-htb-bright-white">Network Map</h4>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-htb-foreground text-sm">Active Nodes</span>
+                    <span className="text-htb-bright-white font-medium">156</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-htb-foreground text-sm">Connections</span>
+                    <span className="text-htb-bright-white font-medium">1.2K</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-htb-foreground text-sm">Latency</span>
+                    <span className="text-green-400 font-medium">12ms</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 
