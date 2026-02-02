@@ -105,7 +105,7 @@ const router = createBrowserRouter([
   {
     path: '/dashboard/create',
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute requiredRole={['admin', 'creator']}>
         <LabWizard />
       </ProtectedRoute>
     ),
