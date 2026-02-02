@@ -198,6 +198,7 @@ model RefreshToken {
 
 enum UserRole {
   USER
+  CREATOR
   ADMIN
   INSTRUCTOR
   MODERATOR

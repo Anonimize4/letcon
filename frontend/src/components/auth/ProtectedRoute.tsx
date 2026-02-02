@@ -44,11 +44,14 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 // Higher roles have access to lower role routes
 // Supports both single role and array of roles
 function checkRoleAccess(userRole: string, requiredRole: string | string[]): boolean {
+  // Role hierarchy: Higher number = more privileges
   const roleHierarchy: Record<string, number> = {
     'user': 1,
     'creator': 2,
     'pro': 2,
     'admin': 3,
+    'instructor': 2,
+    'moderator': 2,
   };
 
   const userRoleLevel = roleHierarchy[userRole.toLowerCase()] || 0;

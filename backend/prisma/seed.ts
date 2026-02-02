@@ -6,8 +6,12 @@ const prisma = new PrismaClient()
 async function main() {
   console.log('🌱 Starting database seeding...')
 
-  // Create default admin user
-  const hashedPassword = await bcrypt.hash('admin123', 12)
+  // ==========================================
+  // Create dedicated admin user
+  // Credentials: admin / Admin@2024!
+  // Access: Full admin dashboard (/admin/*)
+  // ==========================================
+  const adminPassword = await bcrypt.hash('Admin@2024!', 12)
   
   const adminUser = await prisma.user.upsert({
     where: { email: 'admin@cybersectraining.com' },
@@ -15,7 +19,7 @@ async function main() {
     create: {
       email: 'admin@cybersectraining.com',
       username: 'admin',
-      password: hashedPassword,
+      password: adminPassword,
       firstName: 'Admin',
       lastName: 'User',
       role: 'ADMIN',
@@ -23,6 +27,28 @@ async function main() {
   })
 
   console.log('✅ Created admin user:', adminUser.username)
+
+  // ==========================================
+  // Create dedicated lab creator user
+  // Credentials: creator / Creator@2024!
+  // Access: Lab creation dashboard (/dashboard/create)
+  // ==========================================
+  const creatorPassword = await bcrypt.hash('Creator@2024!', 12)
+  
+  const creatorUser = await prisma.user.upsert({
+    where: { email: 'creator@cybersectraining.com' },
+    update: {},
+    create: {
+      email: 'creator@cybersectraining.com',
+      username: 'creator',
+      password: creatorPassword,
+      firstName: 'Lab',
+      lastName: 'Creator',
+      role: 'CREATOR',
+    },
+  })
+
+  console.log('✅ Created lab creator user:', creatorUser.username)
 
   // Create lab categories
   const categories = [
@@ -155,8 +181,12 @@ async function main() {
     console.log('✅ Created sample labs:', sampleLabs.length)
   }
 
+  // ==========================================
   // Create demo user for testing
-  const demoPassword = await bcrypt.hash('demo123', 12)
+  // Credentials: demo / User@2024!
+  // Access: Standard dashboard (/dashboard)
+  // ==========================================
+  const demoPassword = await bcrypt.hash('User@2024!', 12)
   
   const demoUser = await prisma.user.upsert({
     where: { email: 'demo@cybersectraining.com' },
