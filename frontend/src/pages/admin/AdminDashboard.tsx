@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { LayoutDashboard, BarChart3, Users, Settings, Activity } from 'lucide-react';
+import { LayoutDashboard, BarChart3, Users, Settings, Activity, Search, Shield } from 'lucide-react';
 import AdminSidebar, { AdminSidebarToggle } from '../../components/navigation/AdminSidebar';
 
 const AdminDashboard: React.FC = () => {
@@ -19,12 +19,29 @@ const AdminDashboard: React.FC = () => {
         {/* Main Content */}
         <div className="flex-1 p-4 sm:p-6 lg:p-8">
           {/* Header */}
-          <div className="mb-8">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
+            {/* Platform Logo */}
             <div className="flex items-center space-x-3">
-              <LayoutDashboard className="h-8 w-8 text-htb-blue" />
-              <h1 className="text-3xl font-bold text-htb-bright-white">Admin Dashboard</h1>
+              <div className="flex items-center justify-center w-12 h-12 rounded-lg bg-htb-blue/20">
+                <Shield className="h-7 w-7 text-htb-blue" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-htb-bright-white">LETHCON</h1>
+                <p className="text-xs text-htb-foreground">Admin Dashboard</p>
+              </div>
             </div>
-            <p className="text-htb-foreground mt-2">Welcome to Admin Dashboard - This page works!</p>
+
+            {/* Global Search Bar */}
+            <div className="relative w-full md:w-96">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <Search className="h-5 w-5 text-htb-foreground/50" />
+              </div>
+              <input
+                type="text"
+                placeholder="Search users, labs..."
+                className="w-full pl-10 pr-4 py-2.5 bg-htb-selection-background/20 border border-htb-selection-background rounded-lg text-htb-bright-white placeholder-htb-foreground/50 focus:outline-none focus:border-htb-blue focus:ring-1 focus:ring-htb-blue transition-colors"
+              />
+            </div>
           </div>
 
           {/* Welcome Card */}
