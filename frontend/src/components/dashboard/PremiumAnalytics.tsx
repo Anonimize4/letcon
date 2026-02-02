@@ -1,5 +1,5 @@
 import React from 'react';
-import { TrendingUp, TrendingDown, Award, Target, Calendar, Clock } from 'lucide-react';
+import { TrendingUp, Award, Target, Calendar, Clock } from 'lucide-react';
 
 interface AnalyticsData {
   totalPoints: number;
@@ -12,7 +12,7 @@ interface AnalyticsData {
   achievements: { id: string; title: string; icon: string; date: string }[];
 }
 
-const PremiumAnalytics: React.FC = () => {
+export const PremiumAnalytics: React.FC = () => {
   const analytics: AnalyticsData = {
     totalPoints: 15420,
     rank: 156,
@@ -193,6 +193,4 @@ const PremiumAnalytics: React.FC = () => {
     </div>
   );
 };
-
-export default PremiumAnalytics;
 

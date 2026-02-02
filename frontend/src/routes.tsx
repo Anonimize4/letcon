@@ -21,17 +21,6 @@ import DashboardPage from './pages/dashboard/DashboardPage';
 import ProfilePage from './pages/dashboard/ProfilePage';
 import LabWizard from './pages/dashboard/LabWizard';
 
-// Premium Dashboard Pages
-import {
-  PremiumDashboard,
-  PremiumLabs,
-  PremiumAnalytics,
-  PremiumMentoring,
-  PremiumBadges,
-  PremiumAchievements,
-  PremiumCertificates
-} from './pages/dashboard/premium';
-
 // Learning Pages
 import LearningPathsPage from './pages/learning/LearningPathsPage';
 import PathDetailPage from './pages/learning/PathDetailPage';
@@ -111,74 +100,10 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: '/dashboard/premium',
-    element: (
-      <ProtectedRoute>
-        <PremiumDashboard />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: '/dashboard/premium/labs',
-    element: (
-      <ProtectedRoute>
-        <PremiumLabs />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: '/dashboard/premium/analytics',
-    element: (
-      <ProtectedRoute>
-        <PremiumAnalytics />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: '/dashboard/premium/mentoring',
-    element: (
-      <ProtectedRoute>
-        <PremiumMentoring />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: '/dashboard/premium/badges',
-    element: (
-      <ProtectedRoute>
-        <PremiumBadges />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: '/dashboard/premium/achievements',
-    element: (
-      <ProtectedRoute>
-        <PremiumAchievements />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: '/dashboard/premium/certificates',
-    element: (
-      <ProtectedRoute>
-        <PremiumCertificates />
-      </ProtectedRoute>
-    ),
-  },
-  {
     path: '/profile',
     element: (
       <ProtectedRoute>
         <ProfilePage />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: '/pro',
-    element: (
-      <ProtectedRoute>
-        <PremiumDashboard />
       </ProtectedRoute>
     ),
   },
@@ -359,3 +284,4 @@ const router = createBrowserRouter([
 export const AppRouter: React.FC = () => {
   return <RouterProvider router={router} />;
 };
+

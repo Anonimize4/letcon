@@ -13,7 +13,7 @@ interface Lab {
   icon: string;
 }
 
-const PremiumLabs: React.FC = () => {
+export const PremiumLabs: React.FC = () => {
   const labs: Lab[] = [
     {
       id: '1',
@@ -202,6 +202,4 @@ const PremiumLabs: React.FC = () => {
     </div>
   );
 };
-
-export default PremiumLabs;
 

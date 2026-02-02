@@ -15,16 +15,13 @@ import {
   Star,
   Clock,
   Zap,
-  Shield
+  Shield,
+  FlaskConical,
+  BarChart3
 } from 'lucide-react';
 
 // Import premium components
-import PremiumLabs from './premium/PremiumLabs';
-import PremiumAnalytics from './premium/PremiumAnalytics';
-import PremiumMentoring from './premium/PremiumMentoring';
-import PremiumBadges from './premium/PremiumBadges';
-import PremiumAchievements from './premium/PremiumAchievements';
-import PremiumCertificates from './premium/PremiumCertificates';
+import { PremiumLabs, FreeLabsWithUpgradeNudge, PremiumAnalytics } from '../../components/dashboard';
 
 interface SidebarItemProps {
   icon: React.ReactNode;
@@ -50,7 +47,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ icon, label, active, onClick 
 const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [currentView, setCurrentView] = React.useState<'home' | 'labs' | 'analytics' | 'mentoring' | 'badges' | 'achievements' | 'certificates'>('home');
+  const [currentView, setCurrentView] = React.useState<'home' | 'labs' | 'analytics'>('home');
 
   // Check if user has premium access
   const isPremium = user?.role === 'pro' || user?.role === 'admin';
@@ -65,7 +62,22 @@ const DashboardPage: React.FC = () => {
           <SidebarItem
             icon={<Home className="h-5 w-5" />}
             label="Home"
-            onClick={() => navigate('/')}
+            active={currentView === 'home'}
+            onClick={() => setCurrentView('home')}
+          />
+
+          <SidebarItem
+            icon={<FlaskConical className="h-5 w-5" />}
+            label="Labs"
+            active={currentView === 'labs'}
+            onClick={() => setCurrentView('labs')}
+          />
+
+          <SidebarItem
+            icon={<BarChart3 className="h-5 w-5" />}
+            label="Analytics"
+            active={currentView === 'analytics'}
+            onClick={() => setCurrentView('analytics')}
           />
 
           <SidebarItem
@@ -99,69 +111,30 @@ const DashboardPage: React.FC = () => {
           </div>
 
           {/* Premium Section */}
-          <div className="mt-6 pt-6 border-t border-htb-selection-background">
-            <p className="px-4 text-xs text-htb-foreground uppercase tracking-wider mb-2">
-              Premium
-            </p>
-          {/* Premium Section - Only show for premium users */}
           {isPremium && (
-            <>
-              <SidebarItem
-                icon={<Crown className="h-5 w-5 text-yellow-400" />}
-                label="Premium Dashboard"
-                active={currentView === 'home'}
-                onClick={() => setCurrentView('home')}
-              />
-              <SidebarItem
-                icon={<BookOpen className="h-5 w-5" />}
-                label="Premium Labs"
-                active={currentView === 'labs'}
-                onClick={() => setCurrentView('labs')}
-              />
-              <SidebarItem
-                icon={<TrendingUp className="h-5 w-5" />}
-                label="Analytics"
-                active={currentView === 'analytics'}
-                onClick={() => setCurrentView('analytics')}
-              />
-              <SidebarItem
-                icon={<Users className="h-5 w-5" />}
-                label="Mentoring"
-                active={currentView === 'mentoring'}
-                onClick={() => setCurrentView('mentoring')}
-              />
-              <SidebarItem
-                icon={<Award className="h-5 w-5 text-yellow-400" />}
-                label="Badges"
-                active={currentView === 'badges'}
-                onClick={() => setCurrentView('badges')}
-              />
-              <SidebarItem
-                icon={<Medal className="h-5 w-5 text-amber-400" />}
-                label="Achievements"
-                active={currentView === 'achievements'}
-                onClick={() => setCurrentView('achievements')}
-              />
-              <SidebarItem
-                icon={<Star className="h-5 w-5 text-green-400" />}
-                label="Certificates"
-                active={currentView === 'certificates'}
-                onClick={() => setCurrentView('certificates')}
-              />
-            </>
+            <div className="mt-6 pt-6 border-t border-htb-selection-background">
+              <p className="px-4 text-xs text-htb-foreground uppercase tracking-wider mb-2">
+                Premium
+              </p>
+              <div className="flex items-center space-x-2 px-4 py-2">
+                <Crown className="h-5 w-5 text-yellow-400" />
+                <span className="text-yellow-400 font-medium">Premium Active</span>
+              </div>
+            </div>
           )}
-          </div>
 
-          {/* Upgrade to Pro Button */}
-          <div className="mt-8 px-4">
-            <button
-              onClick={() => navigate('/pro')}
-              className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-gradient-to-r from-yellow-500/20 to-amber-500/20 border border-yellow-500/50 rounded-lg text-yellow-400 hover:from-yellow-500/30 hover:to-amber-500/30 hover:border-yellow-400 transition-all duration-200"
-            >
-              <Crown className="h-5 w-5" />
-              <span className="font-semibold">Go to Pro</span>
-            </button>
-          </div>
+          {/* Upgrade to Pro Button - Only show for non-premium users */}
+          {!isPremium && (
+            <div className="mt-8 px-4">
+              <button
+                onClick={() => navigate('/pricing')}
+                className="w-full flex items-center justify-center space-x-2 px-4 py-3 bg-gradient-to-r from-yellow-500/20 to-amber-500/20 border border-yellow-500/50 rounded-lg text-yellow-400 hover:from-yellow-500/30 hover:to-amber-500/30 hover:border-yellow-400 transition-all duration-200"
+              >
+                <Crown className="h-5 w-5" />
+                <span className="font-semibold">Go to Pro</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -172,13 +145,15 @@ const DashboardPage: React.FC = () => {
             {/* Header */}
             <div className="text-center mb-8">
               <div className="flex items-center justify-center space-x-3 mb-4">
-                <Crown className="h-8 w-8 text-yellow-400" />
+                {isPremium && <Crown className="h-8 w-8 text-yellow-400" />}
                 <h1 className="text-4xl font-bold text-htb-bright-white">
-                  Welcome to Your Dashboard!
+                  {isPremium ? 'Welcome, Premium User!' : 'Welcome to Your Dashboard!'}
                 </h1>
               </div>
               <p className="text-lg text-htb-foreground">
-                Select a category from the sidebar to get started with your cybersecurity training.
+                {isPremium 
+                  ? 'Enjoy your exclusive premium features with enhanced learning experience.'
+                  : 'Select a category from the sidebar to get started with your cybersecurity training.'}
               </p>
             </div>
 
@@ -188,7 +163,7 @@ const DashboardPage: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <h2 className="text-2xl font-bold text-htb-bright-white mb-2">
-                      Welcome Premium User
+                      Premium Benefits Active
                     </h2>
                     <p className="text-htb-foreground max-w-2xl">
                       Enjoy exclusive premium features with enhanced learning experience,
@@ -202,27 +177,27 @@ const DashboardPage: React.FC = () => {
               </div>
             )}
 
-            {/* Quick Stats - Show for premium users */}
-            {isPremium && (
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                <div className="bg-htb-selection-background/10 border border-htb-selection-background rounded-lg p-6">
-                  <div className="flex items-center space-x-3 mb-4">
-                    <Star className="h-6 w-6 text-yellow-400" />
-                    <h3 className="text-lg font-semibold text-htb-bright-white">Labs Completed</h3>
-                  </div>
-                  <div className="text-3xl font-bold text-htb-bright-white mb-2">24</div>
-                  <p className="text-sm text-htb-foreground">Keep up the great work!</p>
+            {/* Quick Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+              <div className="bg-htb-selection-background/10 border border-htb-selection-background rounded-lg p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <Star className="h-6 w-6 text-yellow-400" />
+                  <h3 className="text-lg font-semibold text-htb-bright-white">Labs Completed</h3>
                 </div>
+                <div className="text-3xl font-bold text-htb-bright-white mb-2">{isPremium ? '24' : '3'}</div>
+                <p className="text-sm text-htb-foreground">Keep up the great work!</p>
+              </div>
 
-                <div className="bg-htb-selection-background/10 border border-htb-selection-background rounded-lg p-6">
-                  <div className="flex items-center space-x-3 mb-4">
-                    <TrendingUp className="h-6 w-6 text-green-400" />
-                    <h3 className="text-lg font-semibold text-htb-bright-white">Current Streak</h3>
-                  </div>
-                  <div className="text-3xl font-bold text-htb-bright-white mb-2">7 Days</div>
-                  <p className="text-sm text-htb-foreground">Personal best!</p>
+              <div className="bg-htb-selection-background/10 border border-htb-selection-background rounded-lg p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <TrendingUp className="h-6 w-6 text-green-400" />
+                  <h3 className="text-lg font-semibold text-htb-bright-white">Current Streak</h3>
                 </div>
+                <div className="text-3xl font-bold text-htb-bright-white mb-2">7 Days</div>
+                <p className="text-sm text-htb-foreground">Personal best!</p>
+              </div>
 
+              {isPremium && (
                 <div className="bg-htb-selection-background/10 border border-htb-selection-background rounded-lg p-6">
                   <div className="flex items-center space-x-3 mb-4">
                     <Users className="h-6 w-6 text-purple-400" />
@@ -231,17 +206,17 @@ const DashboardPage: React.FC = () => {
                   <div className="text-3xl font-bold text-htb-bright-white mb-2">5</div>
                   <p className="text-sm text-htb-foreground">Next: Tomorrow 2pm</p>
                 </div>
+              )}
 
-                <div className="bg-htb-selection-background/10 border border-htb-selection-background rounded-lg p-6">
-                  <div className="flex items-center space-x-3 mb-4">
-                    <Clock className="h-6 w-6 text-htb-cyan" />
-                    <h3 className="text-lg font-semibold text-htb-bright-white">Learning Time</h3>
-                  </div>
-                  <div className="text-3xl font-bold text-htb-bright-white mb-2">48h</div>
-                  <p className="text-sm text-htb-foreground">This month</p>
+              <div className="bg-htb-selection-background/10 border border-htb-selection-background rounded-lg p-6">
+                <div className="flex items-center space-x-3 mb-4">
+                  <Clock className="h-6 w-6 text-htb-cyan" />
+                  <h3 className="text-lg font-semibold text-htb-bright-white">Learning Time</h3>
                 </div>
+                <div className="text-3xl font-bold text-htb-bright-white mb-2">48h</div>
+                <p className="text-sm text-htb-foreground">This month</p>
               </div>
-            )}
+            </div>
 
             {/* Premium Features Grid - Show for premium users */}
             {isPremium && (
@@ -313,30 +288,44 @@ const DashboardPage: React.FC = () => {
           </>
         )}
 
-        {currentView === 'labs' && isPremium && <PremiumLabs />}
-        {currentView === 'analytics' && isPremium && <PremiumAnalytics />}
-        {currentView === 'mentoring' && isPremium && <PremiumMentoring />}
-        {currentView === 'badges' && isPremium && <PremiumBadges />}
-        {currentView === 'achievements' && isPremium && <PremiumAchievements />}
-        {currentView === 'certificates' && isPremium && <PremiumCertificates />}
-
-        {/* Access Denied Message for non-premium users trying to access premium features */}
-        {currentView !== 'home' && !isPremium && (
-          <div className="text-center">
-            <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-8">
-              <Crown className="h-16 w-16 text-yellow-400 mx-auto mb-4" />
-              <h2 className="text-2xl font-bold text-htb-bright-white mb-4">Premium Feature</h2>
-              <p className="text-htb-foreground mb-6">
-                This feature is available exclusively for premium users. Upgrade your account to access advanced labs, analytics, mentoring, and more.
+        {currentView === 'labs' && (
+          <>
+            <div className="text-center mb-8">
+              <div className="flex items-center justify-center space-x-3 mb-4">
+                <FlaskConical className="h-8 w-8 text-htb-cyan" />
+                <h1 className="text-4xl font-bold text-htb-bright-white">
+                  {isPremium ? 'Premium Labs' : 'Labs'}
+                </h1>
+              </div>
+              <p className="text-lg text-htb-foreground">
+                {isPremium 
+                  ? 'Access your exclusive premium lab environments.'
+                  : 'Get started with free labs or upgrade for unlimited access.'}
               </p>
-              <button
-                onClick={() => navigate('/pricing')}
-                className="bg-gradient-to-r from-yellow-500/20 to-amber-500/20 border border-yellow-500/50 text-yellow-400 hover:from-yellow-500/30 hover:to-amber-500/30 hover:border-yellow-400 px-6 py-3 rounded-lg font-medium transition-all duration-200"
-              >
-                Upgrade to Premium
-              </button>
             </div>
-          </div>
+            {user?.role === 'pro' || user?.role === 'admin' ? (
+              <PremiumLabs />
+            ) : (
+              <FreeLabsWithUpgradeNudge />
+            )}
+          </>
+        )}
+
+        {currentView === 'analytics' && (
+          <>
+            <div className="text-center mb-8">
+              <div className="flex items-center justify-center space-x-3 mb-4">
+                <BarChart3 className="h-8 w-8 text-htb-purple" />
+                <h1 className="text-4xl font-bold text-htb-bright-white">
+                  Analytics
+                </h1>
+              </div>
+              <p className="text-lg text-htb-foreground">
+                Track your learning progress and achievements.
+              </p>
+            </div>
+            <PremiumAnalytics />
+          </>
         )}
       </div>
     </div>
