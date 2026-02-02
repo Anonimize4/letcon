@@ -1,18 +1,50 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { 
   FlaskConical, 
   ChevronRight, 
   CheckCircle, 
-  Settings, 
   Play, 
   Save,
-  ArrowLeft
+  ArrowLeft,
+  AlertCircle
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
+interface LabFormData {
+  // Step 1: Basic Info
+  labName: string;
+  description: string;
+  difficulty: string;
+  
+  // Step 2: Configuration
+  dockerImage: string;
+  ports: string;
+  enableSSH: boolean;
+  enableTerminal: boolean;
+  
+  // Step 3: Content
+  learningObjectives: string;
+  instructions: string;
+  hints: string;
+}
+
 const LabWizard: React.FC = () => {
   const navigate = useNavigate();
-  const [currentStep, setCurrentStep] = React.useState(1);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [formData, setFormData] = useState<LabFormData>({
+    labName: '',
+    description: '',
+    difficulty: 'Beginner',
+    dockerImage: '',
+    ports: '',
+    enableSSH: false,
+    enableTerminal: false,
+    learningObjectives: '',
+    instructions: '',
+    hints: '',
+  });
+
   const totalSteps = 4;
 
   const steps = [
@@ -21,6 +53,87 @@ const LabWizard: React.FC = () => {
     { number: 3, title: 'Content', description: 'Instructions and challenges' },
     { number: 4, title: 'Review', description: 'Finalize and create' },
   ];
+
+  const validateStep = (step: number): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    if (step === 1) {
+      if (!formData.labName.trim()) {
+        newErrors.labName = 'Lab name is required';
+      }
+      if (!formData.description.trim()) {
+        newErrors.description = 'Description is required';
+      }
+    }
+
+    if (step === 2) {
+      if (!formData.dockerImage.trim()) {
+        newErrors.dockerImage = 'Docker image is required';
+      }
+    }
+
+    if (step === 3) {
+      if (!formData.learningObjectives.trim()) {
+        newErrors.learningObjectives = 'Learning objectives are required';
+      }
+      if (!formData.instructions.trim()) {
+        newErrors.instructions = 'Instructions are required';
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    // Clear error when user types
+    if (errors[name]) {
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[name];
+        return newErrors;
+      });
+    }
+  };
+
+  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: checked
+    }));
+  };
+
+  const handleNext = () => {
+    if (validateStep(currentStep)) {
+      setCurrentStep(prev => Math.min(totalSteps, prev + 1));
+    }
+  };
+
+  const handlePrevious = () => {
+    setCurrentStep(prev => Math.max(1, prev - 1));
+  };
+
+  const handleSubmit = () => {
+    // Final validation
+    if (!validateStep(4)) {
+      return;
+    }
+
+    // In a real app, this would send the data to the backend
+    console.log('Creating lab with form data:', formData);
+    
+    // Show success message and redirect
+    alert('Lab created successfully! (Demo - no actual data sent)');
+    navigate('/dashboard');
+  };
 
   return (
     <div className="min-h-screen bg-htb-background">
@@ -48,12 +161,18 @@ const LabWizard: React.FC = () => {
               <div key={step.number} className="flex items-center">
                 <div className="flex flex-col items-center">
                   <button
-                    onClick={() => setCurrentStep(step.number)}
+                    onClick={() => {
+                      // Only allow jumping to previous steps
+                      if (step.number < currentStep) {
+                        setCurrentStep(step.number);
+                      }
+                    }}
                     className={`w-10 h-10 rounded-full flex items-center justify-center font-semibold transition-all duration-200 ${
                       currentStep >= step.number
                         ? 'bg-htb-cyan text-htb-background'
                         : 'bg-htb-selection-background text-htb-foreground'
                     }`}
+                    disabled={step.number >= currentStep}
                   >
                     {currentStep > step.number ? (
                       <CheckCircle className="h-5 w-5" />
@@ -88,33 +207,60 @@ const LabWizard: React.FC = () => {
               <div className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium text-htb-bright-white mb-2">
-                    Lab Name
+                    Lab Name *
                   </label>
                   <input
                     type="text"
-                    className="w-full px-4 py-3 bg-htb-background border border-htb-selection-background rounded-lg text-htb-bright-white focus:outline-none focus:border-htb-cyan transition-colors"
+                    name="labName"
+                    value={formData.labName}
+                    onChange={handleInputChange}
+                    className={`w-full px-4 py-3 bg-htb-background border rounded-lg text-htb-bright-white focus:outline-none focus:border-htb-cyan transition-colors ${
+                      errors.labName ? 'border-red-500' : 'border-htb-selection-background'
+                    }`}
                     placeholder="Enter lab name..."
                   />
+                  {errors.labName && (
+                    <p className="mt-1 text-sm text-red-400 flex items-center">
+                      <AlertCircle className="h-3 w-3 mr-1" />
+                      {errors.labName}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-htb-bright-white mb-2">
-                    Description
+                    Description *
                   </label>
                   <textarea
+                    name="description"
+                    value={formData.description}
+                    onChange={handleInputChange}
                     rows={4}
-                    className="w-full px-4 py-3 bg-htb-background border border-htb-selection-background rounded-lg text-htb-bright-white focus:outline-none focus:border-htb-cyan transition-colors"
+                    className={`w-full px-4 py-3 bg-htb-background border rounded-lg text-htb-bright-white focus:outline-none focus:border-htb-cyan transition-colors ${
+                      errors.description ? 'border-red-500' : 'border-htb-selection-background'
+                    }`}
                     placeholder="Describe what users will learn..."
                   />
+                  {errors.description && (
+                    <p className="mt-1 text-sm text-red-400 flex items-center">
+                      <AlertCircle className="h-3 w-3 mr-1" />
+                      {errors.description}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-htb-bright-white mb-2">
                     Difficulty Level
                   </label>
-                  <select className="w-full px-4 py-3 bg-htb-background border border-htb-selection-background rounded-lg text-htb-bright-white focus:outline-none focus:border-htb-cyan transition-colors">
-                    <option>Beginner</option>
-                    <option>Intermediate</option>
-                    <option>Advanced</option>
-                    <option>Expert</option>
+                  <select
+                    name="difficulty"
+                    value={formData.difficulty}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 bg-htb-background border border-htb-selection-background rounded-lg text-htb-bright-white focus:outline-none focus:border-htb-cyan transition-colors"
+                  >
+                    <option value="Beginner">Beginner</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Advanced">Advanced</option>
+                    <option value="Expert">Expert</option>
                   </select>
                 </div>
               </div>
@@ -127,13 +273,24 @@ const LabWizard: React.FC = () => {
               <div className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium text-htb-bright-white mb-2">
-                    Docker Image
+                    Docker Image *
                   </label>
                   <input
                     type="text"
-                    className="w-full px-4 py-3 bg-htb-background border border-htb-selection-background rounded-lg text-htb-bright-white focus:outline-none focus:border-htb-cyan transition-colors"
+                    name="dockerImage"
+                    value={formData.dockerImage}
+                    onChange={handleInputChange}
+                    className={`w-full px-4 py-3 bg-htb-background border rounded-lg text-htb-bright-white focus:outline-none focus:border-htb-cyan transition-colors ${
+                      errors.dockerImage ? 'border-red-500' : 'border-htb-selection-background'
+                    }`}
                     placeholder="e.g., ubuntu:22.04"
                   />
+                  {errors.dockerImage && (
+                    <p className="mt-1 text-sm text-red-400 flex items-center">
+                      <AlertCircle className="h-3 w-3 mr-1" />
+                      {errors.dockerImage}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-htb-bright-white mb-2">
@@ -141,17 +298,32 @@ const LabWizard: React.FC = () => {
                   </label>
                   <input
                     type="text"
+                    name="ports"
+                    value={formData.ports}
+                    onChange={handleInputChange}
                     className="w-full px-4 py-3 bg-htb-background border border-htb-selection-background rounded-lg text-htb-bright-white focus:outline-none focus:border-htb-cyan transition-colors"
-                    placeholder="e.g., 80, 443, 8080"
+                    placeholder="e.g., 80, 443, 8080 (comma-separated)"
                   />
                 </div>
-                <div className="flex items-center space-x-4">
-                  <label className="flex items-center space-x-2">
-                    <input type="checkbox" className="w-4 h-4 rounded border-htb-selection-background" />
+                <div className="flex items-center space-x-6">
+                  <label className="flex items-center space-x-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      name="enableSSH"
+                      checked={formData.enableSSH}
+                      onChange={handleCheckboxChange}
+                      className="w-4 h-4 rounded border-htb-selection-background bg-htb-background text-htb-cyan focus:ring-htb-cyan"
+                    />
                     <span className="text-htb-bright-white">Enable SSH Access</span>
                   </label>
-                  <label className="flex items-center space-x-2">
-                    <input type="checkbox" className="w-4 h-4 rounded border-htb-selection-background" />
+                  <label className="flex items-center space-x-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      name="enableTerminal"
+                      checked={formData.enableTerminal}
+                      onChange={handleCheckboxChange}
+                      className="w-4 h-4 rounded border-htb-selection-background bg-htb-background text-htb-cyan focus:ring-htb-cyan"
+                    />
                     <span className="text-htb-bright-white">Enable Web Terminal</span>
                   </label>
                 </div>
@@ -165,32 +337,57 @@ const LabWizard: React.FC = () => {
               <div className="space-y-6">
                 <div>
                   <label className="block text-sm font-medium text-htb-bright-white mb-2">
-                    Learning Objectives
+                    Learning Objectives *
                   </label>
                   <textarea
+                    name="learningObjectives"
+                    value={formData.learningObjectives}
+                    onChange={handleInputChange}
                     rows={3}
-                    className="w-full px-4 py-3 bg-htb-background border border-htb-selection-background rounded-lg text-htb-bright-white focus:outline-none focus:border-htb-cyan transition-colors"
-                    placeholder="What will users learn..."
+                    className={`w-full px-4 py-3 bg-htb-background border rounded-lg text-htb-bright-white focus:outline-none focus:border-htb-cyan transition-colors ${
+                      errors.learningObjectives ? 'border-red-500' : 'border-htb-selection-background'
+                    }`}
+                    placeholder="What will users learn? (one objective per line)"
                   />
+                  {errors.learningObjectives && (
+                    <p className="mt-1 text-sm text-red-400 flex items-center">
+                      <AlertCircle className="h-3 w-3 mr-1" />
+                      {errors.learningObjectives}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-htb-bright-white mb-2">
-                    Lab Instructions
+                    Lab Instructions *
                   </label>
                   <textarea
+                    name="instructions"
+                    value={formData.instructions}
+                    onChange={handleInputChange}
                     rows={6}
-                    className="w-full px-4 py-3 bg-htb-background border border-htb-selection-background rounded-lg text-htb-bright-white focus:outline-none focus:border-htb-cyan transition-colors"
-                    placeholder="Step by step instructions..."
+                    className={`w-full px-4 py-3 bg-htb-background border rounded-lg text-htb-bright-white focus:outline-none focus:border-htb-cyan transition-colors ${
+                      errors.instructions ? 'border-red-500' : 'border-htb-selection-background'
+                    }`}
+                    placeholder="Step by step instructions for completing the lab..."
                   />
+                  {errors.instructions && (
+                    <p className="mt-1 text-sm text-red-400 flex items-center">
+                      <AlertCircle className="h-3 w-3 mr-1" />
+                      {errors.instructions}
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-htb-bright-white mb-2">
                     Hints (Optional)
                   </label>
                   <textarea
+                    name="hints"
+                    value={formData.hints}
+                    onChange={handleInputChange}
                     rows={2}
                     className="w-full px-4 py-3 bg-htb-background border border-htb-selection-background rounded-lg text-htb-bright-white focus:outline-none focus:border-htb-cyan transition-colors"
-                    placeholder="Provide helpful hints..."
+                    placeholder="Provide helpful hints (one per line)..."
                   />
                 </div>
               </div>
@@ -200,30 +397,58 @@ const LabWizard: React.FC = () => {
           {currentStep === 4 && (
             <div>
               <h2 className="text-2xl font-bold text-htb-bright-white mb-6">Review & Create</h2>
-              <div className="bg-htb-selection-background/10 border border-htb-selection-background rounded-lg p-6 mb-6">
-                <h3 className="text-lg font-semibold text-htb-bright-white mb-4">Lab Summary</h3>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-htb-foreground">Status:</span>
-                    <span className="text-yellow-400">Draft</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-htb-foreground">Steps Completed:</span>
-                    <span className="text-htb-bright-white">3/4</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-htb-foreground">Environment:</span>
-                    <span className="text-htb-bright-white">Docker</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-htb-foreground">Last Modified:</span>
-                    <span className="text-htb-bright-white">Just now</span>
-                  </div>
+              
+              {/* Lab Name */}
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-htb-bright-white mb-3">Lab Name</h3>
+                <p className="text-htb-foreground">{formData.labName || '(Not specified)'}</p>
+              </div>
+
+              {/* Description */}
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-htb-bright-white mb-3">Description</h3>
+                <p className="text-htb-foreground">{formData.description || '(Not specified)'}</p>
+              </div>
+
+              {/* Difficulty */}
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-htb-bright-white mb-3">Difficulty</h3>
+                <p className="text-htb-foreground">{formData.difficulty}</p>
+              </div>
+
+              {/* Docker Configuration */}
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-htb-bright-white mb-3">Docker Configuration</h3>
+                <div className="space-y-2">
+                  <p className="text-htb-foreground">Image: <span className="text-htb-bright-white">{formData.dockerImage || '(Not specified)'}</span></p>
+                  <p className="text-htb-foreground">Ports: <span className="text-htb-bright-white">{formData.ports || 'Default'}</span></p>
+                  <p className="text-htb-foreground">SSH: <span className="text-htb-bright-white">{formData.enableSSH ? 'Enabled' : 'Disabled'}</span></p>
+                  <p className="text-htb-foreground">Web Terminal: <span className="text-htb-bright-white">{formData.enableTerminal ? 'Enabled' : 'Disabled'}</span></p>
                 </div>
               </div>
+
+              {/* Learning Objectives */}
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-htb-bright-white mb-3">Learning Objectives</h3>
+                <p className="text-htb-foreground whitespace-pre-wrap">{formData.learningObjectives || '(Not specified)'}</p>
+              </div>
+
+              {/* Instructions */}
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-htb-bright-white mb-3">Instructions</h3>
+                <p className="text-htb-foreground whitespace-pre-wrap">{formData.instructions || '(Not specified)'}</p>
+              </div>
+
+              {/* Hints */}
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-htb-bright-white mb-3">Hints</h3>
+                <p className="text-htb-foreground whitespace-pre-wrap">{formData.hints || 'No hints provided'}</p>
+              </div>
+
+              {/* Validation Summary */}
               <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-4">
                 <p className="text-yellow-400 text-sm">
-                  Your lab will be saved as a draft. You can continue editing after creation.
+                  Please review all information carefully before creating the lab.
                 </p>
               </div>
             </div>
@@ -233,7 +458,7 @@ const LabWizard: React.FC = () => {
         {/* Navigation Buttons */}
         <div className="flex justify-between">
           <button
-            onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
+            onClick={handlePrevious}
             disabled={currentStep === 1}
             className={`flex items-center px-6 py-3 rounded-lg font-medium transition-all duration-200 ${
               currentStep === 1
@@ -246,20 +471,30 @@ const LabWizard: React.FC = () => {
           </button>
 
           <div className="flex space-x-4">
-            <button className="flex items-center px-6 py-3 bg-htb-selection-background/30 text-htb-foreground rounded-lg font-medium hover:bg-htb-selection-background/50 transition-all duration-200">
+            <button
+              onClick={() => {
+                // Save draft functionality - in real app would send to backend
+                console.log('Draft saved:', formData);
+                alert('Draft saved successfully!');
+              }}
+              className="flex items-center px-6 py-3 bg-htb-selection-background/30 text-htb-foreground rounded-lg font-medium hover:bg-htb-selection-background/50 transition-all duration-200"
+            >
               <Save className="h-4 w-4 mr-2" />
               Save Draft
             </button>
             {currentStep < totalSteps ? (
               <button
-                onClick={() => setCurrentStep(Math.min(totalSteps, currentStep + 1))}
+                onClick={handleNext}
                 className="flex items-center px-6 py-3 bg-htb-cyan text-htb-background rounded-lg font-medium hover:bg-htb-cyan/80 transition-all duration-200"
               >
                 Next
                 <ChevronRight className="h-4 w-4 ml-2" />
               </button>
             ) : (
-              <button className="flex items-center px-6 py-3 bg-green-500 text-white rounded-lg font-medium hover:bg-green-500/80 transition-all duration-200">
+              <button
+                onClick={handleSubmit}
+                className="flex items-center px-6 py-3 bg-green-500 text-white rounded-lg font-medium hover:bg-green-500/80 transition-all duration-200"
+              >
                 <Play className="h-4 w-4 mr-2" />
                 Create Lab
               </button>
@@ -274,7 +509,7 @@ const LabWizard: React.FC = () => {
             <p className="text-green-400 font-medium">Lab Wizard is Operational</p>
           </div>
           <p className="text-htb-foreground text-sm mt-1">
-            Follow the steps above to create a new cybersecurity lab environment.
+            Fill in all required fields to create your lab environment.
           </p>
         </div>
       </div>
