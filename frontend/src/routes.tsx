@@ -19,6 +19,7 @@ import ForgotPasswordPage from './pages/auth/ForgotPasswordPage';
 // Dashboard Pages
 import DashboardPage from './pages/dashboard/DashboardPage';
 import ProfilePage from './pages/dashboard/ProfilePage';
+import LabWizard from './pages/dashboard/LabWizard';
 
 // Premium Dashboard Pages
 import {
@@ -98,6 +99,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <DashboardPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/dashboard/create',
+    element: (
+      <ProtectedRoute>
+        <LabWizard />
       </ProtectedRoute>
     ),
   },
