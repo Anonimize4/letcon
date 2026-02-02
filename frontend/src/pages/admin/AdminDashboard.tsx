@@ -1,10 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { LayoutDashboard, BarChart3, Users, Settings, Activity } from 'lucide-react';
+import AdminSidebar, { AdminSidebarToggle } from '../../components/navigation/AdminSidebar';
 
 const AdminDashboard: React.FC = () => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
-    <div className="min-h-screen bg-htb-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-htb-background flex">
+      <AdminSidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)} />
+      
+      <div className="flex-1 flex flex-col min-w-0 lg:ml-0">
+        {/* Mobile Header */}
+        <div className="lg:hidden flex items-center h-16 px-4 border-b border-htb-selection-background bg-htb-selection-background/50">
+          <AdminSidebarToggle onClick={() => setSidebarOpen(true)} />
+          <span className="ml-4 text-lg font-semibold text-htb-bright-white">Admin Dashboard</span>
+        </div>
+
+        {/* Main Content */}
+        <div className="flex-1 p-4 sm:p-6 lg:p-8">
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center space-x-3">
