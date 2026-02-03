@@ -107,9 +107,34 @@ npm run db:seed
 See `.env.example` for all available configuration options. Key variables:
 
 - `NODE_ENV`: application environment (development/production)
-- `DATABASE_URL`: PostgreSQL connection string
+- `DATABASE_URL`: PostgreSQL connection string (Supabase format)
 - `JWT_SECRET`: JWT signing secret (change in production)
-- `POSTGRES_*`: Database configuration
+- `SUPABASE_URL`: Supabase project URL
+- `SUPABASE_ANON_KEY`: Supabase anonymous key (for client-side)
+- `SUPABASE_SERVICE_ROLE_KEY`: Supabase service role key (server-side only)
+
+### Supabase Configuration
+
+The platform supports Supabase as the database provider. To configure:
+
+1. **Create a Supabase project** at [supabase.com](https://supabase.com)
+2. **Get your connection credentials** from Supabase dashboard:
+   - Go to Settings → Database
+   - Copy the "Connection string" (DATABASE_URL)
+3. **Get API credentials** from Supabase dashboard:
+   - Go to Settings → API
+   - Copy the "anon" public key (SUPABASE_ANON_KEY)
+   - Copy the "service_role" secret key (SUPABASE_SERVICE_ROLE_KEY)
+
+**Example Supabase DATABASE_URL format:**
+```
+postgresql://postgres:your_password@db.project-id.supabase.co:5432/postgres
+```
+
+**Important Security Notes:**
+- Never expose `SUPABASE_SERVICE_ROLE_KEY` to client-side code
+- Use environment variables for all Supabase credentials
+- Consider using connection pooling for better performance
 
 ## Docker Services
 
