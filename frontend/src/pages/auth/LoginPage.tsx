@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -28,18 +30,35 @@ const LoginPage: React.FC = () => {
     setErrorMessage('');
     
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Call the login function from AuthContext
+      const response = await login(formData.email, formData.password);
       
-      // Simulate successful login
-      setSuccessMessage('Login successful! Redirecting to dashboard...');
+      // Set success message
+      setSuccessMessage('Login successful! Redirecting...');
       
+      // Redirect based on user role
       setTimeout(() => {
-        navigate('/dashboard');
-      }, 2000);
+        const userRole = response.user.role.toUpperCase();
+        
+        switch (userRole) {
+          case 'ADMIN':
+            navigate('/admin');
+            break;
+          case 'CREATOR':
+            navigate('/dashboard/creator');
+            break;
+          case 'INSTRUCTOR':
+          case 'MODERATOR':
+          case 'USER':
+          default:
+            navigate('/dashboard');
+            break;
+        }
+      }, 1000);
       
-    } catch {
-      setErrorMessage('Invalid email or password. Please try again.');
-    } finally {
+    } catch (error) {
+      const errorMsg = error instanceof Error ? error.message : 'Invalid email or password. Please try again.';
+      setErrorMessage(errorMsg);
       setIsSubmitting(false);
     }
   };

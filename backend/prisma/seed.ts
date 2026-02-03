@@ -7,6 +7,58 @@ async function main() {
   console.log('🌱 Starting database seeding...')
 
   // ==========================================
+  // LETHCON Test Users
+  // ==========================================
+  
+  // Admin test user: admin@lethcon.com / Password123
+  const lethconAdminPassword = await bcrypt.hash('Password123', 12)
+  const lethconAdmin = await prisma.user.upsert({
+    where: { email: 'admin@lethcon.com' },
+    update: {},
+    create: {
+      email: 'admin@lethcon.com',
+      username: 'lethcon_admin',
+      password: lethconAdminPassword,
+      firstName: 'Admin',
+      lastName: 'LETHCON',
+      role: 'ADMIN',
+    },
+  })
+  console.log('✅ Created LETHCON admin user:', lethconAdmin.username)
+
+  // User test user: user@lethcon.com / Password123
+  const lethconUserPassword = await bcrypt.hash('Password123', 12)
+  const lethconUser = await prisma.user.upsert({
+    where: { email: 'user@lethcon.com' },
+    update: {},
+    create: {
+      email: 'user@lethcon.com',
+      username: 'lethcon_user',
+      password: lethconUserPassword,
+      firstName: 'User',
+      lastName: 'LETHCON',
+      role: 'USER',
+    },
+  })
+  console.log('✅ Created LETHCON user:', lethconUser.username)
+
+  // Creator test user: creator@lethcon.com / Password123
+  const lethconCreatorPassword = await bcrypt.hash('Password123', 12)
+  const lethconCreator = await prisma.user.upsert({
+    where: { email: 'creator@lethcon.com' },
+    update: {},
+    create: {
+      email: 'creator@lethcon.com',
+      username: 'lethcon_creator',
+      password: lethconCreatorPassword,
+      firstName: 'Creator',
+      lastName: 'LETHCON',
+      role: 'CREATOR',
+    },
+  })
+  console.log('✅ Created LETHCON creator user:', lethconCreator.username)
+
+  // ==========================================
   // Create dedicated admin user
   // Credentials: admin / Admin@2024!
   // Access: Full admin dashboard (/admin/*)

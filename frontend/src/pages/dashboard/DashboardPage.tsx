@@ -49,8 +49,8 @@ const DashboardPage: React.FC = () => {
   const { user } = useAuth();
   const [currentView, setCurrentView] = React.useState<'home' | 'labs' | 'analytics'>('home');
 
-  // Check if user has premium access
-  const isPremium = user?.role === 'pro' || user?.role === 'admin';
+  // Check if user has premium access (ADMIN, CREATOR, INSTRUCTOR, MODERATOR)
+  const isPremium = user?.role && ['ADMIN', 'CREATOR', 'INSTRUCTOR', 'MODERATOR'].includes(user.role.toUpperCase());
 
   return (
     <div className="flex min-h-screen">
@@ -303,7 +303,7 @@ const DashboardPage: React.FC = () => {
                   : 'Get started with free labs or upgrade for unlimited access.'}
               </p>
             </div>
-            {user?.role === 'pro' || user?.role === 'admin' ? (
+            {isPremium ? (
               <PremiumLabs />
             ) : (
               <FreeLabsWithUpgradeNudge />

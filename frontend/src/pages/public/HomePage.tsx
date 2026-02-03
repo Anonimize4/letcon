@@ -23,12 +23,21 @@ const HomePage = () => {
   // Redirect logged-in users to their appropriate dashboard
   React.useEffect(() => {
     if (isAuthenticated && user) {
-      if (user.role === 'admin') {
-        navigate('/admin');
-      } else if (user.role === 'premium' || user.username?.includes('premium')) {
-        navigate('/dashboard/premium');
-      } else {
-        navigate('/dashboard');
+      const userRole = user.role.toUpperCase();
+      
+      switch (userRole) {
+        case 'ADMIN':
+          navigate('/admin');
+          break;
+        case 'CREATOR':
+          navigate('/dashboard/creator');
+          break;
+        case 'INSTRUCTOR':
+        case 'MODERATOR':
+        case 'USER':
+        default:
+          navigate('/dashboard');
+          break;
       }
     }
   }, [isAuthenticated, user, navigate]);
