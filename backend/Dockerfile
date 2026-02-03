@@ -3,14 +3,17 @@ FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-# Copy all files for monorepo
-COPY . .
+# Copy backend package files first for better caching
+COPY backend/package*.json ./
 
 # Install dependencies
 RUN npm ci --omit=dev
 
+# Copy backend source code
+COPY backend/ ./
+
 # Build the backend
-RUN cd backend && npm run build
+RUN npm run build
 
 # Production stage
 FROM node:18-alpine AS production
