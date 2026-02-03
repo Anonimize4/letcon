@@ -40,13 +40,13 @@ export const verifyEmail = async (req: Request, res: Response) => {
 
     // TODO: Activate user account if needed
 
-    res.json({
+    return res.json({
       success: true,
       message: 'Email verified successfully'
     });
   } catch (error) {
     console.error('Email verification error:', error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: 'Internal server error'
     });

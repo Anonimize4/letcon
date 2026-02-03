@@ -58,7 +58,7 @@ export const authenticate = async (req: Request, res: Response, next: NextFuncti
       role: user.role
     };
 
-    next();
+    return next();
   } catch (error) {
     if (error instanceof jwt.JsonWebTokenError) {
       return res.status(401).json({
@@ -97,7 +97,7 @@ export const authorize = (...roles: (string | string[])[]) => {
       });
     }
 
-    next();
+    return next();
   };
 };
 
@@ -134,9 +134,9 @@ export const optionalAuth = async (req: Request, res: Response, next: NextFuncti
       };
     }
 
-    next();
+    return next();
   } catch (error) {
     // Don't fail on optional auth, just continue without user
-    next();
+    return next();
   }
 };

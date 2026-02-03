@@ -25,7 +25,7 @@ export const createTerminalSession = async (req: Request, res: Response) => {
 
     const session = await terminalService.createTerminalSession(containerId, userId);
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       data: {
         sessionId: session.id,
@@ -37,7 +37,7 @@ export const createTerminalSession = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Error creating terminal session:', error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: error instanceof Error ? error.message : 'Failed to create terminal session'
     });
@@ -86,7 +86,7 @@ export const getTerminalSession = async (req: Request, res: Response) => {
     // Update activity
     terminalService.updateSessionActivity(sessionId!);
 
-    res.json({
+    return res.json({
       success: true,
       data: {
         sessionId: session.id,
@@ -99,7 +99,7 @@ export const getTerminalSession = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Error getting terminal session:', error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: 'Failed to get terminal session'
     });
@@ -147,13 +147,13 @@ export const terminateTerminalSession = async (req: Request, res: Response) => {
 
     await terminalService.terminateTerminalSession(sessionId!);
 
-    res.json({
+    return res.json({
       success: true,
       message: 'Terminal session terminated successfully'
     });
   } catch (error) {
     console.error('Error terminating terminal session:', error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: 'Failed to terminate terminal session'
     });
@@ -176,7 +176,7 @@ export const getUserTerminalSessions = async (req: Request, res: Response) => {
 
     const sessions = terminalService.getUserSessions(userId!);
 
-    res.json({
+    return res.json({
       success: true,
       data: sessions.map(session => ({
         sessionId: session.id,
@@ -189,7 +189,7 @@ export const getUserTerminalSessions = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Error getting user terminal sessions:', error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: 'Failed to get terminal sessions'
     });
@@ -212,13 +212,13 @@ export const terminateAllUserSessions = async (req: Request, res: Response) => {
 
     await terminalService.terminateUserSessions(userId!);
 
-    res.json({
+    return res.json({
       success: true,
       message: 'All terminal sessions terminated successfully'
     });
   } catch (error) {
     console.error('Error terminating all user sessions:', error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: 'Failed to terminate terminal sessions'
     });
@@ -240,13 +240,13 @@ export const getTerminalStats = async (req: Request, res: Response) => {
 
     const stats = terminalService.getStats();
 
-    res.json({
+    return res.json({
       success: true,
       data: stats
     });
   } catch (error) {
     console.error('Error getting terminal stats:', error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: 'Failed to get terminal statistics'
     });

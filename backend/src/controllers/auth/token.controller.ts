@@ -71,7 +71,7 @@ export const refreshToken = async (req: Request, res: Response) => {
       }
     });
 
-    res.json({
+    return res.json({
       success: true,
       message: 'Token refreshed successfully',
       data: {
@@ -81,7 +81,7 @@ export const refreshToken = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Refresh token error:', error);
-    res.status(401).json({
+    return res.status(401).json({
       success: false,
       message: 'Invalid or expired refresh token'
     });
@@ -106,13 +106,13 @@ export const logout = async (req: Request, res: Response) => {
       data: { revokedAt: new Date() }
     });
 
-    res.json({
+    return res.json({
       success: true,
       message: 'Logout successful'
     });
   } catch (error) {
     console.error('Logout error:', error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: 'Internal server error'
     });
@@ -140,13 +140,13 @@ export const logoutAll = async (req: Request, res: Response) => {
       data: { revokedAt: new Date() }
     });
 
-    res.json({
+    return res.json({
       success: true,
       message: 'Logged out from all devices successfully'
     });
   } catch (error) {
     console.error('Logout all error:', error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: 'Internal server error'
     });

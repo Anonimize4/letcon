@@ -44,7 +44,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
     // TODO: Send reset email
 
-    res.json({
+    return res.json({
       success: true,
       message: 'If an account with that email exists, a password reset link has been sent.',
       data: {
@@ -53,7 +53,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Forgot password error:', error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: 'Internal server error'
     });

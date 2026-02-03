@@ -61,13 +61,13 @@ export const resetPassword = async (req: Request, res: Response) => {
       data: { revokedAt: new Date() }
     });
 
-    res.json({
+    return res.json({
       success: true,
       message: 'Password reset successfully. Please login with your new password.'
     });
   } catch (error) {
     console.error('Reset password error:', error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: 'Internal server error'
     });

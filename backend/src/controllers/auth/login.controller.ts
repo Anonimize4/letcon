@@ -75,7 +75,7 @@ export const login = async (req: Request, res: Response) => {
       data: { lastLoginAt: new Date() }
     });
 
-    res.json({
+    return res.json({
       success: true,
       message: 'Login successful',
       data: {
@@ -93,7 +93,7 @@ export const login = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: 'Internal server error'
     });

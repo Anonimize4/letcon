@@ -74,7 +74,7 @@ export const register = async (req: Request, res: Response) => {
 
     // TODO: Send verification email
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       message: 'User registered successfully. Please check your email to verify your account.',
       data: {
@@ -84,7 +84,7 @@ export const register = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Registration error:', error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: 'Internal server error'
     });
