@@ -1,6 +1,6 @@
 # Render Deployment Guide for LETHCON
 
-This guide provides step-by-step instructions to deploy LETHCON on Render.
+This guide provides step-by-step instructions to deploy LETHCON on Render using Docker.
 
 ## Prerequisites
 
@@ -11,19 +11,19 @@ Before deploying, ensure you have:
 
 ## Quick Deploy (One-Click)
 
-### Option 1: Deploy Backend Only
+### Deploy with Docker
 1. Go to [Render Dashboard](https://dashboard.render.com)
 2. Click "New +" → "Web Service"
 3. Connect your GitHub repository
 4. Configure:
    - **Name**: `lethcon-backend`
-   - **Environment**: `Node`
-   - **Build Command**: `cd backend && npm install && npm run build`
-   - **Start Command**: `cd backend && node dist/server.js`
+   - **Environment**: `Docker`
+   - **Dockerfile Path**: `Dockerfile`
+   - **Docker Command**: `node dist/server.js`
 5. Add Environment Variables (see below)
 6. Click "Create Web Service"
 
-### Option 2: Deploy Full Stack
+### Deploy Full Stack with Blueprint
 Use the `render.yaml` file for automatic deployment:
 1. Go to Render Dashboard
 2. Click "New +" → "Blueprint"
@@ -51,7 +51,6 @@ SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
 
 # Application
 NODE_ENV=production
-PORT=5000
 CORS_ORIGIN=https://your-frontend.onrender.com
 ```
 

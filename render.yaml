@@ -3,19 +3,17 @@
 # Docs: https://render.com/docs/blueprint-spec
 
 services:
-  # Backend API Service
+  # Backend API Service (Docker-based)
   - type: web
     name: lethcon-backend
-    env: node
+    env: docker
     region: us-east
     plan: starter
-    buildCommand: cd backend && npm install && npm run build
-    startCommand: cd backend && node dist/server.js
+    dockerfilePath: backend/Dockerfile
+    dockerCommand: node dist/server.js
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 5000
       - key: DATABASE_URL
         fromDatabase:
           name: lethcon-db

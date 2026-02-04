@@ -1,65 +1,43 @@
-# Multi-stage build for LETHCON Backend
+# Dockerfile for LETHCON Backend
 # Optimized for Render deployment
 
-# Stage 1: Build stage
-FROM node:18-alpine AS builder
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copy monorepo package files
-COPY package*.json lerna.json ./
-
-# Copy backend package files
-COPY backend/package*.json ./backend/
-COPY backend/tsconfig.json ./backend/
-COPY backend/tsconfig.base.json ./
-
-# Install dependencies (including dev for build)
+# Copy package files
+COPY package*.json ./
 RUN npm ci
 
-# Copy backend source code
-COPY backend/ ./backend/
+# Copy source code
+COPY src/ ./
+COPY prisma/ ./
 
-# Build backend TypeScript
-WORKDIR /app/backend
+# Prisma generate before build
+RUN npx prisma generate
+
+# Build TypeScript
 RUN npm run build
 
-# Stage 2: Production stage
-FROM node:18-alpine AS production
+# Production stage
+FROM node:20-alpine AS production
 
 WORKDIR /app
 
-# Create non-root user for security
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nodejs -u 1001
+# Copy only production dependencies
+COPY package*.json ./
+RUN npm ci --omit=dev
 
 # Copy built application from builder stage
-COPY --from=builder --chown=nodejs:nodejs /app/backend/dist ./dist
-COPY --from=builder --chown=nodejs:nodejs /app/backend/node_modules ./node_modules
-COPY --from=builder --chown=nodejs:nodejs /app/backend/package*.json ./
-COPY --from=builder --chown=nodejs:nodejs /app/backend/prisma ./prisma
-
-# Copy environment file template
-COPY --from=builder --chown=nodejs:nodejs /app/backend/.env.example ./.env.example
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/prisma ./prisma
 
 # Create necessary directories
-RUN mkdir -p uploads logs && \
-    chown nodejs:nodejs uploads logs
+RUN mkdir -p uploads logs
 
-# Switch to non-root user
-USER nodejs
-
-# Expose port (Render will use PORT environment variable)
-EXPOSE 5000
-
-# Set environment variables
 ENV NODE_ENV=production
-ENV PORT=5000
+EXPOSE 10000
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD wget --quiet --tries=1 --spider http://localhost:5000/health || exit 1
-
-# Start the application
 CMD ["node", "dist/server.js"]
 
