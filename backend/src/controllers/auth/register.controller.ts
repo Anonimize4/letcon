@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
-import { v4 as uuidv4 } from 'uuid';
-import { PrismaClient, TokenType, UserRole } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { validationResult } from 'express-validator';
 
 const prisma = new PrismaClient();
@@ -48,7 +47,7 @@ export const register = async (req: Request, res: Response) => {
         password: hashedPassword,
         firstName,
         lastName,
-        role: UserRole.USER
+        role: 'USER'
       },
       select: {
         id: true,

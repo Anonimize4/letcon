@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
-import { PrismaClient, TokenType } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { validationResult } from 'express-validator';
 
 const prisma = new PrismaClient();
@@ -18,11 +18,18 @@ export const resetPassword = async (req: Request, res: Response) => {
 
     const { token, newPassword } = req.body;
 
+    if (!token || !newPassword) {
+      return res.status(400).json({
+        success: false,
+        message: 'Token and new password are required'
+      });
+    }
+
     // Find token
     const resetToken = await prisma.token.findFirst({
       where: {
-        token,
-        type: TokenType.PASSWORD_RESET,
+        token: token,
+        type: 'PASSWORD_RESET',
         expiresAt: { gt: new Date() },
         usedAt: null
       },
@@ -42,7 +49,7 @@ export const resetPassword = async (req: Request, res: Response) => {
 
     // Update user password
     await prisma.user.update({
-      where: { id: resetToken.user.id },
+      where: { id: resetToken.userId },
       data: { password: hashedPassword }
     });
 
@@ -52,18 +59,9 @@ export const resetPassword = async (req: Request, res: Response) => {
       data: { usedAt: new Date() }
     });
 
-    // Revoke all refresh tokens for this user
-    await prisma.refreshToken.updateMany({
-      where: { 
-        userId: resetToken.user.id,
-        revokedAt: null
-      },
-      data: { revokedAt: new Date() }
-    });
-
     return res.json({
       success: true,
-      message: 'Password reset successfully. Please login with your new password.'
+      message: 'Password reset successfully'
     });
   } catch (error) {
     console.error('Reset password error:', error);

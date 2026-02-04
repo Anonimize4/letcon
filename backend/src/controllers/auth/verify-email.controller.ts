@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { PrismaClient, TokenType } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
@@ -18,7 +18,7 @@ export const verifyEmail = async (req: Request, res: Response) => {
     const verificationToken = await prisma.token.findFirst({
       where: {
         token: token,
-        type: TokenType.EMAIL_VERIFICATION,
+        type: 'EMAIL_VERIFICATION',
         expiresAt: { gt: new Date() },
         usedAt: null
       },

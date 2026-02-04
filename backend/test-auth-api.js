@@ -8,7 +8,9 @@ const API_VERSION = 'v1';
 
 async function makeRequest(method, path, body = null) {
   return new Promise((resolve, reject) => {
-    const url = new URL(`${API_BASE_URL}/api/${API_VERSION}${path}`);
+    // For health endpoint, don't add /api/v1 prefix
+    const fullPath = path === '/health' ? path : `/api/${API_VERSION}${path}`;
+    const url = new URL(`${API_BASE_URL}${fullPath}`);
     
     const options = {
       hostname: url.hostname,
@@ -123,4 +125,3 @@ async function testEndpoints() {
 }
 
 testEndpoints().catch(console.error);
-

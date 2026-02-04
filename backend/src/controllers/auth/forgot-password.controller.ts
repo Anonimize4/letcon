@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
-import { PrismaClient, TokenType } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { validationResult } from 'express-validator';
 
 const prisma = new PrismaClient();
@@ -36,7 +36,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
     await prisma.token.create({
       data: {
         token: resetToken,
-        type: TokenType.PASSWORD_RESET,
+        type: 'PASSWORD_RESET',
         userId: user.id,
         expiresAt: new Date(Date.now() + 60 * 60 * 1000) // 1 hour
       }
