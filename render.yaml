@@ -1,0 +1,59 @@
+# Render Blueprint Configuration
+# This file defines the services and configuration for Render deployment
+# Docs: https://render.com/docs/blueprint-spec
+
+services:
+  # Backend API Service
+  - type: web
+    name: lethcon-backend
+    env: node
+    region: us-east
+    plan: starter
+    buildCommand: cd backend && npm install && npm run build
+    startCommand: cd backend && node dist/server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: DATABASE_URL
+        fromDatabase:
+          name: lethcon-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: SUPABASE_URL
+        fromSecret:
+          name: supabase-url
+      - key: SUPABASE_KEY
+        fromSecret:
+          name: supabase-key
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        fromSecret:
+          name: supabase-service-role-key
+      - key: CORS_ORIGIN
+        value: https://your-frontend.onrender.com
+
+  # Frontend Static Site
+  - type: web
+    name: lethcon-frontend
+    env: static
+    region: us-east
+    plan: free
+    buildCommand: cd frontend && npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://lethcon-backend.onrender.com/api/v1
+
+databases:
+  - name: lethcon-db
+    databaseName: cybersecurity_training
+    plan: starter
+    region: us-east
+
+secrets:
+  - name: supabase-url
+  - name: supabase-key
+  - name: supabase-service-role-key
+
