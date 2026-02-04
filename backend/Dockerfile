@@ -7,7 +7,14 @@ WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
-RUN npm ci
+
+# Generate package-lock.json if it doesn't exist
+# This is needed for npm ci to work in Render deployments
+RUN if [ ! -f package-lock.json ]; then \
+    echo "package-lock.json not found, generating from package.json..."; \
+    npm install --package-lock-only; \
+fi && \
+npm ci
 
 # Copy source code
 COPY src/ ./
@@ -29,7 +36,14 @@ ENV NODE_ENV=production
 
 # Copy package files and install production deps only
 COPY package*.json ./
-RUN npm ci
+
+# Generate package-lock.json if it doesn't exist
+# This is needed for npm ci to work in Render deployments
+RUN if [ ! -f package-lock.json ]; then \
+    echo "package-lock.json not found, generating from package.json..."; \
+    npm install --package-lock-only; \
+fi && \
+npm ci
 
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist
