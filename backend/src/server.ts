@@ -66,7 +66,7 @@ const limiter = rateLimit({
 const speedLimiter = slowDown({
   windowMs: 15 * 60 * 1000, // 15 minutes
   delayAfter: NODE_ENV === 'production' ? 50 : 200, // allow 50 requests per windowMs without delay
-  delayMs: 500 // add 500ms delay per request after delayAfter
+  delayMs: () => 500 // add 500ms delay per request after delayAfter
 })
 
 app.use(limiter)

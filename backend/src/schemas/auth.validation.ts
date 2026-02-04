@@ -31,10 +31,20 @@ export const loginValidation = [
   body('email')
     .isEmail()
     .normalizeEmail()
-    .withMessage('Please provide a valid email address'),
+    .withMessage('Please provide a valid email address')
+    .custom((value) => {
+      // Allow any valid email format
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(value)) {
+        throw new Error('Invalid email format');
+      }
+      return true;
+    }),
   body('password')
     .notEmpty()
     .withMessage('Password is required')
+    .isLength({ min: 1 })
+    .withMessage('Password cannot be empty')
 ];
 
 // Forgot password validation

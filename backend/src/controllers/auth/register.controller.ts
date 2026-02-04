@@ -61,25 +61,14 @@ export const register = async (req: Request, res: Response) => {
       }
     });
 
-    // Generate email verification token
-    const verificationToken = uuidv4();
-    await prisma.token.create({
-      data: {
-        token: verificationToken,
-        type: TokenType.EMAIL_VERIFICATION,
-        userId: user.id,
-        expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000) // 24 hours
-      }
-    });
-
-    // TODO: Send verification email
+    // Skip email verification for development
+    // TODO: Implement email verification for production
 
     return res.status(201).json({
       success: true,
-      message: 'User registered successfully. Please check your email to verify your account.',
+      message: 'User registered successfully. You can now login.',
       data: {
-        user,
-        verificationToken // Only for development, remove in production
+        user
       }
     });
   } catch (error) {

@@ -1,4 +1,4 @@
-import { createWriteStream, WriteStream } from 'fs'
+import { createWriteStream, WriteStream, mkdirSync } from 'fs'
 import { join } from 'path'
 
 export enum LogLevel {
@@ -21,6 +21,8 @@ class Logger {
     const logFile = join(logDir, 'app.log')
 
     try {
+      // Ensure log directory exists
+      mkdirSync(logDir, { recursive: true })
       this.logStream = createWriteStream(logFile, { flags: 'a' })
     } catch (error) {
       console.error('Failed to create log stream:', error)

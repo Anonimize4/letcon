@@ -27,6 +27,7 @@ export const login = async (req: Request, res: Response) => {
   try {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.log('Validation errors:', errors.array());
       return res.status(400).json({
         success: false,
         message: 'Validation errors',
@@ -34,14 +35,23 @@ export const login = async (req: Request, res: Response) => {
       });
     }
 
-    const { email, password } = req.body;
+    const { email, password, username } = req.body;
 
-    // Find user
-    const user = await prisma.user.findUnique({
-      where: { email }
-    });
+    // Try to find user by email or username
+    let user = null;
+    
+    if (email) {
+      user = await prisma.user.findUnique({
+        where: { email }
+      });
+    } else if (username) {
+      user = await prisma.user.findUnique({
+        where: { username }
+      });
+    }
 
     if (!user) {
+      console.log('Login failed: User not found', { email, username });
       return res.status(401).json({
         success: false,
         message: 'Invalid credentials'
@@ -51,6 +61,7 @@ export const login = async (req: Request, res: Response) => {
     // Verify password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
+      console.log('Login failed: Invalid password for user:', email || username);
       return res.status(401).json({
         success: false,
         message: 'Invalid credentials'

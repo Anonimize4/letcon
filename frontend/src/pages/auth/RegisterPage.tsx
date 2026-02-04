@@ -1,30 +1,49 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 
 const RegisterPage: React.FC = () => {
   const navigate = useNavigate();
+  const { register } = useAuth();
   const [formData, setFormData] = useState({
     email: '',
     username: '',
     password: '',
     confirmPassword: '',
+    firstName: '',
+    lastName: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError('');
     
+    if (formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await register({
+        email: formData.email,
+        username: formData.username,
+        password: formData.password,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+      });
+      
       setSuccessMessage('Registration successful! Redirecting to login...');
       
       setTimeout(() => {
         navigate('/login');
       }, 2000);
-    } catch {
-      // Registration failed
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Registration failed');
     } finally {
       setIsSubmitting(false);
     }
@@ -61,6 +80,21 @@ const RegisterPage: React.FC = () => {
           </p>
         </div>
 
+          {error && (
+          <div className="mb-6 rounded-lg bg-red-500/10 border border-red-500/30 p-4">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <svg className="h-5 w-5 text-htb-red" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <p className="text-sm font-medium text-htb-red">{error}</p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {successMessage && (
           <div className="mb-6 rounded-lg bg-green-500/10 border border-green-500/30 p-4">
             <div className="flex">
@@ -79,6 +113,41 @@ const RegisterPage: React.FC = () => {
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div className="bg-htb-selection-background/10 rounded-xl p-6 border border-htb-selection-background">
             <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label htmlFor="firstName" className="block text-sm font-medium text-htb-bright-white mb-2">
+                    First Name
+                  </label>
+                  <input
+                    id="firstName"
+                    name="firstName"
+                    type="text"
+                    autoComplete="given-name"
+                    className="w-full px-4 py-3 rounded-lg border bg-htb-background text-htb-bright-white placeholder-htb-foreground focus:outline-none focus:ring-2 focus:ring-htb-blue focus:border-transparent transition-all border-htb-selection-background"
+                    placeholder="First name"
+                    value={formData.firstName}
+                    onChange={handleInputChange}
+                    disabled={isSubmitting}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="lastName" className="block text-sm font-medium text-htb-bright-white mb-2">
+                    Last Name
+                  </label>
+                  <input
+                    id="lastName"
+                    name="lastName"
+                    type="text"
+                    autoComplete="family-name"
+                    className="w-full px-4 py-3 rounded-lg border bg-htb-background text-htb-bright-white placeholder-htb-foreground focus:outline-none focus:ring-2 focus:ring-htb-blue focus:border-transparent transition-all border-htb-selection-background"
+                    placeholder="Last name"
+                    value={formData.lastName}
+                    onChange={handleInputChange}
+                    disabled={isSubmitting}
+                  />
+                </div>
+              </div>
+
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-htb-bright-white mb-2">
                   Email Address
