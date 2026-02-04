@@ -18,6 +18,7 @@ export interface Config {
   
   // Supabase
   SUPABASE_URL: string
+  SUPABASE_KEY: string
   SUPABASE_ANON_KEY: string
   SUPABASE_SERVICE_ROLE_KEY: string
   
@@ -76,6 +77,7 @@ const config: Config = {
   DB_PASSWORD: process.env.DB_PASSWORD || 'password',
   
   SUPABASE_URL: process.env.SUPABASE_URL || '',
+  SUPABASE_KEY: process.env.SUPABASE_KEY || '',
   SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY || '',
   SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY || '',
   
