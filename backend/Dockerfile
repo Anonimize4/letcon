@@ -24,19 +24,20 @@ FROM node:20-alpine AS production
 
 WORKDIR /app
 
-# Copy only production dependencies
+# Set NODE_ENV first - npm ci will skip devDependencies automatically
+ENV NODE_ENV=production
+
+# Copy package files and install production deps only
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN npm ci
 
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/prisma ./prisma
 
 # Create necessary directories
 RUN mkdir -p uploads logs
 
-ENV NODE_ENV=production
 EXPOSE 10000
 
 CMD ["node", "dist/server.js"]
