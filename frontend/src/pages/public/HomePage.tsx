@@ -32,8 +32,6 @@ const HomePage = () => {
         case 'CREATOR':
           navigate('/dashboard/creator');
           break;
-        case 'INSTRUCTOR':
-        case 'MODERATOR':
         case 'USER':
         default:
           navigate('/dashboard');

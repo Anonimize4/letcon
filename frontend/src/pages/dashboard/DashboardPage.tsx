@@ -49,8 +49,8 @@ const DashboardPage: React.FC = () => {
   const { user } = useAuth();
   const [currentView, setCurrentView] = React.useState<'home' | 'labs' | 'analytics'>('home');
 
-  // Check if user has premium access (ADMIN, CREATOR, INSTRUCTOR, MODERATOR)
-  const isPremium = user?.role && ['ADMIN', 'CREATOR', 'INSTRUCTOR', 'MODERATOR'].includes(user.role.toUpperCase());
+  // Check if user has premium access (ADMIN, CREATOR)
+  const isPremium = user?.role && ['ADMIN', 'CREATOR'].includes(user.role.toUpperCase());
 
   return (
     <div className="flex min-h-screen">

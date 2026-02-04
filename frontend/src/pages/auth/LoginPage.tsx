@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { login } = useAuth();
+  const { login, error: authError, isLoading, clearError, isAuthenticated } = useAuth();
+  
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -16,7 +17,7 @@ const LoginPage: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   // Check for success message from navigation state
-  React.useEffect(() => {
+  useEffect(() => {
     if (location.state?.message) {
       setSuccessMessage(location.state.message);
       // Clear message from location state
@@ -24,41 +25,37 @@ const LoginPage: React.FC = () => {
     }
   }, [location.state]);
 
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/dashboard');
+    }
+  }, [isAuthenticated, navigate]);
+
+  // Sync auth error to local state
+  useEffect(() => {
+    if (authError) {
+      setErrorMessage(authError);
+      clearError();
+    }
+  }, [authError, clearError]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
     setErrorMessage('');
     
     try {
-      // Call the login function from AuthContext
-      const response = await login(formData.email, formData.password);
+      await login(formData.email, formData.password);
+      setSuccessMessage('Login successful! Redirecting to dashboard...');
       
-      // Set success message
-      setSuccessMessage('Login successful! Redirecting...');
-      
-      // Redirect based on user role
       setTimeout(() => {
-        const userRole = response.user.role.toUpperCase();
-        
-        switch (userRole) {
-          case 'ADMIN':
-            navigate('/admin');
-            break;
-          case 'CREATOR':
-            navigate('/dashboard/creator');
-            break;
-          case 'INSTRUCTOR':
-          case 'MODERATOR':
-          case 'USER':
-          default:
-            navigate('/dashboard');
-            break;
-        }
+        navigate('/dashboard');
       }, 1000);
       
     } catch (error) {
-      const errorMsg = error instanceof Error ? error.message : 'Invalid email or password. Please try again.';
-      setErrorMessage(errorMsg);
+      // Error is already handled by auth context
+    } finally {
       setIsSubmitting(false);
     }
   };

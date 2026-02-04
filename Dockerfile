@@ -3,17 +3,19 @@ FROM node:18-alpine AS builder
 
 WORKDIR /app
 
-# Copy backend package files first for better caching
-COPY backend/package*.json ./
+# Copy workspace package files first
+COPY package*.json ./
+COPY backend/package*.json ./backend/
+COPY frontend/package*.json ./frontend/
 
-# Install dependencies
+# Install dependencies for the entire workspace
 RUN npm ci --omit=dev
 
 # Copy backend source code
-COPY backend/ ./
+COPY backend/ ./backend/
 
 # Build the backend
-RUN npm run build
+RUN cd backend && npm run build
 
 # Production stage
 FROM node:18-alpine AS production
@@ -26,7 +28,7 @@ RUN adduser -S nodejs -u 1001
 
 # Copy built application
 COPY --from=builder --chown=nodejs:nodejs /app/backend/dist ./dist
-COPY --from=builder --chown=nodejs:nodejs /app/backend/node_modules ./node_modules
+COPY --from=builder --chown=nodejs:nodejs /app/node_modules/backend/node_modules ./node_modules
 COPY --from=builder --chown=nodejs:nodejs /app/backend/package*.json ./
 
 # Create uploads directory

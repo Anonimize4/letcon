@@ -200,8 +200,6 @@ enum UserRole {
   USER
   CREATOR
   ADMIN
-  INSTRUCTOR
-  MODERATOR
 }
 
 enum Difficulty {
