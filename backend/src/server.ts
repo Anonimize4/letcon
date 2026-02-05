@@ -92,42 +92,7 @@ app.use(compression())
 // Cookie parsing
 app.use(cookieParser())
 
-// Session configuration
-if (NODE_ENV === 'production') {
-  app.set('trust proxy', 1)
-}
-
-// Configure session store
-let sessionStore: any = undefined
-
-// Try to use Redis store if available
-try {
-  const redisClient = getRedisClient()
-  if (redisClient) {
-    const RedisStore = require('connect-redis')(session)
-    sessionStore = new RedisStore({ client: redisClient })
-    logger.info('✅ Using Redis session store')
-  } else {
-    logger.warn('⚠️  Redis not available, using MemoryStore (not recommended for production)')
-  }
-} catch (error) {
-  logger.warn('⚠️  Failed to initialize Redis session store, using MemoryStore:', error)
-}
-
-const sessionConfig: any = {
-  secret: process.env.SESSION_SECRET || 'session-secret',
-  resave: false,
-  saveUninitialized: false,
-  store: sessionStore,
-  cookie: {
-    secure: NODE_ENV === 'production',
-    httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    sameSite: NODE_ENV === 'production' ? 'strict' : 'lax',
-  },
-}
-
-app.use(session(sessionConfig))
+// Session configuration will be set up after Redis connection in initializeServices()
 
 // Logging
 if (NODE_ENV === 'development') {
@@ -189,11 +154,55 @@ async function disconnectServices() {
   }
 }
 
+// Setup session middleware after Redis is connected
+function setupSessionMiddleware() {
+  // Session configuration
+  if (NODE_ENV === 'production') {
+    app.set('trust proxy', 1)
+  }
+
+  // Configure session store
+  let sessionStore: any = undefined
+
+  // Try to use Redis store if available
+  try {
+    const redisClient = getRedisClient()
+    if (redisClient) {
+      const RedisStore = require('connect-redis')(session)
+      sessionStore = new RedisStore({ client: redisClient })
+      logger.info('✅ Using Redis session store')
+    } else {
+      logger.warn('⚠️  Redis not available, using MemoryStore (not recommended for production)')
+    }
+  } catch (error) {
+    logger.warn('⚠️  Failed to initialize Redis session store, using MemoryStore:', error)
+  }
+
+  const sessionConfig: any = {
+    secret: process.env.SESSION_SECRET || 'session-secret',
+    resave: false,
+    saveUninitialized: false,
+    store: sessionStore,
+    cookie: {
+      secure: NODE_ENV === 'production',
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      sameSite: NODE_ENV === 'production' ? 'strict' : 'lax',
+    },
+  }
+
+  app.use(session(sessionConfig))
+  logger.info('Session middleware configured')
+}
+
 // Initialize services
 async function initializeServices() {
   try {
     // Connect to Redis first (for session store)
     await connectRedis()
+    
+    // Setup session middleware after Redis is connected
+    setupSessionMiddleware()
     
     // Connect to database
     await connectDatabase()
