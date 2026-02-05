@@ -16,15 +16,16 @@ RUN if [ ! -f package-lock.json ]; then \
 fi && \
 npm ci
 
-# Copy source code
-COPY src/ ./
-COPY prisma/ ./
+# Copy source code explicitly into subdirectories to ensure tsc finds inputs
+COPY src/ ./src
+COPY prisma/ ./prisma
 
 # Copy TypeScript config files (needed because backend/tsconfig.json extends tsconfig.base.json)
 COPY tsconfig.base.json ./
 COPY tsconfig.json ./
 
-# Prisma generate before build
+# Ensure schema exists before prisma generate
+RUN ls -la /app && ls -la /app/src && ls -la /app/prisma || true
 RUN npx prisma generate
 
 # Build TypeScript
