@@ -3,8 +3,8 @@
 
 FROM node:20-alpine AS builder
 
-# Install ttyd for terminal functionality
-RUN apk add --no-cache ttyd
+# Install ttyd for terminal functionality and openssl for Prisma
+RUN apk add --no-cache ttyd openssl
 
 WORKDIR /app
 
@@ -37,40 +37,34 @@ RUN npm run build
 # Production stage
 FROM node:20-alpine AS production
 
-# Install ttyd for terminal functionality
-RUN apk add --no-cache ttyd
+# 1. ADD THIS: Install OpenSSL (Prisma needs this on Alpine)
+RUN apk add --no-cache ttyd openssl
 
 WORKDIR /app
 
-# Set NODE_ENV first - npm ci will skip devDependencies automatically
+# Set NODE_ENV
 ENV NODE_ENV=production
 
-# Copy package files and install production deps only
+# Copy package files
 COPY package*.json ./
 
-# Generate package-lock.json if it doesn't exist
-# This is needed for npm ci to work in Render deployments
-RUN if [ ! -f package-lock.json ]; then \
-    echo "package-lock.json not found, generating from package.json..."; \
-    npm install --package-lock-only; \
-fi && \
-npm ci --omit=dev
+# Install production deps
+RUN npm ci --omit=dev
 
-# 1. Copy the prisma directory first
+# 2. ENSURE THIS PATH IS CORRECT
+# If building from the backend folder, this is fine. 
+# If building from the root, change this to: COPY backend/prisma ./prisma/
 COPY prisma ./prisma/
 
-# 2. Then generate the client
-RUN npx prisma generate
+# 3. GENERATE WITH EXPLICIT PATH
+RUN npx prisma generate --schema=./prisma/schema.prisma
 
-# 3. Then proceed with the rest of your build
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/prisma ./prisma
+# (Optionally copy the generated client if it's not in node_modules)
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
 # Create necessary directories
 RUN mkdir -p uploads logs
-
-# Don't expose a specific port - Render will set PORT environment variable
-# and the server will use process.env.PORT
 
 CMD ["node", "dist/src/server.js"]
