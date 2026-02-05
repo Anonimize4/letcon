@@ -1,1 +1,2 @@
-export default backend/src/scripts/seed-database.ts;
+// Placeholder - content needs to be restored
+export {};

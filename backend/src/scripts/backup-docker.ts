@@ -1,1 +1,2 @@
-export default backend/src/scripts/backup-docker.ts;
+// Placeholder - content needs to be restored
+export {};

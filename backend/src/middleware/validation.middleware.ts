@@ -1,1 +1,2 @@
-export default backend/src/middleware/validation.middleware.ts;
+// Placeholder - content needs to be restored
+export {};

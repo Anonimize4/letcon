@@ -1,1 +1,2 @@
-export default backend/src/services/community/writeup.service.ts;
+// Placeholder - content needs to be restored
+export {};

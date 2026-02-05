@@ -1,1 +1,2 @@
-export default backend/src/models/User.ts;
+// Placeholder - content needs to be restored
+export {};

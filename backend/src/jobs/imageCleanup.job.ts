@@ -1,1 +1,2 @@
-export default backend/src/jobs/imageCleanup.job.ts;
+// Placeholder - content needs to be restored
+export {};

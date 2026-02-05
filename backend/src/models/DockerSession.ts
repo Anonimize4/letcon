@@ -1,1 +1,2 @@
-export default backend/src/models/DockerSession.ts;
+// Placeholder - content needs to be restored
+export {};

@@ -1,1 +1,2 @@
-export default backend/src/utils/validators.ts;
+// Placeholder - content needs to be restored
+export {};

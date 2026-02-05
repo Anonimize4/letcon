@@ -1,1 +1,2 @@
-export default backend/src/controllers/payment/PaymentController.ts;
+// Placeholder - content needs to be restored
+export {};

@@ -1,1 +1,2 @@
-export default backend/src/middleware/rateLimit.middleware.ts;
+// Placeholder - content needs to be restored
+export {};

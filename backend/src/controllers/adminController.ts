@@ -1,1 +1,2 @@
-export default backend/src/controllers/adminController.ts;
+// Placeholder - content needs to be restored
+export {};

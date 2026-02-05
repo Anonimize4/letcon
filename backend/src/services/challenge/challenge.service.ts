@@ -1,1 +1,2 @@
-export default backend/src/services/challenge/challenge.service.ts;
+// Placeholder - content needs to be restored
+export {};

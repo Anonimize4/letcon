@@ -1,1 +1,2 @@
-export default backend/src/services/labService.ts;
+// Placeholder - content needs to be restored
+export {};

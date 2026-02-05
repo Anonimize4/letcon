@@ -1,1 +1,2 @@
-export default backend/src/controllers/user/progress.controller.ts;
+// Placeholder - content needs to be restored
+export {};

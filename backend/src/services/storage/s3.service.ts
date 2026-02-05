@@ -1,1 +1,2 @@
-export default backend/src/services/storage/s3.service.ts;
+// Placeholder - content needs to be restored
+export {};

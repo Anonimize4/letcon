@@ -1,1 +1,2 @@
-export default backend/src/services/admin/lab-builder/dockerBuilder.service.ts;
+// Placeholder - content needs to be restored
+export {};

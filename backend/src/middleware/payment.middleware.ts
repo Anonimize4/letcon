@@ -1,1 +1,2 @@
-export default backend/src/middleware/payment.middleware.ts;
+// Placeholder - content needs to be restored
+export {};

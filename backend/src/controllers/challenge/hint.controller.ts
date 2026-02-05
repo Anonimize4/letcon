@@ -1,1 +1,2 @@
-export default backend/src/controllers/challenge/hint.controller.ts;
+// Placeholder - content needs to be restored
+export {};

@@ -1,1 +1,2 @@
-export default backend/src/utils/constants/roles.ts;
+// Placeholder - content needs to be restored
+export {};

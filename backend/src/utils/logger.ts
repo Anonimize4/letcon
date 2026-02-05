@@ -1,1 +1,2 @@
-export default backend/src/utils/logger.ts;
+// Placeholder - content needs to be restored
+export {};

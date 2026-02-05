@@ -1,1 +1,2 @@
-export default backend/src/jobs/containerCleanup.job.ts;
+// Placeholder - content needs to be restored
+export {};

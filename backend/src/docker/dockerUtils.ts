@@ -1,1 +1,2 @@
-export default backend/src/docker/dockerUtils.ts;
+// Placeholder - content needs to be restored
+export {};

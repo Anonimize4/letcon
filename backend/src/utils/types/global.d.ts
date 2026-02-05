@@ -1,1 +1,2 @@
-export default backend/src/utils/types/global.d.ts;
+// Placeholder - content needs to be restored
+export {};

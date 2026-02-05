@@ -1,1 +1,2 @@
-export default backend/src/models/UserProgress.ts;
+// Placeholder - content needs to be restored
+export {};

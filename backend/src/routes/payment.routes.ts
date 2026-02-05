@@ -1,1 +1,2 @@
-export default backend/src/routes/payment.routes.ts;
+// Placeholder - content needs to be restored
+export {};

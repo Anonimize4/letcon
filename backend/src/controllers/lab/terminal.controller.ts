@@ -1,1 +1,2 @@
-export default backend/src/controllers/lab/terminal.controller.ts;
+// Placeholder - content needs to be restored
+export {};

@@ -1,1 +1,2 @@
-export default backend/src/docker/securityConfig.ts;
+// Placeholder - content needs to be restored
+export {};

@@ -1,1 +1,2 @@
-export default backend/src/docker/queueManager.ts;
+// Placeholder - content needs to be restored
+export {};

@@ -1,1 +1,2 @@
-export default backend/src/schemas/lab.schema.ts;
+// Placeholder - content needs to be restored
+export {};

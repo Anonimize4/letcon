@@ -1,1 +1,2 @@
-export default backend/src/scripts/migrate-data.ts;
+// Placeholder - content needs to be restored
+export {};

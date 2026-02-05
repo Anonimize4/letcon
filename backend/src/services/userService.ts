@@ -1,1 +1,2 @@
-export default backend/src/services/userService.ts;
+// Placeholder - content needs to be restored
+export {};
