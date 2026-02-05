@@ -1,7 +1,33 @@
 import dotenv from 'dotenv'
+import path from 'path'
 
-// Load environment variables
-dotenv.config()
+// Load environment variables in order of precedence
+// 1. .env.local (for local overrides)
+// 2. .env.${NODE_ENV} (environment-specific)
+// 3. .env (default)
+// 4. Look in backend directory first, then project root
+
+const envPaths = [
+  path.join(process.cwd(), `.env.local`),
+  path.join(process.cwd(), `.env.${process.env.NODE_ENV || 'development'}`),
+  path.join(process.cwd(), `.env`),
+  path.join(process.cwd(), 'backend', `.env.local`),
+  path.join(process.cwd(), 'backend', `.env.${process.env.NODE_ENV || 'development'}`),
+  path.join(process.cwd(), 'backend', `.env`)
+]
+
+// Load each environment file if it exists
+envPaths.forEach(envPath => {
+  const result = dotenv.config({ path: envPath })
+  if (result.error) {
+    // Ignore file not found errors, but log others
+    if ('code' in result.error && result.error.code !== 'ENOENT') {
+      console.warn(`Warning: Error loading ${envPath}:`, result.error.message)
+    }
+  } else {
+    console.log(`Loaded environment from: ${envPath}`)
+  }
+})
 
 export interface Config {
   NODE_ENV: string
