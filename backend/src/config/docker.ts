@@ -1,18 +1,48 @@
 import Docker from 'dockerode'
+import { logger } from '../utils/helpers/logger'
 
-export const docker = new Docker()
+let docker: Docker | null = null
+
+export function getDockerClient(): Docker | null {
+  return docker
+}
 
 export async function setupDockerClient(): Promise<void> {
   try {
+    // Skip Docker setup in production environments like Render
+    if (process.env.NODE_ENV === 'production' && process.env.RENDER) {
+      logger.warn('⚠️  Docker setup skipped in Render production environment')
+      return
+    }
+
+    // Check if Docker socket is available
+    const fs = require('fs')
+    const dockerSocketPath = '/var/run/docker.sock'
+    
+    if (!fs.existsSync(dockerSocketPath)) {
+      logger.warn('⚠️  Docker socket not found, skipping Docker client setup')
+      return
+    }
+
+    docker = new Docker()
     await docker.ping()
-    console.log('✅ Docker client configured successfully')
+    logger.info('✅ Docker client configured successfully')
   } catch (error) {
-    console.error('❌ Docker client setup failed:', error)
-    throw error
+    logger.warn('⚠️  Docker client setup failed, continuing without Docker:', error)
+    docker = null
+    // Don't throw error in production, just log warning
+    if (process.env.NODE_ENV !== 'production') {
+      throw error
+    }
   }
 }
 
 export async function cleanupDockerResources(): Promise<void> {
+  if (!docker) {
+    logger.info('No Docker client available, skipping cleanup')
+    return
+  }
+
   try {
     // Clean up stopped containers
     const containers = await docker.listContainers({ all: true })
@@ -25,9 +55,8 @@ export async function cleanupDockerResources(): Promise<void> {
     // Clean up unused images
     await docker.pruneImages()
     
-    console.log('✅ Docker resources cleaned up successfully')
+    logger.info('✅ Docker resources cleaned up successfully')
   } catch (error) {
-    console.error('❌ Docker cleanup failed:', error)
-    throw error
+    logger.error('❌ Docker cleanup failed:', error)
   }
 }

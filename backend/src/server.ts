@@ -14,6 +14,7 @@ import './config/env'
 
 import { connectDatabase, disconnectDatabase } from './config/database'
 import { setupDockerClient } from './config/docker'
+import { connectRedis, disconnectRedis, getRedisClient } from './config/redis'
 
 import { errorHandler } from './middleware/error.middleware'
 import { notFoundHandler } from './middleware/error.middleware'
@@ -96,17 +97,37 @@ if (NODE_ENV === 'production') {
   app.set('trust proxy', 1)
 }
 
-app.use(session({
+// Configure session store
+let sessionStore: any = undefined
+
+// Try to use Redis store if available
+try {
+  const redisClient = getRedisClient()
+  if (redisClient) {
+    const RedisStore = require('connect-redis')(session)
+    sessionStore = new RedisStore({ client: redisClient })
+    logger.info('✅ Using Redis session store')
+  } else {
+    logger.warn('⚠️  Redis not available, using MemoryStore (not recommended for production)')
+  }
+} catch (error) {
+  logger.warn('⚠️  Failed to initialize Redis session store, using MemoryStore:', error)
+}
+
+const sessionConfig: any = {
   secret: process.env.SESSION_SECRET || 'session-secret',
   resave: false,
   saveUninitialized: false,
+  store: sessionStore,
   cookie: {
     secure: NODE_ENV === 'production',
     httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
     sameSite: NODE_ENV === 'production' ? 'strict' : 'lax',
   },
-}))
+}
+
+app.use(session(sessionConfig))
 
 // Logging
 if (NODE_ENV === 'development') {
@@ -156,6 +177,9 @@ async function disconnectServices() {
     // Close database connections
     await disconnectDatabase()
     
+    // Disconnect Redis
+    await disconnectRedis()
+    
     // Clean up Docker resources
     // await cleanupDockerResources()
     
@@ -168,6 +192,9 @@ async function disconnectServices() {
 // Initialize services
 async function initializeServices() {
   try {
+    // Connect to Redis first (for session store)
+    await connectRedis()
+    
     // Connect to database
     await connectDatabase()
     logger.info('Database connected')
