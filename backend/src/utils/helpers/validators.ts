@@ -1,28 +1,5 @@
-import winston from 'winston'
+// Helper validator functions for the application
 
-const logger = winston.createLogger({
-  level: process.env.LOG_LEVEL || 'info',
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.errors({ stack: true }),
-    winston.format.json()
-  ),
-  defaultMeta: { service: 'cybersecurity-training-backend-helpers' },
-  transports: [
-    new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
-    new winston.transports.File({ filename: 'logs/combined.log' }),
-  ],
-})
-
-if (process.env.NODE_ENV !== 'production') {
-  logger.add(new winston.transports.Console({
-    format: winston.format.simple()
-  }))
-}
-
-export { logger }
-
-// Validator helper functions
 export function isValidEmail(email: string): boolean {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   return emailRegex.test(email)
@@ -62,4 +39,3 @@ export function isValidChallengeId(challengeId: string): boolean {
   const challengeIdRegex = /^[a-zA-Z0-9-]{1,50}$/
   return challengeIdRegex.test(challengeId)
 }
-
