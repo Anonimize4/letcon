@@ -44,11 +44,21 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-# Copy package files AND the lockfile
-COPY package.json package-lock.json ./
+# Copy package files
+COPY package.json ./
+
+# Copy package-lock.json if it exists, otherwise generate it
+COPY package-lock.json* ./
 
 # Install production deps
-RUN npm ci --omit=dev
+RUN if [ -f package-lock.json ]; then \
+    echo "Using existing package-lock.json"; \
+    npm ci --omit=dev; \
+else \
+    echo "No package-lock.json found, generating and installing..."; \
+    npm install --package-lock-only && \
+    npm ci --omit=dev; \
+fi
 
 # 2. ENSURE THIS PATH IS CORRECT
 # If building from the backend folder, this is fine. 
