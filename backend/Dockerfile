@@ -20,6 +20,10 @@ npm ci
 COPY src/ ./
 COPY prisma/ ./
 
+# Copy TypeScript config files (needed because backend/tsconfig.json extends tsconfig.base.json)
+COPY tsconfig.base.json ./
+COPY tsconfig.json ./
+
 # Prisma generate before build
 RUN npx prisma generate
 
