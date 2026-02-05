@@ -8,6 +8,7 @@ import communityRoutes from './v1/community.routes'
 import adminRoutes from './v1/admin.routes'
 import terminalRoutes from './v1/terminal.routes'
 
+
 const router = express.Router()
 
 // API routes
@@ -19,5 +20,6 @@ router.use('/challenges', challengeRoutes)
 router.use('/community', communityRoutes)
 router.use('/admin', adminRoutes)
 router.use('/terminal', terminalRoutes)
+
 
 export default router

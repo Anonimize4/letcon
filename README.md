@@ -41,7 +41,7 @@ This platform solves these gaps by providing:
 - User registration, authentication (JWT), profiles & roles
 - Structured **learning paths** (Beginner → Intermediate → Advanced + certification tracks)
 - **Docker-based labs** — one-click start/stop, auto-cleanup
-- Web-based terminal access (xterm.js)
+- Web-based terminal access
 - CTF-style challenges with flag submission
 - Dynamic scoring + decaying points system
 - Multiple leaderboards (global, monthly, category, teams)
