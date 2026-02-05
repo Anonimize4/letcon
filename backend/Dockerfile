@@ -37,16 +37,15 @@ RUN npm run build
 # Production stage
 FROM node:20-alpine AS production
 
-# 1. ADD THIS: Install OpenSSL (Prisma needs this on Alpine)
+# Install ttyd and openssl
 RUN apk add --no-cache ttyd openssl
 
 WORKDIR /app
 
-# Set NODE_ENV
 ENV NODE_ENV=production
 
-# Copy package files
-COPY package*.json ./
+# Copy package files AND the lockfile
+COPY package.json package-lock.json ./
 
 # Install production deps
 RUN npm ci --omit=dev
