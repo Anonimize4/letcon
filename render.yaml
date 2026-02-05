@@ -43,6 +43,12 @@ services:
     envVars:
       - key: VITE_API_URL
         value: https://lethcon-backend.onrender.com/api/v1
+      - key: VITE_SUPABASE_URL
+        fromSecret:
+          name: supabase-url
+      - key: VITE_SUPABASE_ANON_KEY
+        fromSecret:
+          name: supabase-key
 
 databases:
   - name: lethcon-db
@@ -54,4 +60,3 @@ secrets:
   - name: supabase-url
   - name: supabase-key
   - name: supabase-service-role-key
-

@@ -52,7 +52,7 @@ COPY --from=builder /app/prisma ./prisma
 # Create necessary directories
 RUN mkdir -p uploads logs
 
-EXPOSE 10000
+# Don't expose a specific port - Render will set PORT environment variable
+# and the server will use process.env.PORT
 
 CMD ["node", "dist/server.js"]
-

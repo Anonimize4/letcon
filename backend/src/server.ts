@@ -20,6 +20,7 @@ import { notFoundHandler } from './middleware/error.middleware'
 
 import routes from './routes'
 import { setupWebSocket } from './websocket'
+import { healthCheck } from './health'
 
 import { logger } from './utils/helpers/logger'
 
@@ -115,15 +116,7 @@ if (NODE_ENV === 'development') {
 }
 
 // Health check
-app.get('/health', (req, res) => {
-  res.status(200).json({
-    status: 'OK',
-    timestamp: new Date().toISOString(),
-    environment: NODE_ENV,
-    uptime: process.uptime(),
-    version: process.env.npm_package_version || '1.0.0',
-  })
-})
+app.get('/health', healthCheck)
 
 // API routes
 app.use('/api/v1', routes)
