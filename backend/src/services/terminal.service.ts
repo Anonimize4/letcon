@@ -190,13 +190,7 @@ export class TerminalService {
    * Get the path to ttyd executable
    */
   private getTtydPath(): string {
-    // Try to find ttyd in node_modules
-    const localTtyd = path.join(process.cwd(), 'node_modules', '.bin', 'ttyd');
-    if (fs.existsSync(localTtyd)) {
-      return localTtyd;
-    }
-
-    // Try global ttyd
+    // Use system-installed ttyd (provided by Docker image)
     return 'ttyd';
   }
 

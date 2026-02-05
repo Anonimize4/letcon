@@ -3,6 +3,9 @@
 
 FROM node:20-alpine AS builder
 
+# Install ttyd for terminal functionality
+RUN apk add --no-cache ttyd
+
 WORKDIR /app
 
 # Copy package files
@@ -34,6 +37,9 @@ RUN npm run build
 # Production stage
 FROM node:20-alpine AS production
 
+# Install ttyd for terminal functionality
+RUN apk add --no-cache ttyd
+
 WORKDIR /app
 
 # Set NODE_ENV first - npm ci will skip devDependencies automatically
@@ -48,7 +54,7 @@ RUN if [ ! -f package-lock.json ]; then \
     echo "package-lock.json not found, generating from package.json..."; \
     npm install --package-lock-only; \
 fi && \
-npm ci
+npm ci --omit=dev
 
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist
