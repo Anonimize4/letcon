@@ -56,9 +56,13 @@ RUN if [ ! -f package-lock.json ]; then \
 fi && \
 npm ci --omit=dev
 
-# Generate Prisma Client
+# 1. Copy the prisma directory first
+COPY prisma ./prisma/
+
+# 2. Then generate the client
 RUN npx prisma generate
 
+# 3. Then proceed with the rest of your build
 # Copy built application from builder stage
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
