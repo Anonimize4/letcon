@@ -10,7 +10,7 @@ services:
     region: us-east
     plan: starter
     dockerfilePath: backend/Dockerfile
-    dockerCommand: node dist/server.js
+    dockerCommand: node dist/src/server.js
     envVars:
       - key: NODE_ENV
         value: production
@@ -30,7 +30,10 @@ services:
         fromSecret:
           name: supabase-service-role-key
       - key: CORS_ORIGIN
-        value: https://your-frontend.onrender.com
+        fromService:
+          type: web
+          name: lethcon-frontend
+          property: host
 
   # Frontend Static Site
   - type: web
@@ -42,7 +45,10 @@ services:
     staticPublishPath: ./dist
     envVars:
       - key: VITE_API_URL
-        value: https://lethcon-backend.onrender.com/api/v1
+        fromService:
+          type: web
+          name: lethcon-backend
+          property: host
       - key: VITE_SUPABASE_URL
         fromSecret:
           name: supabase-url

@@ -66,4 +66,4 @@ RUN mkdir -p uploads logs
 # Don't expose a specific port - Render will set PORT environment variable
 # and the server will use process.env.PORT
 
-CMD ["node", "dist/server.js"]
+CMD ["node", "dist/src/server.js"]

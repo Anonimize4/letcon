@@ -2,11 +2,11 @@
   "name": "cybersecurity-training-platform-backend",
   "version": "1.0.0",
   "description": "Backend API for the Cybersecurity Training Platform",
-  "main": "dist/server.js",
+  "main": "dist/src/server.js",
   "scripts": {
     "dev": "nodemon",
     "build": "tsc",
-    "start": "node dist/server.js",
+    "start": "node dist/src/server.js",
     "lint": "eslint src/**/*.ts",
     "type-check": "tsc --noEmit",
     "test": "jest --config jest.config.ts",
