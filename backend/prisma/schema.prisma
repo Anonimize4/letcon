@@ -4,8 +4,9 @@ generator client {
 
 // THIS BLOCK MUST EXIST
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL") // Used by 'npx prisma migrate' commands for direct DB connection
 }
 
 model User {
@@ -49,3 +50,4 @@ model Token {
 
   @@map("tokens")
 }
+

@@ -44,6 +44,7 @@
     "multer": "^2.0.0",
     "node-cron": "^3.0.3",
     "nodemailer": "^7.0.13",
+    "postgres": "^3.4.8",
     "redis": "^4.6.12",
     "socket.io": "^4.7.4",
     "swagger-jsdoc": "^6.2.8",
