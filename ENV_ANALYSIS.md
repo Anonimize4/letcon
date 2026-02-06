@@ -25,8 +25,8 @@ The .env files in this project are **NORMAL AND NECESSARY**, not redundant. They
 ## Why This Structure is CORRECT
 
 ### 1. **Security Separation**
-- **Backend `.env`**: Contains sensitive server-side keys (SUPABASE_SERVICE_ROLE_KEY, JWT_SECRET, database credentials)
-- **Frontend `.env`**: Only contains client-safe variables (VITE_API_URL, VITE_SUPABASE_ANON_KEY)
+- **Backend `.env`**: Contains sensitive server-side keys (JWT_SECRET, database credentials)
+- **Frontend `.env`**: Only contains client-safe variables (VITE_API_URL)
 - **Root `.env`**: Used by docker-compose for orchestration
 
 ### 2. **Environment-Specific Configuration**
@@ -51,12 +51,12 @@ Frontend:       Client-side configuration, API endpoints
 ### Backend vs Frontend Security
 ```bash
 # Backend (SAFE - server-side only)
-SUPABASE_SERVICE_ROLE_KEY=sk-super-secret-key
+JWT_SECRET=your-super-secret-jwt-key
 JWT_SECRET=super-secret-jwt-key
 DATABASE_URL=postgresql://user:pass@host:5432/db
 
 # Frontend (SAFE - client-exposed)
-VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+VITE_API_BASE_URL=http://localhost:5000/api/v1
 VITE_API_URL=/api/v1
 ```
 

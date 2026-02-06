@@ -35,8 +35,8 @@ psql -U postgres -d cybersecurity_training
 \i backend/prisma/migrations/add_test_users.sql
 ```
 
-Or if using Supabase SQL Editor:
-1. Open your Supabase project
+Or if using a PostgreSQL GUI:
+1. Open your PostgreSQL client (pgAdmin, DBeaver, etc.)
 2. Go to SQL Editor
 3. Copy and paste the contents of `backend/prisma/migrations/add_test_users.sql`
 4. Run the query
@@ -101,7 +101,7 @@ If you're getting database connection errors:
    docker-compose logs -f postgres
    ```
 
-4. For Supabase, ensure your connection string and credentials are correct
+4. Ensure your DATABASE_URL connection string and credentials are correct
 
 ### Permission Issues
 

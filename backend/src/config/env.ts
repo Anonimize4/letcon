@@ -42,11 +42,6 @@ export interface Config {
   DB_USER: string
   DB_PASSWORD: string
   
-  // Supabase
-  SUPABASE_URL: string
-  SUPABASE_ANON_KEY: string
-  SUPABASE_SERVICE_ROLE_KEY: string
-  
   // JWT
   JWT_SECRET: string
   JWT_EXPIRES_IN: string
@@ -100,10 +95,6 @@ const config: Config = {
   DB_NAME: process.env.DB_NAME || 'cybersecurity_training',
   DB_USER: process.env.DB_USER || 'postgres',
   DB_PASSWORD: process.env.DB_PASSWORD || 'password',
-  
-  SUPABASE_URL: process.env.SUPABASE_URL || '',
-  SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY || '',
-  SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY || '',
   
   JWT_SECRET: process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production',
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '24h',

@@ -107,33 +107,28 @@ npm run db:seed
 See `.env.example` for all available configuration options. Key variables:
 
 - `NODE_ENV`: application environment (development/production)
-- `DATABASE_URL`: PostgreSQL connection string (Supabase format)
+- `DATABASE_URL`: PostgreSQL connection string
 - `JWT_SECRET`: JWT signing secret (change in production)
-- `SUPABASE_URL`: Supabase project URL
-- `SUPABASE_ANON_KEY`: Supabase anonymous key (for client-side)
-- `SUPABASE_SERVICE_ROLE_KEY`: Supabase service role key (server-side only)
+- `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`: Database connection parameters
 
-### Supabase Configuration
+### PostgreSQL Database Configuration
 
-The platform supports Supabase as the database provider. To configure:
+The platform uses PostgreSQL as the database. To configure:
 
-1. **Create a Supabase project** at [supabase.com](https://supabase.com)
-2. **Get your connection credentials** from Supabase dashboard:
-   - Go to Settings → Database
-   - Copy the "Connection string" (DATABASE_URL)
-3. **Get API credentials** from Supabase dashboard:
-   - Go to Settings → API
-   - Copy the "anon" public key (SUPABASE_ANON_KEY)
-   - Copy the "service_role" secret key (SUPABASE_SERVICE_ROLE_KEY)
+1. **Set up PostgreSQL** locally or use a hosted provider
+2. **Configure connection** in your `.env` file:
+   - Set `DATABASE_URL` with your connection string
+   - Or set individual parameters: `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`
 
-**Example Supabase DATABASE_URL format:**
+**Example DATABASE_URL format:**
 ```
-postgresql://postgres:your_password@db.project-id.supabase.co:5432/postgres
+postgresql://postgres:your_password@localhost:5432/cybersecurity_training
 ```
 
 **Important Security Notes:**
-- Never expose `SUPABASE_SERVICE_ROLE_KEY` to client-side code
-- Use environment variables for all Supabase credentials
+- Never commit database credentials to version control
+- Use strong passwords in production
+- Use environment variables for all database credentials
 - Consider using connection pooling for better performance
 
 ## Docker Services

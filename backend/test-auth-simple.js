@@ -127,7 +127,7 @@ async function testAuthFlow() {
   console.log('3. ✅ JWT token generation working');
   
   console.log('\n📝 Next Steps:');
-  console.log('1. Fix DATABASE_URL in backend/.env with actual Supabase credentials');
+  console.log('1. Fix DATABASE_URL in backend/.env with actual database credentials');
   console.log('2. Start the backend server: cd backend && npm run dev');
   console.log('3. Test with real API endpoints');
 }

@@ -4,12 +4,6 @@
 # Environment Setup Script
 # =============================================================================
 # This script helps set up the environment files for local development
-# 
-# Supabase Setup:
-# - Backend: Uses SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_ROLE_KEY
-# - Frontend: Uses VITE_SUPABASE_URL, VITE_SUPABASE_ANON_KEY (ANON key only!)
-# 
-# ⚠️  CRITICAL: Never expose SUPABASE_SERVICE_ROLE_KEY to frontend!
 # =============================================================================
 
 set -e
@@ -63,7 +57,7 @@ if [ ! -f "backend/.env" ]; then
     print_status "Creating backend/.env from backend/.env.example..."
     cp backend/.env.example backend/.env
     print_success "Created backend/.env file"
-    print_security_note "⚠️  IMPORTANT: backend/.env contains SUPABASE_SERVICE_ROLE_KEY"
+    print_security_note "⚠️  IMPORTANT: backend/.env contains sensitive secrets"
     print_security_note "   This file should NEVER be committed to version control!"
 else
     print_warning "backend/.env file already exists, skipping"
@@ -79,8 +73,6 @@ if [ ! -f "frontend/.env.development" ]; then
     print_status "Creating frontend/.env.development from frontend/.env.development.example..."
     cp frontend/.env.development.example frontend/.env.development
     print_success "Created frontend/.env.development file"
-    print_security_note "✅  GOOD: frontend/.env.development only contains VITE_SUPABASE_ANON_KEY"
-    print_security_note "   Service role key is NOT included (as it should be)"
 else
     print_warning "frontend/.env.development file already exists, skipping"
 fi
@@ -94,22 +86,19 @@ echo ""
 print_warning "IMPORTANT: You need to update these files with your actual values:"
 echo ""
 echo "  📝 backend/.env"
-echo "     - SUPABASE_URL (your Supabase project URL)"
-echo "     - SUPABASE_ANON_KEY (anon public key)"
-echo "     - SUPABASE_SERVICE_ROLE_KEY (service_role key - SERVER ONLY!)"
-echo "     - Database connection strings"
-echo "     - JWT secrets"
-echo "     - Email configuration"
+echo "     - Database connection strings (DATABASE_URL)"
+echo "     - JWT secrets (JWT_SECRET)"
+echo "     - Email configuration (SMTP_*)"
+echo "     - Docker configuration"
 echo ""
 echo "  📝 frontend/.env.development"
-echo "     - VITE_SUPABASE_URL (your Supabase project URL)"
-echo "     - VITE_SUPABASE_ANON_KEY (anon public key - PUBLIC SAFE!)"
-echo "     - VITE_API_URL"
+echo "     - VITE_API_BASE_URL (backend API URL)"
+echo "     - VITE_WS_URL (WebSocket URL)"
 echo ""
 print_security_note "⚠️  SECURITY RULES:"
-echo "     1. SUPABASE_SERVICE_ROLE_KEY must NEVER be in frontend/.env* files"
-echo "     2. Only VITE_SUPABASE_ANON_KEY should be in frontend"
-echo "     3. backend/.env must be in .gitignore"
+echo "     1. Never commit .env files with real secrets to version control"
+echo "     2. Keep backend/.env in .gitignore"
+echo "     3. Only expose public-safe variables to the frontend"
 echo ""
 
 # Verify .gitignore has backend/.env
@@ -120,15 +109,15 @@ else
 fi
 
 echo ""
-print_status "For detailed Supabase setup instructions, see:"
-echo "  - SUPABASE_ENV_CONFIG.md"
+print_status "For detailed setup instructions, see:"
 echo "  - docs/ENVIRONMENT_SETUP.md"
+echo "  - docs/SETUP.md"
 echo ""
 print_success "Setup complete! 🎉"
 echo ""
 print_status "Next steps:"
-echo "  1. Update backend/.env with your Supabase credentials"
-echo "  2. Update frontend/.env.development with VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY"
+echo "  1. Update backend/.env with your database credentials"
+echo "  2. Update frontend/.env.development with API endpoints"
 echo "  3. Install dependencies: npm install"
 echo "  4. Start development: npm run dev"
 

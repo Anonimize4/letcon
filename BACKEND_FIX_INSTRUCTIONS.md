@@ -54,11 +54,11 @@ The backend Docker container is running a simple `index.js` file that doesn't ha
 
 ### Option 3: Create Test Users in Database (Required for Either Option)
 
-Since your database is Supabase, you need to add the test users:
+You need to add the test users to your PostgreSQL database:
 
-#### Using Supabase SQL Editor:
+#### Using PostgreSQL Client:
 
-1. Go to: https://mmbcmttkzbmilftkxhkx.supabase.co
+1. Connect to your PostgreSQL database
 2. Navigate to: **SQL Editor**
 3. Run this SQL:
 
@@ -146,9 +146,9 @@ docker exec docker-train-backend-1 ps aux
 ## Common Issues & Solutions
 
 ### Issue: "Can't reach database server"
-**Solution:** Check your `.env` file has the correct Supabase connection string:
+**Solution:** Check your `.env` file has the correct PostgreSQL connection string:
 ```
-DATABASE_URL=postgresql://postgres.mmbcmttkzbmilftkxhkx:YOUR_PASSWORD@aws-1-eu-west-1.pooler.supabase.com:6543/postgres?pool_mode=transaction
+DATABASE_URL=postgresql://postgres:YOUR_PASSWORD@localhost:5432/cybersecurity_training
 ```
 
 ### Issue: "Unexpected token '<', "<!DOCTYPE"..."
@@ -163,7 +163,7 @@ DATABASE_URL=postgresql://postgres.mmbcmttkzbmilftkxhkx:YOUR_PASSWORD@aws-1-eu-w
 ## Next Steps
 
 1. **Choose a solution** (Option 1 is quickest)
-2. **Create the test users** in Supabase (Option 3)
+2. **Create the test users** in PostgreSQL (Option 3)
 3. **Test the login** with all three user types
 4. **Verify role-based routing** works correctly
 

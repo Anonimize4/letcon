@@ -4,7 +4,7 @@
 
 The LETHCON platform implements a complete authentication system with:
 - **Backend**: Node.js/Express API (deployed on Render)
-- **Database**: PostgreSQL via Prisma ORM (Supabase)
+- **Database**: PostgreSQL via Prisma ORM
 - **Frontend**: React/Vite application
 
 ## Login Flow Diagram
@@ -151,7 +151,7 @@ The LETHCON platform implements a complete authentication system with:
 ```
 frontend/src/
 ├── lib/
-│   └── supabase.ts              # Supabase client configuration
+│   └── postgres.ts              # PostgreSQL client configuration
 ├── contexts/
 │   └── AuthContext.tsx          # React Context for global auth state
 ├── components/
@@ -293,8 +293,8 @@ CORS_ORIGIN=http://localhost:3000
 
 # Frontend (.env)
 VITE_API_URL=http://localhost:5000/api/v1
-VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_ANON_KEY=your-anon-key
+VITE_API_BASE_URL=http://localhost:5000/api/v1
+VITE_WS_URL=ws://localhost:5000
 ```
 
 ## Deployment Architecture
@@ -310,7 +310,7 @@ Database: PostgreSQL (localhost:5432)
 ```
 Frontend: https://lethcon.vercel.app (or similar)
 Backend:  https://lethcon-api.onrender.com
-Database: Supabase PostgreSQL
+Database: PostgreSQL
 ```
 
 ### Docker Production Stack
@@ -321,7 +321,7 @@ Database: Supabase PostgreSQL
 │                                                         │
 │   ┌─────────┐     ┌─────────┐     ┌─────────────┐     │
 │   │  Nginx  │────▶│ Backend │────▶│ PostgreSQL  │     │
-│   │   (80)  │     │  (5000) │     │  (Supabase) │     │
+│   │   (80)  │     │  (5000) │     │  (PostgreSQL) │   │
 │   └─────────┘     └─────────┘     └─────────────┘     │
 │        │              │                                  │
 │        ▼              ▼                                  │

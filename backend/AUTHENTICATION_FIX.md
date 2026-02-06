@@ -62,15 +62,15 @@ if (!user.emailVerified) {
 
 ### Fix 3: Fix Database Connection
 
-Update `backend/.env` with actual Supabase credentials:
+Update `backend/.env` with actual database credentials:
 
-1. Go to Supabase Dashboard → Settings → Database
+1. Set up your PostgreSQL database
 2. Copy the connection string
 3. Replace the placeholder DATABASE_URL
 
 Example:
 ```env
-DATABASE_URL=postgresql://postgres:[ACTUAL_PASSWORD]@db.mmbcmttkzbmilftkxhkx.supabase.co:5432/postgres?sslmode=require
+DATABASE_URL=postgresql://postgres:[ACTUAL_PASSWORD]@localhost:5432/cybersecurity_training
 ```
 
 ## 🚀 Quick Fix for Development
@@ -78,7 +78,7 @@ DATABASE_URL=postgresql://postgres:[ACTUAL_PASSWORD]@db.mmbcmttkzbmilftkxhkx.sup
 If you want to get the system working immediately for testing:
 
 1. **Remove email verification requirement** from registration
-2. **Use a local database** or fix Supabase connection
+2. **Use a local database** or fix PostgreSQL connection
 3. **Test registration and login flow**
 
 ## 📋 Testing Steps

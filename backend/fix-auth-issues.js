@@ -14,28 +14,30 @@ if (fs.existsSync(envPath)) {
   console.log('   ✅ .env file exists');
   
   const envContent = fs.readFileSync(envPath, 'utf8');
-  const hasSupabaseUrl = envContent.includes('SUPABASE_URL=') && !envContent.includes('SUPABASE_URL=');
-  const hasSupabaseKey = envContent.includes('SUPABASE_KEY=');
+  const hasDatabaseUrl = envContent.includes('DATABASE_URL=');
+  const hasJwtSecret = envContent.includes('JWT_SECRET=');
   
-  if (hasSupabaseUrl && hasSupabaseKey) {
-    console.log('   ✅ Supabase credentials configured');
+  if (hasDatabaseUrl && hasJwtSecret) {
+    console.log('   ✅ Database and JWT configuration found');
   } else {
-    console.log('   ❌ Missing Supabase credentials');
-    console.log('   Please add SUPABASE_URL and SUPABASE_KEY to .env');
+    console.log('   ❌ Missing configuration');
+    console.log('   Please ensure DATABASE_URL and JWT_SECRET are set in .env');
   }
 } else {
   console.log('   ❌ .env file missing');
   console.log('   Creating template...');
   
-  const template = `# Supabase Configuration
-SUPABASE_URL=https://mmbcmttkzbmilftkxhkx.supabase.co
-SUPABASE_KEY=your-anon-key
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+  const template = `# Database Configuration
+DATABASE_URL=postgresql://postgres:password@localhost:5432/cybersecurity_training
+
+# JWT Configuration
+JWT_SECRET=your-super-secret-jwt-key-change-in-production
+JWT_EXPIRES_IN=24h
 `;
   
   fs.writeFileSync(envPath, template);
   console.log('   ✅ Template created at backend/.env');
-  console.log('   Please add your actual Supabase keys');
+  console.log('   Please update with your actual database credentials');
 }
 
 // Check 2: Verify database connection

@@ -50,7 +50,6 @@ Environment variables are loaded in the following order of precedence (later fil
    ```
 
 3. Update the copied files with your actual values:
-   - Supabase URL and keys
    - Database connection strings
    - JWT secrets
    - Email configuration
@@ -90,12 +89,7 @@ The `.env.production` files should only contain example values and serve as docu
 
 - `DATABASE_URL` - Primary database connection string
 - `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD` - PostgreSQL credentials
-
-### Supabase Configuration
-
-- `SUPABASE_URL` - Your Supabase project URL
-- `SUPABASE_ANON_KEY` - Public key (safe for client-side)
-- `SUPABASE_SERVICE_ROLE_KEY` - Service role key (keep secret)
+- `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD` - Individual database parameters
 
 ### Security Settings
 
@@ -153,12 +147,12 @@ The `.env.production` files should only contain example values and serve as docu
 3. Validate credentials
 4. Ensure database is running
 
-### Supabase Authentication Issues
+### Database Connection Issues
 
-1. Verify Supabase URL and keys
-2. Check key permissions (anon vs service role)
-3. Ensure CORS is configured correctly
-4. Verify RLS policies
+1. Verify DATABASE_URL is correctly formatted
+2. Check database credentials
+3. Ensure database server is accessible
+4. Verify database exists and migrations are applied
 
 ## CI/CD Integration
 
@@ -168,9 +162,7 @@ The `.env.production` files should only contain example values and serve as docu
 env:
   NODE_ENV: production
   DATABASE_URL: ${{ secrets.DATABASE_URL }}
-  SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-  SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-  SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+  JWT_SECRET: ${{ secrets.JWT_SECRET }}
   JWT_SECRET: ${{ secrets.JWT_SECRET }}
 ```
 
@@ -188,5 +180,5 @@ The application validates required environment variables on startup. Missing req
 ## Additional Resources
 
 - [dotenv documentation](https://github.com/motdotla/dotenv)
-- [Supabase environment setup](https://supabase.com/docs/guides/environment-variables)
+- [PostgreSQL documentation](https://www.postgresql.org/docs/)
 - [Node.js best practices](https://github.com/goldbergyoni/nodebestpractices)
