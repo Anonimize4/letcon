@@ -57,8 +57,5 @@
     "typescript"
   ],
   "author": "Cybersecurity Training Platform Team",
-  "license": "MIT",
-  "dependencies": {
-    "@supabase/supabase-js": "^2.94.1"
-  }
+  "license": "MIT"
 }
