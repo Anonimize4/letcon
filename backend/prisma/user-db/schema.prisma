@@ -1,22 +1,23 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../../node_modules/@prisma-user/client"
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("USER_DATABASE_URL")
 }
 
 model User {
-  id            String   @id @default(cuid())
-  email         String   @unique
-  username      String   @unique
+  id            String         @id @default(cuid())
+  email         String         @unique
+  username      String         @unique
   password      String
   firstName     String?
   lastName      String?
-  role          String   @default("USER")
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  role          String         @default("USER")
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
   lastLoginAt   DateTime?
   refreshTokens RefreshToken[]
   tokens        Token[]
@@ -31,7 +32,7 @@ model RefreshToken {
   expiresAt DateTime
   revokedAt DateTime?
   createdAt DateTime @default(now())
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("refresh_tokens")
 }
@@ -44,7 +45,7 @@ model Token {
   expiresAt DateTime
   usedAt    DateTime?
   createdAt DateTime @default(now())
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("tokens")
 }

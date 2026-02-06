@@ -1,0 +1,20 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../node_modules/@prisma-lab/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("LAB_DATABASE_URL")
+}
+
+model LabInstance {
+  id          String   @id @default(cuid())
+  userId      String   // Logical link to User.id
+  machineId   String
+  containerId String
+  status      String   @default("RUNNING")
+  createdAt   DateTime @default(now())
+
+  @@map("lab_instances")
+}

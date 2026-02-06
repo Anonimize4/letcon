@@ -1,17 +1,33 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient as UserClient } from '@prisma-user/client'
+import { PrismaClient as LabClient } from '@prisma-lab/client'
 import config from '../src/config/env'
 
 const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined
+  userDB: UserClient | undefined
+  labDB: LabClient | undefined
 }
 
-export const prisma =
-  globalForPrisma.prisma ??
-  new PrismaClient({
+// 1. Initialize the User Database (Neon / Cloud)
+export const userDB =
+  globalForPrisma.userDB ??
+  new UserClient({
     log: config.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
     errorFormat: 'pretty',
   })
 
-if (config.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+// 2. Initialize the Lab Database (Local PC / Datacenter)
+export const labDB =
+  globalForPrisma.labDB ??
+  new LabClient({
+    log: config.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+    errorFormat: 'pretty',
+  })
 
-export default prisma
+// Prevent multiple instances during Hot Module Replacement (HMR) in development
+if (config.NODE_ENV !== 'production') {
+  globalForPrisma.userDB = userDB
+  globalForPrisma.labDB = labDB
+}
+
+// Export a default object for compatibility, though named exports are preferred
+export default { userDB, labDB }

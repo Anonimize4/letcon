@@ -20,15 +20,6 @@ services:
           property: connectionString
       - key: JWT_SECRET
         generateValue: true
-      - key: SUPABASE_URL
-        fromSecret:
-          name: supabase-url
-      - key: SUPABASE_KEY
-        fromSecret:
-          name: supabase-key
-      - key: SUPABASE_SERVICE_ROLE_KEY
-        fromSecret:
-          name: supabase-service-role-key
       - key: CORS_ORIGIN
         fromService:
           type: web
@@ -49,20 +40,9 @@ services:
           type: web
           name: lethcon-backend
           property: host
-      - key: VITE_SUPABASE_URL
-        fromSecret:
-          name: supabase-url
-      - key: VITE_SUPABASE_ANON_KEY
-        fromSecret:
-          name: supabase-key
 
 databases:
   - name: lethcon-db
     databaseName: cybersecurity_training
     plan: starter
     region: us-east
-
-secrets:
-  - name: supabase-url
-  - name: supabase-key
-  - name: supabase-service-role-key
