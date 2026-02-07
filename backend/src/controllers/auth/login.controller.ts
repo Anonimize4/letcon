@@ -1,10 +1,8 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { PrismaClient } from '@prisma/client';
+import { userDB as prisma } from '../../config/database';
 import { validationResult } from 'express-validator';
-
-const prisma = new PrismaClient();
 
 // Generate JWT tokens
 const generateTokens = (userId: string) => {

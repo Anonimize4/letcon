@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
-import { PrismaClient } from '@prisma/client';
+// 1. Import userDB instead of PrismaClient
+import { userDB as prisma } from '../../config/database';
 import { validationResult } from 'express-validator';
-
-const prisma = new PrismaClient();
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -59,9 +58,6 @@ export const register = async (req: Request, res: Response) => {
         createdAt: true
       }
     });
-
-    // Skip email verification for development
-    // TODO: Implement email verification for production
 
     return res.status(201).json({
       success: true,

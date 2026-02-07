@@ -1,9 +1,7 @@
 import { Request, Response } from 'express';
 import { v4 as uuidv4 } from 'uuid';
-import { PrismaClient } from '@prisma/client';
+import { userDB as prisma } from '../../config/database';
 import { validationResult } from 'express-validator';
-
-const prisma = new PrismaClient();
 
 export const forgotPassword = async (req: Request, res: Response) => {
   try {

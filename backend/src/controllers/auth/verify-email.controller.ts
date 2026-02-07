@@ -1,7 +1,5 @@
 import { Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import { userDB as prisma } from '../../config/database';
 
 export const verifyEmail = async (req: Request, res: Response) => {
   try {
