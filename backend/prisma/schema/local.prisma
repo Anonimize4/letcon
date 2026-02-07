@@ -1,8 +1,9 @@
-// This schema is for lab contents and learning data on local PostgreSQL
+// This schema is for lab contents and learning data on local PostgreSQLgenerator client {
 generator client {
   provider = "prisma-client-js"
-  output   = "../../../node_modules/@prisma-local/client"
+  output   = "../../node_modules/@prisma-lab/client"
 }
+
 
 datasource db {
   provider = "postgresql"

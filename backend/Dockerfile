@@ -1,9 +1,7 @@
 # Dockerfile for LETHCON Backend
-# Optimized for Render deployment
-
 FROM node:20-alpine AS builder
 
-# Install ttyd for terminal functionality and openssl for Prisma
+# Install build dependencies
 RUN apk add --no-cache ttyd openssl
 
 WORKDIR /app
@@ -11,69 +9,53 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Generate package-lock.json if it doesn't exist
-# This is needed for npm ci to work in Render deployments
+# Install dependencies
 RUN if [ ! -f package-lock.json ]; then \
-    echo "package-lock.json not found, generating from package.json..."; \
     npm install --package-lock-only; \
-fi && \
-npm ci
+fi && npm ci
 
-# Copy source code explicitly into subdirectories to ensure tsc finds inputs
-COPY src/ ./src
-COPY prisma/ ./prisma
-
-# Copy TypeScript config files (needed because backend/tsconfig.json extends tsconfig.base.json)
+# Copy configuration and source
 COPY tsconfig.base.json ./
 COPY tsconfig.json ./
+COPY prisma/ ./prisma/
+COPY src/ ./src/
 
-# Ensure schema exists before prisma generate
-RUN ls -la /app && ls -la /app/src && ls -la /app/prisma || true
-RUN npx prisma generate
+# Generate both Prisma clients explicitly
+RUN npx prisma generate --schema=./prisma/schema/neon.prisma
+RUN npx prisma generate --schema=./prisma/schema/local.prisma
 
 # Build TypeScript
 RUN npm run build
 
-# Production stage
+# --- Production Stage ---
 FROM node:20-alpine AS production
 
-# Install ttyd and openssl
 RUN apk add --no-cache ttyd openssl
-
 WORKDIR /app
-
 ENV NODE_ENV=production
 
-# Copy package files
-COPY package.json ./
-
-# Copy package-lock.json if it exists, otherwise generate it
-COPY package-lock.json* ./
-
-# Install production deps
+# Copy package files and install prod-only deps
+COPY package*.json ./
 RUN if [ -f package-lock.json ]; then \
-    echo "Using existing package-lock.json"; \
     npm ci --omit=dev; \
 else \
-    echo "No package-lock.json found, generating and installing..."; \
-    npm install --package-lock-only && \
-    npm ci --omit=dev; \
+    npm install --package-lock-only && npm ci --omit=dev; \
 fi
 
-# 2. ENSURE THIS PATH IS CORRECT
-# If building from the backend folder, this is fine. 
-# If building from the root, change this to: COPY backend/prisma ./prisma/
+# Copy the Prisma directory (needed for generation/engines)
 COPY prisma ./prisma/
 
-# 3. GENERATE WITH EXPLICIT PATH
-RUN npx prisma generate --schema=./prisma/schema.prisma
+# Re-generate clients in production environment to ensure binary compatibility
+RUN npx prisma generate --schema=./prisma/schema/neon.prisma
+RUN npx prisma generate --schema=./prisma/schema/local.prisma
 
-# Copy built application from builder stage
+# Copy built app and specific generated clients from builder
 COPY --from=builder /app/dist ./dist
-# (Optionally copy the generated client if it's not in node_modules)
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/node_modules/@prisma-user ./node_modules/@prisma-user
+COPY --from=builder /app/node_modules/@prisma-lab ./node_modules/@prisma-lab
 
-# Create necessary directories
+# Create storage directories
 RUN mkdir -p uploads logs
 
+EXPOSE 3000
 CMD ["node", "dist/src/server.js"]

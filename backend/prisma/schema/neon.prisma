@@ -1,9 +1,9 @@
 // This schema is for user profiles and authentication data on Neon PostgreSQL
 generator client {
   provider = "prisma-client-js"
-  output   = "../../../node_modules/@prisma-neon/client"
-}
+  output   = "../../node_modules/@prisma-user/client"
 
+}
 datasource db {
   provider = "postgresql"
   url      = env("NEON_DATABASE_URL")

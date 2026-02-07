@@ -3,23 +3,15 @@
   "version": "1.0.0",
   "description": "Backend API for the Cybersecurity Training Platform",
   "main": "dist/src/server.js",
-  "scripts": {
+"scripts": {
     "dev": "nodemon",
     "build": "npm run db:gen && tsc",
     "start": "node dist/src/server.js",
-    "lint": "eslint src/**/*.ts",
-    "type-check": "tsc --noEmit",
-    "test": "jest --config jest.config.ts",
-    "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage",
-    "db:gen": "prisma generate --schema=./prisma/user-db/schema.prisma && prisma generate --schema=./prisma/lab-db/schema.prisma",
-    "db:migrate:user": "prisma migrate dev --schema=./prisma/user-db/schema.prisma",
-    "db:migrate:lab": "prisma migrate dev --schema=./prisma/lab-db/schema.prisma",
-    "db:push:user": "prisma db push --schema=./prisma/user-db/schema.prisma",
-    "db:push:lab": "prisma db push --schema=./prisma/lab-db/schema.prisma",
-    "db:seed": "ts-node prisma/seed.ts",
-    "db:studio:user": "prisma studio --schema=./prisma/user-db/schema.prisma",
-    "db:studio:lab": "prisma studio --schema=./prisma/lab-db/schema.prisma"
+    "db:gen": "prisma generate --schema=./prisma/schema/neon.prisma && prisma generate --schema=./prisma/schema/local.prisma",
+    "db:migrate:user": "prisma migrate dev --schema=./prisma/schema/neon.prisma",
+    "db:migrate:lab": "prisma migrate dev --schema=./prisma/schema/local.prisma",
+    "db:push:user": "prisma db push --schema=./prisma/schema/neon.prisma",
+    "db:push:lab": "prisma db push --schema=./prisma/schema/local.prisma"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
