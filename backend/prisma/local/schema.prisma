@@ -1,0 +1,255 @@
+// This schema is for lab contents and learning data on local PostgreSQL
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../../node_modules/@prisma-local/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("LOCAL_DATABASE_URL")
+}
+
+// Learning Paths
+model LearningPath {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  slug        String   @unique
+  difficulty  Difficulty @default(BEGINNER)
+  duration    Int?     // Duration in minutes
+  isPublished Boolean  @default(false)
+  isPremium   Boolean  @default(false)
+  category    String?
+  tags        String[]
+  thumbnail   String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  modules     LearningModule[]
+  prerequisites LearningPath[] @relation("PathPrerequisites")
+  dependentPaths LearningPath[] @relation("PathPrerequisites")
+  
+  @@map("learning_paths")
+}
+
+model LearningModule {
+  id            String   @id @default(cuid())
+  title         String
+  description   String?
+  order         Int
+  duration      Int?     // Duration in minutes
+  isPublished   Boolean  @default(false)
+  learningPathId String
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  // Relations
+  learningPath  LearningPath @relation(fields: [learningPathId], references: [id], onDelete: Cascade)
+  lessons       Lesson[]
+  
+  @@map("learning_modules")
+}
+
+model Lesson {
+  id          String   @id @default(cuid())
+  title       String
+  content     String   // Rich text content
+  type        LessonType @default(THEORY)
+  order       Int
+  duration    Int?     // Duration in minutes
+  moduleId    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  module      LearningModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  
+  @@map("lessons")
+}
+
+// Labs
+model Lab {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  slug        String   @unique
+  difficulty  Difficulty @default(BEGINNER)
+  duration    Int?     // Duration in minutes
+  isPublished Boolean  @default(false)
+  isPremium   Boolean  @default(false)
+  category    String?
+  tags        String[]
+  thumbnail   String?
+  dockerImage String?
+  port        Int?
+  commands    Json?    // Lab commands as JSON
+  environment Json?    // Environment variables as JSON
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  challenges  Challenge[]
+  instances   LabInstance[]
+  prerequisites Lab[] @relation("LabPrerequisites")
+  dependentLabs Lab[] @relation("LabPrerequisites")
+  
+  @@map("labs")
+}
+
+model Challenge {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  instructions String?
+  solution    String?
+  hints       String[]
+  difficulty  Difficulty @default(BEGINNER)
+  points      Int      @default(100)
+  timeLimit   Int?     // Time limit in minutes
+  labId       String
+  order       Int
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  lab         Lab @relation(fields: [labId], references: [id], onDelete: Cascade)
+  submissions ChallengeSubmission[]
+  
+  @@map("challenges")
+}
+
+model LabInstance {
+  id           String   @id @default(cuid())
+  userId       String   // Reference to user ID from Neon
+  labId        String
+  status       LabStatus @default(PENDING)
+  startedAt    DateTime @default(now())
+  completedAt  DateTime?
+  expiresAt    DateTime?
+  containerId  String?  // Docker container ID
+  port         Int?     // Assigned port
+  metadata     Json?    // Additional instance data
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  // Relations
+  lab          Lab @relation(fields: [labId], references: [id], onDelete: Cascade)
+  submissions  ChallengeSubmission[]
+  
+  @@unique([userId, labId])
+  @@map("lab_instances")
+}
+
+model ChallengeSubmission {
+  id           String   @id @default(cuid())
+  userId       String   // Reference to user ID from Neon
+  challengeId  String
+  labInstanceId String
+  answer       String
+  isCorrect    Boolean  @default(false)
+  attempts     Int      @default(1)
+  submittedAt  DateTime @default(now())
+  metadata     Json?    // Submission metadata
+  
+  // Relations
+  challenge    Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+  labInstance  LabInstance @relation(fields: [labInstanceId], references: [id], onDelete: Cascade)
+  
+  @@map("challenge_submissions")
+}
+
+// Content Management
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  slug        String   @unique
+  parentId    String?
+  order       Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  parent      Category? @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children    Category[] @relation("CategoryHierarchy")
+  
+  @@map("categories")
+}
+
+model Achievement {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  icon        String?
+  badge       String?  // Badge image URL
+  points      Int      @default(0)
+  type        AchievementType @default(BRONZE)
+  criteria    Json?    // Achievement criteria as JSON
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("achievements")
+}
+
+model Certificate {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  template    String?  // Certificate template URL
+  criteria    Json?    // Certificate criteria as JSON
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("certificates")
+}
+
+// System Configuration
+model SystemConfig {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       Json
+  description String?
+  isPublic    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("system_config")
+}
+
+// Enums
+enum Difficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+}
+
+enum LessonType {
+  THEORY
+  PRACTICAL
+  QUIZ
+  VIDEO
+  READING
+}
+
+enum LabStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  EXPIRED
+  STOPPED
+}
+
+enum AchievementType {
+  BRONZE
+  SILVER
+  GOLD
+  PLATINUM
+  DIAMOND
+}

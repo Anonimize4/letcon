@@ -1,0 +1,139 @@
+// This schema is for user profiles and authentication data on Neon PostgreSQL
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../../node_modules/@prisma-neon/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("NEON_DATABASE_URL")
+}
+
+model User {
+  id            String         @id @default(cuid())
+  email         String         @unique
+  username      String         @unique
+  password      String
+  firstName     String?
+  lastName      String?
+  avatar        String?
+  bio           String?
+  role          UserRole       @default(USER)
+  isActive      Boolean        @default(true)
+  isVerified    Boolean        @default(false)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  lastLoginAt   DateTime?
+  
+  // Authentication tokens
+  refreshTokens RefreshToken[]
+  tokens        Token[]
+  
+  // User preferences and settings
+  preferences   UserPreferences?
+  
+  // User achievements and progress
+  achievements  UserAchievement[]
+  certificates  UserCertificate[]
+  
+  // User activity tracking
+  sessions      UserSession[]
+  
+  @@map("users")
+}
+
+model UserPreferences {
+  id                String  @id @default(cuid())
+  userId            String  @unique
+  theme             String  @default("light")
+  language          String  @default("en")
+  timezone          String  @default("UTC")
+  notifications     Json?   // Notification preferences as JSON
+  privacy           Json?   // Privacy settings as JSON
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("user_preferences")
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+}
+
+model Token {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  type      TokenType
+  userId    String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("tokens")
+}
+
+model UserAchievement {
+  id            String   @id @default(cuid())
+  userId        String
+  achievementId String
+  earnedAt      DateTime @default(now())
+  metadata      Json?    // Additional achievement data
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, achievementId])
+  @@map("user_achievements")
+}
+
+model UserCertificate {
+  id            String   @id @default(cuid())
+  userId        String
+  certificateId String
+  issuedAt      DateTime @default(now())
+  expiresAt     DateTime?
+  metadata      Json?    // Certificate data, URL, etc.
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, certificateId])
+  @@map("user_certificates")
+}
+
+model UserSession {
+  id           String    @id @default(cuid())
+  userId       String
+  sessionToken String   @unique
+  ipAddress    String?
+  userAgent    String?
+  startedAt    DateTime  @default(now())
+  lastActivity DateTime  @default(now())
+  expiresAt    DateTime
+  isActive     Boolean   @default(true)
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("user_sessions")
+}
+
+// Enums
+enum UserRole {
+  USER
+  PREMIUM
+  PRO
+  ADMIN
+  SUPER_ADMIN
+}
+
+enum TokenType {
+  EMAIL_VERIFICATION
+  PASSWORD_RESET
+  ACCOUNT_ACTIVATION
+  TWO_FACTOR
+}
