@@ -84,7 +84,7 @@ main()
     process.exit(1)
   })
   .finally(async () => {
-    // Correctly disconnect both instances
+    // Correctly disconnect both instances; labDB may be null in production
     await userDB.$disconnect()
-    await labDB.$disconnect()
+    if (labDB) await labDB.$disconnect()
   })
