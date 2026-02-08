@@ -2,10 +2,16 @@ import { userDB, labDB } from '../../prisma/client'
 
 export async function connectDatabase(): Promise<void> {
   try {
-    // Connect to both databases individually
+    // Always connect the User DB (Neon / Cloud)
     await userDB.$connect()
-    await labDB.$connect()
-    console.log('✅ Databases (User & Lab) connected successfully')
+
+    // Connect the Lab DB only if it is initialized (non-production)
+    if (labDB) {
+      await labDB.$connect()
+      console.log('�� Databases (User & Lab) connected successfully')
+    } else {
+      console.log('✅ User DB connected. Lab DB is disabled in this environment')
+    }
   } catch (error) {
     console.error('❌ Database connection failed:', error)
     throw error
@@ -13,10 +19,10 @@ export async function connectDatabase(): Promise<void> {
 }
 
 export async function disconnectDatabase(): Promise<void> {
-  // Disconnect both instances
+  // Disconnect both instances (labDB may be null in production)
   await Promise.all([
     userDB.$disconnect(),
-    labDB.$disconnect()
+    labDB ? labDB.$disconnect() : Promise.resolve()
   ])
   console.log('🔌 Databases disconnected')
 }
