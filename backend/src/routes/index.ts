@@ -7,7 +7,7 @@ import challengeRoutes from './v1/challenge.routes'
 import communityRoutes from './v1/community.routes'
 import adminRoutes from './v1/admin.routes'
 import terminalRoutes from './v1/terminal.routes'
-
+import devRoutes from './v1/dev.routes'
 
 const router = express.Router()
 
@@ -21,5 +21,7 @@ router.use('/community', communityRoutes)
 router.use('/admin', adminRoutes)
 router.use('/terminal', terminalRoutes)
 
+// Dev-only routes (guarded inside the route file)
+router.use('/dev', devRoutes)
 
 export default router
