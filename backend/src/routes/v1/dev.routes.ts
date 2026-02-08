@@ -18,12 +18,12 @@ function generateTokens(userId: string) {
   const accessToken = jwt.sign(
     { userId },
     config.JWT_SECRET,
-    { expiresIn: config.JWT_EXPIRES_IN }
+    { expiresIn: config.JWT_EXPIRES_IN } as jwt.SignOptions
   );
   const refreshToken = jwt.sign(
     { userId },
     config.JWT_SECRET,
-    { expiresIn: config.REFRESH_TOKEN_EXPIRES_IN }
+    { expiresIn: config.REFRESH_TOKEN_EXPIRES_IN } as jwt.SignOptions
   );
   return { accessToken, refreshToken };
 }
