@@ -1,4 +1,35 @@
 const LearningPathsPage = () => {
+  // Color mapping to ensure Tailwind classes are detected at build time
+  const colorVariants: Record<string, {
+    text: string;
+    bg: string;
+    gradient: string;
+    hoverText: string;
+    hoverBg: string;
+  }> = {
+    'htb-green': {
+      text: 'text-htb-green',
+      bg: 'bg-htb-green',
+      gradient: 'from-htb-green/20',
+      hoverText: 'hover:text-htb-green/80',
+      hoverBg: 'hover:bg-htb-green/90'
+    },
+    'htb-yellow': {
+      text: 'text-htb-yellow',
+      bg: 'bg-htb-yellow',
+      gradient: 'from-htb-yellow/20',
+      hoverText: 'hover:text-htb-yellow/80',
+      hoverBg: 'hover:bg-htb-yellow/90'
+    },
+    'htb-red': {
+      text: 'text-htb-red',
+      bg: 'bg-htb-red',
+      gradient: 'from-htb-red/20',
+      hoverText: 'hover:text-htb-red/80',
+      hoverBg: 'hover:bg-htb-red/90'
+    }
+  };
+
   // Learning paths data organized by difficulty
   const learningPaths = [
     {
@@ -122,10 +153,10 @@ const LearningPathsPage = () => {
             className="bg-htb-selection-background rounded-lg border border-gray-700 hover:border-gray-600 transition-all duration-300 hover:shadow-xl"
           >
             {/* Path Header */}
-            <div className={`p-6 rounded-t-lg bg-gradient-to-r from-${path.color}/20 to-transparent`}>
+            <div className={`p-6 rounded-t-lg bg-gradient-to-r ${colorVariants[path.color].gradient} to-transparent`}>
               <div className="flex items-center mb-3">
                 <span className="text-3xl mr-3">{path.icon}</span>
-                <h2 className={`text-2xl font-bold text-${path.color}`}>
+                <h2 className={`text-2xl font-bold ${colorVariants[path.color].text}`}>
                   {path.title}
                 </h2>
               </div>
@@ -139,7 +170,7 @@ const LearningPathsPage = () => {
               <div className="space-y-4">
                 {path.paths.map((item, index) => (
                   <div
-                    key={index}
+                    key={item.title}
                     className="bg-htb-background rounded-lg p-4 border border-gray-700 hover:border-gray-600 transition-colors duration-200 cursor-pointer"
                   >
                     <h3 className="font-semibold text-htb-bright-white mb-2">
@@ -157,7 +188,7 @@ const LearningPathsPage = () => {
                           🧪 {item.labs} labs
                         </span>
                       </div>
-                      <button className={`text-${path.color} hover:text-${path.color}/80 transition-colors duration-200`}>
+                      <button className={`${colorVariants[path.color].text} ${colorVariants[path.color].hoverText} transition-colors duration-200`}>
                         Start →
                       </button>
                     </div>
@@ -168,7 +199,7 @@ const LearningPathsPage = () => {
 
             {/* Path Footer */}
             <div className="px-6 pb-6">
-              <button className={`w-full py-3 px-4 bg-${path.color} text-htb-background font-semibold rounded-lg hover:bg-${path.color}/90 transition-colors duration-200`}>
+              <button className={`w-full py-3 px-4 ${colorVariants[path.color].bg} text-htb-background font-semibold rounded-lg ${colorVariants[path.color].hoverBg} transition-colors duration-200`}>
                 Explore {path.title} Path
               </button>
             </div>
