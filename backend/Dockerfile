@@ -10,9 +10,11 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install all dependencies (including devDeps for Prisma and TS)
-RUN if [ ! -f package-lock.json ]; then \
-    npm install --package-lock-only; \
-fi && npm ci
+RUN if [ -f package-lock.json ]; then \
+    npm ci; \
+else \
+    npm install; \
+fi
 
 # Copy configuration and source
 COPY tsconfig.base.json ./
@@ -36,7 +38,11 @@ ENV NODE_ENV=production
 
 # Copy package files and install prod-only deps
 COPY package*.json ./
-RUN npm ci --omit=dev
+RUN if [ -f package-lock.json ]; then \
+    npm ci --omit=dev; \
+else \
+    npm install --omit=dev; \
+fi
 
 # Copy the built app
 COPY --from=builder /app/dist ./dist
