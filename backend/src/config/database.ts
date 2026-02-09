@@ -1,4 +1,11 @@
-import { userDB, labDB } from '../../prisma/client'
+import { PrismaClient as UserPrismaClient } from '@prisma-user/client'
+import { PrismaClient as LabPrismaClient } from '../../node_modules/.prisma/client'
+
+// Initialize the clients
+const userDB = new UserPrismaClient()
+// labDB is only initialized in development, otherwise it's null
+const labDB = process.env.NODE_ENV === 'development' ? new LabPrismaClient() : null
+
 
 export async function connectDatabase(): Promise<void> {
   try {
@@ -8,7 +15,7 @@ export async function connectDatabase(): Promise<void> {
     // Connect the Lab DB only if it is initialized (non-production)
     if (labDB) {
       await labDB.$connect()
-      console.log('�� Databases (User & Lab) connected successfully')
+      console.log('✅ Databases (User & Lab) connected successfully')
     } else {
       console.log('✅ User DB connected. Lab DB is disabled in this environment')
     }

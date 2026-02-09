@@ -4,8 +4,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("NEON_DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("NEON_DATABASE_URL")
   directUrl = env("NEON_DIRECT_DATABASE_URL")
 }
 
@@ -25,6 +25,7 @@ model User {
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
   lastLoginAt   DateTime?
+  recorded      Boolean         @default(false)
   api_keys      api_keys[]
   certificates  certificates[]
   enrollments   enrollments[]
@@ -187,8 +188,6 @@ model user_progress {
 enum UserRole {
   USER
   ADMIN
-  INSTRUCTOR
-  MODERATOR
   LABCREATOR
 }
 
