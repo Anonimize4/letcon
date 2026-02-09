@@ -41,6 +41,50 @@ The application now supports only three user roles:
 2. **ADMIN** - Administrative users with full system access
 3. **LABCREATOR** - Users who can create and manage labs
 
+## Default User Credentials
+
+### Main Seed File (backend/prisma/seed.ts)
+The main seed file creates three default users:
+
+#### Admin User
+- **Email**: admin@lethcon.com
+- **Username**: admin
+- **Password**: Admin@2024!
+- **Role**: ADMIN
+
+#### Demo User
+- **Email**: demo@lethcon.com
+- **Username**: demo
+- **Password**: User@2024!
+- **Role**: USER
+
+#### Lab Creator User
+- **Email**: labcreator@lethcon.com
+- **Username**: labcreator
+- **Password**: LabCreator@2024!
+- **Role**: LABCREATOR
+
+### Test Users Script (backend/scripts/create-test-users.ts)
+Additional test users for development/testing:
+
+#### Admin Test User
+- **Email**: admin@lethcon.com
+- **Username**: lethcon_admin
+- **Password**: Password123
+- **Role**: ADMIN
+
+#### Demo Test User
+- **Email**: user@lethcon.com
+- **Username**: lethcon_user
+- **Password**: Password123
+- **Role**: USER
+
+#### Lab Creator Test User
+- **Email**: creator@lethcon.com
+- **Username**: lethcon_creator
+- **Password**: Password123
+- **Role**: LABCREATOR
+
 ## Verification Completed
 
 ### Backend Code

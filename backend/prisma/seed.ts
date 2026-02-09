@@ -38,6 +38,21 @@ async function main() {
   })
   console.log('✅ Created demo user:', demo.username)
 
+  const labcreatorPassword = await bcrypt.hash('LabCreator@2024!', 12)
+  const labcreator = await userDB.user.upsert({
+    where: { email: 'labcreator@lethcon.com' },
+    update: {},
+    create: {
+      email: 'labcreator@lethcon.com',
+      username: 'labcreator',
+      password: labcreatorPassword,
+      firstName: 'Lab',
+      lastName: 'Creator',
+      role: 'LABCREATOR',
+    },
+  })
+  console.log('✅ Created labcreator user:', labcreator.username)
+
   // ==========================================
   // Example for Lab Seeding (Targeting labDB - Local)
   // ==========================================
