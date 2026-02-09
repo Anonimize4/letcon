@@ -2,8 +2,8 @@ import "dotenv/config"; // Ensures your .env file is loaded
 import { defineConfig, env } from "@prisma/config";
 
 export default defineConfig({
-  schema: "prisma/schema.prisma",
+  schema: "prisma/schema/neon.prisma",
   datasource: {
-    url: env("DATABASE_URL"), // Connects to the URL in your .env file
+    url: env("NEON_DATABASE_URL"), // Neon pooler URL for regular operations
   },
 });
