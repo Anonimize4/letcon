@@ -16,18 +16,19 @@ export const userDB =
   })
 
 // 2. Initialize the Lab Database (Local PC / Datacenter)
-// In production (e.g., Render), skip creating the lab client to avoid connecting to localhost
+// Temporarily disable lab database to focus on Neon user authentication
 let labClient: LabClientInstance | null = null
-if (config.NODE_ENV !== 'production') {
-  type LabClientConstructor = new (...args: any[]) => LabClientInstance
-  const { PrismaClient: LabClient } = require('@prisma-lab/client') as { PrismaClient: LabClientConstructor }
-  labClient =
-    (globalForPrisma.labDB as LabClientInstance | null) ??
-    new LabClient({
-      log: config.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
-      errorFormat: 'pretty',
-    })
-}
+// Skip lab database connection for now to focus on Neon authentication
+// if (config.NODE_ENV !== 'production') {
+//   type LabClientConstructor = new (...args: any[]) => LabClientInstance
+//   const { PrismaClient: LabClient } = require('@prisma-lab/client') as { PrismaClient: LabClientConstructor }
+//   labClient =
+//     (globalForPrisma.labDB as LabClientInstance | null) ??
+//     new LabClient({
+//       log: config.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+//       errorFormat: 'pretty',
+//     })
+// }
 
 export const labDB = labClient as LabClientInstance | null
 

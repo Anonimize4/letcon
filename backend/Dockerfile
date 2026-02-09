@@ -57,5 +57,5 @@ COPY --from=builder /app/node_modules/@prisma-lab ./node_modules/@prisma-lab
 # Create storage directories
 RUN mkdir -p uploads logs
 
-EXPOSE 3000
+EXPOSE 5000
 CMD ["node", "dist/src/server.js"]

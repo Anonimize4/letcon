@@ -1,139 +1,227 @@
-// This schema is for user profiles and authentication data on Neon PostgreSQL
 generator client {
   provider = "prisma-client-js"
   output   = "../../node_modules/@prisma-user/client"
-
 }
+
 datasource db {
   provider = "postgresql"
   url      = env("NEON_DATABASE_URL")
 }
 
 model User {
-  id            String         @id @default(cuid())
-  email         String         @unique
-  username      String         @unique
+  id            String          @id @default(cuid())
+  email         String          @unique
+  username      String          @unique
   password      String
   firstName     String?
   lastName      String?
+  role          UserRole        @default(USER)
   avatar        String?
   bio           String?
-  role          UserRole       @default(USER)
-  isActive      Boolean        @default(true)
-  isVerified    Boolean        @default(false)
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  company       String?
+  location      String?
+  website       String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
   lastLoginAt   DateTime?
-  
-  // Authentication tokens
+  api_keys      api_keys[]
+  certificates  certificates[]
+  enrollments   enrollments[]
+  lab_sessions  lab_sessions[]
   refreshTokens RefreshToken[]
   tokens        Token[]
-  
-  // User preferences and settings
-  preferences   UserPreferences?
-  
-  // User achievements and progress
-  achievements  UserAchievement[]
-  certificates  UserCertificate[]
-  
-  // User activity tracking
-  sessions      UserSession[]
-  
+  user_progress user_progress[]
+
   @@map("users")
 }
 
-model UserPreferences {
-  id                String  @id @default(cuid())
-  userId            String  @unique
-  theme             String  @default("light")
-  language          String  @default("en")
-  timezone          String  @default("UTC")
-  notifications     Json?   // Notification preferences as JSON
-  privacy           Json?   // Privacy settings as JSON
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  @@map("user_preferences")
-}
-
 model RefreshToken {
-  id        String   @id @default(cuid())
-  token     String   @unique
+  id        String    @id @default(cuid())
+  token     String    @unique
   userId    String
   expiresAt DateTime
   revokedAt DateTime?
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("refresh_tokens")
 }
 
 model Token {
-  id        String   @id @default(cuid())
-  token     String   @unique
+  id        String    @id @default(cuid())
+  token     String    @unique
   type      TokenType
   userId    String
   expiresAt DateTime
   usedAt    DateTime?
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("tokens")
 }
 
-model UserAchievement {
-  id            String   @id @default(cuid())
-  userId        String
-  achievementId String
-  earnedAt      DateTime @default(now())
-  metadata      Json?    // Additional achievement data
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  @@unique([userId, achievementId])
-  @@map("user_achievements")
+model api_keys {
+  id         String    @id
+  name       String
+  key        String    @unique
+  scopes     String[]
+  userId     String?
+  isActive   Boolean   @default(true)
+  expiresAt  DateTime?
+  lastUsedAt DateTime?
+  usageCount Int       @default(0)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime
+  users      User?     @relation(fields: [userId], references: [id])
 }
 
-model UserCertificate {
-  id            String   @id @default(cuid())
-  userId        String
-  certificateId String
-  issuedAt      DateTime @default(now())
-  expiresAt     DateTime?
-  metadata      Json?    // Certificate data, URL, etc.
-  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  @@unique([userId, certificateId])
-  @@map("user_certificates")
+model certificates {
+  id               String   @id
+  userId           String
+  labId            String
+  certificateUrl   String
+  verificationCode String   @unique
+  issuedAt         DateTime @default(now())
+  labs             labs     @relation(fields: [labId], references: [id])
+  users            User     @relation(fields: [userId], references: [id])
 }
 
-model UserSession {
-  id           String    @id @default(cuid())
-  userId       String
-  sessionToken String   @unique
-  ipAddress    String?
-  userAgent    String?
-  startedAt    DateTime  @default(now())
-  lastActivity DateTime  @default(now())
-  expiresAt    DateTime
-  isActive     Boolean   @default(true)
-  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  @@map("user_sessions")
+model enrollments {
+  id         String    @id
+  userId     String
+  labId      String
+  enrolledAt DateTime  @default(now())
+  expiresAt  DateTime?
+  isActive   Boolean   @default(true)
+  labs       labs      @relation(fields: [labId], references: [id])
+  users      User      @relation(fields: [userId], references: [id])
+
+  @@unique([userId, labId])
 }
 
-// Enums
+model lab_categories {
+  id          String  @id
+  name        String  @unique
+  description String?
+  icon        String?
+  color       String?
+  labs        labs[]
+}
+
+model lab_sessions {
+  id          String        @id
+  userId      String
+  labId       String
+  containerId String?
+  status      SessionStatus @default(RUNNING)
+  startedAt   DateTime      @default(now())
+  endedAt     DateTime?
+  completedAt DateTime?
+  progress    Float         @default(0)
+  hintsUsed   Int           @default(0)
+  timeSpent   Int           @default(0)
+  ipAddress   String?
+  userAgent   String?
+  labs        labs          @relation(fields: [labId], references: [id])
+  users       User          @relation(fields: [userId], references: [id])
+}
+
+model labs {
+  id             String          @id
+  title          String
+  description    String
+  difficulty     Difficulty      @default(BEGINNER)
+  dockerImage    String
+  port           Int?
+  environment    Json?
+  instructions   String?
+  hints          String[]
+  flag           String?
+  estimatedTime  Int?
+  tags           String[]
+  categoryId     String
+  objectives     String[]
+  prerequisites  String[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime
+  isActive       Boolean         @default(true)
+  certificates   certificates[]
+  enrollments    enrollments[]
+  lab_sessions   lab_sessions[]
+  lab_categories lab_categories  @relation(fields: [categoryId], references: [id])
+  user_progress  user_progress[]
+}
+
+model system_logs {
+  id        String   @id
+  level     LogLevel
+  message   String
+  metadata  Json?
+  userId    String?
+  action    String?
+  resource  String?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+}
+
+model user_progress {
+  id             String         @id
+  userId         String
+  labId          String
+  status         ProgressStatus @default(NOT_STARTED)
+  score          Float          @default(0)
+  attempts       Int            @default(0)
+  bestTime       Int?
+  totalTime      Int            @default(0)
+  firstAttemptAt DateTime?
+  lastAttemptAt  DateTime?
+  completedAt    DateTime?
+  labs           labs           @relation(fields: [labId], references: [id])
+  users          User           @relation(fields: [userId], references: [id])
+
+  @@unique([userId, labId])
+}
+
 enum UserRole {
   USER
-  PREMIUM
-  PRO
   ADMIN
-  SUPER_ADMIN
+  INSTRUCTOR
+  MODERATOR
 }
 
 enum TokenType {
   EMAIL_VERIFICATION
   PASSWORD_RESET
   ACCOUNT_ACTIVATION
-  TWO_FACTOR
+}
+
+enum Difficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+}
+
+enum LogLevel {
+  DEBUG
+  INFO
+  WARN
+  ERROR
+  FATAL
+}
+
+enum ProgressStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+}
+
+enum SessionStatus {
+  RUNNING
+  COMPLETED
+  FAILED
+  TIMEOUT
+  TERMINATED
 }
