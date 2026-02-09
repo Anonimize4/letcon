@@ -1,5 +1,5 @@
 import { PrismaClient as UserPrismaClient } from '@prisma-user/client'
-import { PrismaClient as LabPrismaClient } from '../../node_modules/.prisma/client'
+import { PrismaClient as LabPrismaClient } from '@prisma-lab/client'
 
 // Initialize the clients
 const userDB = new UserPrismaClient()
