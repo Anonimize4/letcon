@@ -5,48 +5,15 @@ async function main() {
   console.log('🌱 Starting database seeding...')
 
   // ==========================================
-  // LETHCON Test Users (Targeting userDB - Neon)
+  // LETHCON Users (Targeting userDB - Neon)
   // ==========================================
   
-  const lethconAdminPassword = await bcrypt.hash('Password123', 12)
-  const lethconAdmin = await userDB.user.upsert({
+  const adminPassword = await bcrypt.hash('Admin@2024!', 12)
+  const admin = await userDB.user.upsert({
     where: { email: 'admin@lethcon.com' },
     update: {},
     create: {
       email: 'admin@lethcon.com',
-      username: 'lethcon_admin',
-      password: lethconAdminPassword,
-      firstName: 'Admin',
-      lastName: 'LETHCON',
-      role: 'ADMIN',
-    },
-  })
-  console.log('✅ Created LETHCON admin user:', lethconAdmin.username)
-
-  const lethconUserPassword = await bcrypt.hash('Password123', 12)
-  const lethconUser = await userDB.user.upsert({
-    where: { email: 'user@lethcon.com' },
-    update: {},
-    create: {
-      email: 'user@lethcon.com',
-      username: 'lethcon_user',
-      password: lethconUserPassword,
-      firstName: 'User',
-      lastName: 'LETHCON',
-      role: 'USER',
-    },
-  })
-  console.log('✅ Created LETHCON user:', lethconUser.username)
-
-  // ==========================================
-  // System Accounts (Targeting userDB - Neon)
-  // ==========================================
-  const adminPassword = await bcrypt.hash('Admin@2024!', 12)
-  await userDB.user.upsert({
-    where: { email: 'admin@cybersectraining.com' },
-    update: {},
-    create: {
-      email: 'admin@cybersectraining.com',
       username: 'admin',
       password: adminPassword,
       firstName: 'Admin',
@@ -54,13 +21,14 @@ async function main() {
       role: 'ADMIN',
     },
   })
+  console.log('✅ Created admin user:', admin.username)
 
   const demoPassword = await bcrypt.hash('User@2024!', 12)
-  await userDB.user.upsert({
-    where: { email: 'demo@cybersectraining.com' },
+  const demo = await userDB.user.upsert({
+    where: { email: 'demo@lethcon.com' },
     update: {},
     create: {
-      email: 'demo@cybersectraining.com',
+      email: 'demo@lethcon.com',
       username: 'demo',
       password: demoPassword,
       firstName: 'Demo',
@@ -68,6 +36,7 @@ async function main() {
       role: 'USER',
     },
   })
+  console.log('✅ Created demo user:', demo.username)
 
   // ==========================================
   // Example for Lab Seeding (Targeting labDB - Local)
