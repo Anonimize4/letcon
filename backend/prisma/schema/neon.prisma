@@ -186,8 +186,7 @@ model user_progress {
 enum UserRole {
   USER
   ADMIN
-  INSTRUCTOR
-  MODERATOR
+  LABCREATOR
 }
 
 enum TokenType {
