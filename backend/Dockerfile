@@ -9,7 +9,7 @@ WORKDIR /app
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
+# Install all dependencies (including devDeps for Prisma and TS)
 RUN if [ ! -f package-lock.json ]; then \
     npm install --package-lock-only; \
 fi && npm ci
@@ -20,7 +20,7 @@ COPY tsconfig.json ./
 COPY prisma/ ./prisma/
 COPY src/ ./src/
 
-# Generate both Prisma clients explicitly
+# Generate both Prisma clients
 RUN npx prisma generate --schema=./prisma/schema/neon.prisma
 RUN npx prisma generate --schema=./prisma/schema/local.prisma
 
@@ -36,21 +36,14 @@ ENV NODE_ENV=production
 
 # Copy package files and install prod-only deps
 COPY package*.json ./
-RUN if [ -f package-lock.json ]; then \
-    npm ci --omit=dev; \
-else \
-    npm install --package-lock-only && npm ci --omit=dev; \
-fi
+RUN npm ci --omit=dev
 
-# Copy the Prisma directory (needed for generation/engines)
-COPY prisma ./prisma/
-
-# Re-generate clients in production environment to ensure binary compatibility
-RUN npx prisma generate --schema=./prisma/schema/neon.prisma
-RUN npx prisma generate --schema=./prisma/schema/local.prisma
-
-# Copy built app and specific generated clients from builder
+# Copy the built app
 COPY --from=builder /app/dist ./dist
+
+# FIX: Copy the specific clients AND the hidden .prisma engine folder
+# This ensures the internal imports in @prisma-user/client find the engines
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma-user ./node_modules/@prisma-user
 COPY --from=builder /app/node_modules/@prisma-lab ./node_modules/@prisma-lab
 
