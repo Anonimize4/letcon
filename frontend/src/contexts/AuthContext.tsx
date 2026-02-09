@@ -138,13 +138,23 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include', // Important for CORS with credentials
         body: JSON.stringify({ email, password }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || 'Login failed');
+        // Handle specific CORS errors
+        if (response.status === 0) {
+          throw new Error('Network error: Unable to connect to the server. Please check your internet connection and CORS settings.');
+        }
+        throw new Error(data.message || `Login failed with status ${response.status}`);
+      }
+
+      // Validate response data structure
+      if (!data.data || !data.data.user || !data.data.accessToken || !data.data.refreshToken) {
+        throw new Error('Invalid response from server');
       }
 
       // Store tokens
@@ -159,7 +169,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         refreshToken: data.data.refreshToken
       };
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Login failed';
+      let errorMessage = 'Login failed';
+      
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      } else if (error && typeof error === 'object' && 'message' in error) {
+        errorMessage = (error as any).message;
+      }
+      
+      // Add CORS-specific error handling
+      if (errorMessage.includes('CORS') || errorMessage.includes('Network error')) {
+        errorMessage = 'Connection error: Unable to reach the authentication server. Please ensure the backend is running and CORS is properly configured.';
+      }
+      
       dispatch({ type: 'AUTH_FAILURE', payload: errorMessage });
       throw error;
     }
