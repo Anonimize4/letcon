@@ -21,6 +21,7 @@ model User {
   company       String?
   location      String?
   website       String?
+  recorded      Boolean         @default(false)
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
   lastLoginAt   DateTime?

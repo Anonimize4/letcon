@@ -1,8 +1,11 @@
 {
   "name": "cybersecurity-training-platform-backend",
   "version": "1.0.0",
-  "description": "Backend API for the Cybersecurity Training Platform",
+  "description": "Backend API for Cybersecurity Training Platform",
   "main": "dist/src/server.js",
+  "prisma": {
+    "schema": "prisma/schema/neon.prisma"
+  },
 "scripts": {
     "dev": "nodemon",
     "build": "npm run db:gen && tsc",

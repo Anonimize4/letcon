@@ -10,6 +10,7 @@ interface TestUser {
   firstName: string
   lastName: string
   role: 'ADMIN' | 'USER' | 'LABCREATOR'
+  recorded?: boolean
 }
 
 const testUsers: TestUser[] = [
@@ -36,6 +37,7 @@ const testUsers: TestUser[] = [
     firstName: 'Creator',
     lastName: 'LETHCON',
     role: 'LABCREATOR',
+    recorded: true,
   },
 ]
 

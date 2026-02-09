@@ -49,6 +49,7 @@ async function main() {
       firstName: 'Lab',
       lastName: 'Creator',
       role: 'LABCREATOR',
+      recorded: true,
     },
   })
   console.log('✅ Created labcreator user:', labcreator.username)

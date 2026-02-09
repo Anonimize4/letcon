@@ -117,6 +117,9 @@ npx prisma migrate deploy --schema prisma/schema/neon.prisma
 1. `backend/prisma/schema/neon.prisma` - Updated UserRole enum
 2. `backend/prisma/schema/migrations/20260209085812_remove_instructor_moderator_roles/migration.sql` - New migration file
 3. `backend/node_modules/@prisma-user/client/` - Regenerated Prisma client
+4. `backend/prisma/seed.ts` - Added LABCREATOR user credentials
+5. `backend/scripts/create-test-users.ts` - Fixed CREATOR to LABCREATOR role and added credentials
+6. `backend/package.json` - Added prisma.schema configuration for easier Prisma commands
 
 ## Files Verified (No Changes Needed)
 - `backend/prisma/seed.ts` - Already uses only valid roles
