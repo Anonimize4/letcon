@@ -22,7 +22,7 @@ COPY tsconfig.json ./
 COPY prisma/ ./prisma/
 COPY src/ ./src/
 
-# Generate both Prisma clients
+# Generate both Prisma clients in builder stage for the build process
 RUN npx prisma generate --schema=./prisma/schema/neon.prisma
 RUN npx prisma generate --schema=./prisma/schema/local.prisma
 
@@ -32,11 +32,12 @@ RUN npm run build
 # --- Production Stage ---
 FROM node:20-alpine AS production
 
+# Install runtime dependencies
 RUN apk add --no-cache ttyd openssl
 WORKDIR /app
 ENV NODE_ENV=production
 
-# Copy package files and install prod-only deps
+# Copy package files and install production dependencies only
 COPY package*.json ./
 RUN if [ -f package-lock.json ]; then \
     npm ci --omit=dev; \
@@ -44,17 +45,21 @@ else \
     npm install --omit=dev; \
 fi
 
-# Copy the built app
+# Copy the built app from builder
 COPY --from=builder /app/dist ./dist
 
-# FIX: Copy the specific clients AND the hidden .prisma engine folder
-# This ensures the internal imports in @prisma-user/client find the engines
-COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
-COPY --from=builder /app/node_modules/@prisma-user ./node_modules/@prisma-user
-COPY --from=builder /app/node_modules/@prisma-lab ./node_modules/@prisma-lab
+# FIX: Copy the prisma folder so we can re-generate the clients for the production OS
+COPY --from=builder /app/prisma ./prisma
+
+# Re-generate Prisma Clients in the production stage to ensure engines match Alpine
+# and that the @prisma-user and @prisma-lab internal paths are correctly initialized
+RUN npx prisma generate --schema=./prisma/schema/neon.prisma
+RUN npx prisma generate --schema=./prisma/schema/local.prisma
 
 # Create storage directories
 RUN mkdir -p uploads logs
 
 EXPOSE 5000
+
+# Start the application
 CMD ["node", "dist/src/server.js"]
