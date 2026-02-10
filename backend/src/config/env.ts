@@ -1,5 +1,5 @@
-import dotenv from 'dotenv'
-import path from 'path'
+import * as dotenv from 'dotenv'
+import * as path from 'path'
 
 // Load environment variables in order of precedence
 // 1. .env.local (for local overrides)
@@ -136,4 +136,3 @@ const config: Config = {
 }
 
 export default config
-
