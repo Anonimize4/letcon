@@ -36,6 +36,8 @@ export interface Config {
   
   // Database
   DATABASE_URL: string
+  NEON_DATABASE_URL: string
+  NEON_DIRECT_DATABASE_URL: string
   DB_HOST: string
   DB_PORT: number
   DB_NAME: string
@@ -90,6 +92,8 @@ const config: Config = {
   API_VERSION: process.env.API_VERSION || 'v1',
   
   DATABASE_URL: process.env.DATABASE_URL || 'postgresql://postgres:password@localhost:5432/cybersecurity_training',
+  NEON_DATABASE_URL: process.env.NEON_DATABASE_URL || '',
+  NEON_DIRECT_DATABASE_URL: process.env.NEON_DIRECT_DATABASE_URL || '',
   DB_HOST: process.env.DB_HOST || 'localhost',
   DB_PORT: parseInt(process.env.DB_PORT || '5432', 10),
   DB_NAME: process.env.DB_NAME || 'cybersecurity_training',
@@ -132,3 +136,4 @@ const config: Config = {
 }
 
 export default config
+

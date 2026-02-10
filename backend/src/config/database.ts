@@ -1,32 +1,24 @@
-import { PrismaClient as UserPrismaClient } from '@prisma-user/client'
+import { PrismaClient } from '@prisma/client'
+import config from './env'
 
-// Initialize user database client
-const userDB = new UserPrismaClient()
-
-// Lab database client - only initialize if the package is available
-let labDB: any = null
-try {
-  // Try to import lab client (may not be available in all environments)
-  const { PrismaClient: LabPrismaClient } = require('@prisma-lab/client')
-  labDB = process.env.NODE_ENV === 'development' ? new LabPrismaClient() : null
-} catch (error) {
-  console.log('⚠️  Lab Prisma client not available, lab features will be disabled')
-  labDB = null
+const globalForPrisma = globalThis as unknown as {
+  prisma: PrismaClient | undefined
 }
 
+// Initialize Prisma Client for Neon Database
+export const prisma =
+  globalForPrisma.prisma ??
+  new PrismaClient()
+
+// Prevent multiple instances during Hot Module Replacement (HMR) in development
+if (config.NODE_ENV !== 'production') {
+  globalForPrisma.prisma = prisma
+}
 
 export async function connectDatabase(): Promise<void> {
   try {
-    // Always connect the User DB (Neon / Cloud)
-    await userDB.$connect()
-
-    // Connect the Lab DB only if it is initialized (non-production)
-    if (labDB) {
-      await labDB.$connect()
-      console.log('✅ Databases (User & Lab) connected successfully')
-    } else {
-      console.log('✅ User DB connected. Lab DB is disabled in this environment')
-    }
+    await prisma.$connect()
+    console.log('✅ Database connected successfully')
   } catch (error) {
     console.error('❌ Database connection failed:', error)
     throw error
@@ -34,14 +26,8 @@ export async function connectDatabase(): Promise<void> {
 }
 
 export async function disconnectDatabase(): Promise<void> {
-  // Disconnect both instances (labDB may be null in production)
-  await Promise.all([
-    userDB.$disconnect(),
-    labDB ? labDB.$disconnect() : Promise.resolve()
-  ])
-  console.log('🔌 Databases disconnected')
+  await prisma.$disconnect()
+  console.log('🔌 Database disconnected')
 }
 
-// Export the instances directly for usage throughout the app
-export { userDB, labDB }
-export default { userDB, labDB }
+export default { prisma, connectDatabase, disconnectDatabase }

@@ -3,19 +3,18 @@
   "version": "1.0.0",
   "description": "Backend API for Cybersecurity Training Platform",
   "main": "dist/src/server.js",
-  "prisma": {
-    "schema": "prisma/schema/neon.prisma",
-    "seed": "ts-node prisma/seed.ts"
-  },
   "scripts": {
     "dev": "nodemon",
     "build": "npm run db:gen && tsc",
     "start": "node dist/src/server.js",
-    "db:gen": "dotenv -e ../.env -- prisma generate --schema=./prisma/schema/neon.prisma && dotenv -e ../.env -- prisma generate --schema=./prisma/schema/local.prisma",
-    "db:migrate:user": "dotenv -e ../.env -- prisma migrate dev --schema=./prisma/schema/neon.prisma",
-    "db:migrate:lab": "dotenv -e ../.env -- prisma migrate dev --schema=./prisma/schema/local.prisma",
-    "db:push:user": "dotenv -e ../.env -- prisma db push --schema=./prisma/schema/neon.prisma",
-    "db:push:lab": "dotenv -e ../.env -- prisma db push --schema=./prisma/schema/local.prisma"
+    "db:gen": "prisma generate",
+    "db:migrate": "prisma migrate deploy",
+    "db:push": "prisma db push",
+    "db:seed": "ts-node prisma/seed.ts"
+  },
+  "prisma": {
+    "schema": "prisma/schema/neon.prisma",
+    "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
@@ -84,3 +83,4 @@
     "npm": ">=9.0.0"
   }
 }
+
