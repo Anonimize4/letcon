@@ -1,10 +1,18 @@
 import { PrismaClient as UserPrismaClient } from '@prisma-user/client'
-import { PrismaClient as LabPrismaClient } from '@prisma-lab/client'
 
-// Initialize the clients
+// Initialize user database client
 const userDB = new UserPrismaClient()
-// labDB is only initialized in development, otherwise it's null
-const labDB = process.env.NODE_ENV === 'development' ? new LabPrismaClient() : null
+
+// Lab database client - only initialize if the package is available
+let labDB: any = null
+try {
+  // Try to import lab client (may not be available in all environments)
+  const { PrismaClient: LabPrismaClient } = require('@prisma-lab/client')
+  labDB = process.env.NODE_ENV === 'development' ? new LabPrismaClient() : null
+} catch (error) {
+  console.log('⚠️  Lab Prisma client not available, lab features will be disabled')
+  labDB = null
+}
 
 
 export async function connectDatabase(): Promise<void> {

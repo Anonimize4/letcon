@@ -28,23 +28,29 @@ export const registerValidation = [
 
 // Login validation
 export const loginValidation = [
+  // Accept either email or username
   body('email')
+    .optional()
     .isEmail()
     .normalizeEmail()
-    .withMessage('Please provide a valid email address')
-    .custom((value) => {
-      // Allow any valid email format
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(value)) {
-        throw new Error('Invalid email format');
-      }
-      return true;
-    }),
+    .withMessage('Please provide a valid email address'),
+  body('username')
+    .optional()
+    .isLength({ min: 3, max: 30 })
+    .matches(/^[a-zA-Z0-9_]+$/)
+    .withMessage('Username must be 3-30 characters long and contain only letters, numbers, and underscores'),
   body('password')
     .notEmpty()
     .withMessage('Password is required')
     .isLength({ min: 1 })
     .withMessage('Password cannot be empty')
+    .custom((value, { req }) => {
+      // Ensure either email or username is provided
+      if (!req.body.email && !req.body.username) {
+        throw new Error('Either email or username is required');
+      }
+      return true;
+    })
 ];
 
 // Forgot password validation
