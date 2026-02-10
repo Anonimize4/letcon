@@ -4,6 +4,7 @@
   "description": "Backend API for Cybersecurity Training Platform",
   "main": "dist/src/server.js",
   "scripts": {
+    "predev": "fuser -k 5000/tcp || true",
     "dev": "nodemon",
     "build": "npm run db:gen && tsc",
     "start": "node dist/src/server.js",
