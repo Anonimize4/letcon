@@ -31,30 +31,27 @@ RUN npm run build
 # --- Production Stage ---
 FROM node:20-alpine AS production
 
-# Install runtime dependencies
 RUN apk add --no-cache ttyd openssl
 WORKDIR /app
 ENV NODE_ENV=production
 
-# Copy package files and install production dependencies
+# Copy package files and install prod deps
 COPY package*.json ./
-RUN npm install --omit=dev
+RUN npm ci --omit=dev
 
-# Copy the built app and prisma folder
+# Copy the built app and the prisma schemas
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/prisma ./prisma
 
-# GENERATE ALL THREE CLIENTS
-# 1. This one fixes the "@prisma/client did not initialize" error (Default)
+# Generate the clients specifically where the code expects them
 RUN npx prisma generate --schema=./prisma/schema/neon.prisma
-
-# 2. These fix your custom imports if you use them elsewhere
-RUN npx prisma generate --schema=./prisma/schema/neon.prisma --data-proxy
 RUN npx prisma generate --schema=./prisma/schema/local.prisma
 
-# Create storage directories
-RUN mkdir -p uploads logs
+# Final safety: If your code still insists on looking in @prisma/client, 
+# we symlink the generated user client to the default location.
+RUN ln -s /app/node_modules/@prisma-user/client /app/node_modules/@prisma/client
 
+RUN mkdir -p uploads logs
 EXPOSE 5000
 CMD ["node", "dist/src/server.js"]
 
