@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 // 1. Import userDB instead of PrismaClient
-import { userDB as prisma } from '../../config/database';
+import dbConfig from '../../config/database';
+const { prisma } = dbConfig;
 import { validationResult } from 'express-validator';
 
 export const register = async (req: Request, res: Response) => {

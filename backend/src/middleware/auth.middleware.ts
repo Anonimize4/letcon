@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import * as jwt from 'jsonwebtoken';
-import { userDB as prisma } from '../config/database';
+import { prisma } from '../config/database';
 
 // Extend Request interface to include user
 declare global {

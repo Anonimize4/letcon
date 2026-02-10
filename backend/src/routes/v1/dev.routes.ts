@@ -1,8 +1,7 @@
 import { Router, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import config from '../../config/env';
-import { userDB as prisma } from '../../config/database';
-
+import { prisma } from '../../config/database';
 const router = Router();
 
 // Guard all routes in this file behind env flag

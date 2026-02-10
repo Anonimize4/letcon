@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
-import { userDB as prisma } from '../../config/database';
-
+import { prisma } from '../../config/database';
 export const verifyEmail = async (req: Request, res: Response) => {
   try {
     const { token } = req.params;

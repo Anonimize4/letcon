@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { userDB as prisma } from '../../config/database';
+import { prisma } from '../../config/database';
 
 // Generate JWT tokens
 const generateTokens = (userId: string) => {

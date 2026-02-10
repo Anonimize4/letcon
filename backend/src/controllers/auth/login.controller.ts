@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { userDB as prisma } from '../../config/database';
+import { prisma } from '../../config/database';
 import { validationResult } from 'express-validator';
 
 // Generate JWT tokens

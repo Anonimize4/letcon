@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
-import { userDB as prisma } from '../../config/database';
+import { prisma } from '../../config/database';
 import { validationResult } from 'express-validator';
 
 export const resetPassword = async (req: Request, res: Response) => {
