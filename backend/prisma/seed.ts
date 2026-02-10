@@ -1,4 +1,4 @@
-import { userDB, labDB } from '../src/config/database'
+import { prisma } from '../src/config/database';
 import bcrypt from 'bcryptjs'
 
 async function main() {
