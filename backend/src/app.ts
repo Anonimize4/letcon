@@ -1,6 +1,7 @@
 import express, { Application } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import routes from './routes';
 
 // Load environment variables from .env
 dotenv.config();
@@ -26,14 +27,17 @@ export class App {
     this.app.use(cors({
       origin: [
         'http://localhost:5173',           // Default Vite port
-        'https://lethcon-frontend.vercel.app/ ' // Add your Vercel URL here later
+        'https://lethcon-frontend.vercel.app'  // Your Vercel URL
       ],
       credentials: true
     }));
   }
 
   private configureRoutes(): void {
-    // Match the /api/v1 prefix you set in your frontend .env.development
+    // Mount API routes with /api/v1 prefix
+    this.app.use('/api/v1', routes);
+    
+    // Health check endpoint
     this.app.get('/api/v1/health', (req, res) => {
       res.json({ status: 'ok', message: 'Backend is connected!' });
     });
