@@ -1,3 +1,6 @@
+// This schema is for user management and authentication on Neon PostgreSQL
+// Labs and learning content are handled by local.prisma on local database
+
 generator client {
   provider = "prisma-client-js"
   output   = "../../node_modules/@prisma-user/client"
@@ -8,6 +11,10 @@ datasource db {
   url       = env("NEON_DATABASE_URL")
   directUrl = env("NEON_DIRECT_DATABASE_URL")
 }
+
+// ============================================
+// USER & AUTHENTICATION MODELS
+// ============================================
 
 model User {
   id            String          @id @default(cuid())
@@ -26,13 +33,11 @@ model User {
   updatedAt     DateTime        @updatedAt
   lastLoginAt   DateTime?
   recorded      Boolean         @default(false)
+  
+  // Relations for authentication
   api_keys      api_keys[]
-  certificates  certificates[]
-  enrollments   enrollments[]
-  lab_sessions  lab_sessions[]
   refreshTokens RefreshToken[]
   tokens        Token[]
-  user_progress user_progress[]
 
   @@map("users")
 }
@@ -75,84 +80,13 @@ model api_keys {
   createdAt  DateTime  @default(now())
   updatedAt  DateTime
   users      User?     @relation(fields: [userId], references: [id])
+  
+  @@map("api_keys")
 }
 
-model certificates {
-  id               String   @id
-  userId           String
-  labId            String
-  certificateUrl   String
-  verificationCode String   @unique
-  issuedAt         DateTime @default(now())
-  labs             labs     @relation(fields: [labId], references: [id])
-  users            User     @relation(fields: [userId], references: [id])
-}
-
-model enrollments {
-  id         String    @id
-  userId     String
-  labId      String
-  enrolledAt DateTime  @default(now())
-  expiresAt  DateTime?
-  isActive   Boolean   @default(true)
-  labs       labs      @relation(fields: [labId], references: [id])
-  users      User      @relation(fields: [userId], references: [id])
-
-  @@unique([userId, labId])
-}
-
-model lab_categories {
-  id          String  @id
-  name        String  @unique
-  description String?
-  icon        String?
-  color       String?
-  labs        labs[]
-}
-
-model lab_sessions {
-  id          String        @id
-  userId      String
-  labId       String
-  containerId String?
-  status      SessionStatus @default(RUNNING)
-  startedAt   DateTime      @default(now())
-  endedAt     DateTime?
-  completedAt DateTime?
-  progress    Float         @default(0)
-  hintsUsed   Int           @default(0)
-  timeSpent   Int           @default(0)
-  ipAddress   String?
-  userAgent   String?
-  labs        labs          @relation(fields: [labId], references: [id])
-  users       User          @relation(fields: [userId], references: [id])
-}
-
-model labs {
-  id             String          @id
-  title          String
-  description    String
-  difficulty     Difficulty      @default(BEGINNER)
-  dockerImage    String
-  port           Int?
-  environment    Json?
-  instructions   String?
-  hints          String[]
-  flag           String?
-  estimatedTime  Int?
-  tags           String[]
-  categoryId     String
-  objectives     String[]
-  prerequisites  String[]
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime
-  isActive       Boolean         @default(true)
-  certificates   certificates[]
-  enrollments    enrollments[]
-  lab_sessions   lab_sessions[]
-  lab_categories lab_categories  @relation(fields: [categoryId], references: [id])
-  user_progress  user_progress[]
-}
+// ============================================
+// SYSTEM LOGS (Optional - can be used for audit logging)
+// ============================================
 
 model system_logs {
   id        String   @id
@@ -165,25 +99,13 @@ model system_logs {
   ipAddress String?
   userAgent String?
   createdAt DateTime @default(now())
+  
+  @@map("system_logs")
 }
 
-model user_progress {
-  id             String         @id
-  userId         String
-  labId          String
-  status         ProgressStatus @default(NOT_STARTED)
-  score          Float          @default(0)
-  attempts       Int            @default(0)
-  bestTime       Int?
-  totalTime      Int            @default(0)
-  firstAttemptAt DateTime?
-  lastAttemptAt  DateTime?
-  completedAt    DateTime?
-  labs           labs           @relation(fields: [labId], references: [id])
-  users          User           @relation(fields: [userId], references: [id])
-
-  @@unique([userId, labId])
-}
+// ============================================
+// ENUMS
+// ============================================
 
 enum UserRole {
   USER
@@ -197,13 +119,6 @@ enum TokenType {
   ACCOUNT_ACTIVATION
 }
 
-enum Difficulty {
-  BEGINNER
-  INTERMEDIATE
-  ADVANCED
-  EXPERT
-}
-
 enum LogLevel {
   DEBUG
   INFO
@@ -212,17 +127,3 @@ enum LogLevel {
   FATAL
 }
 
-enum ProgressStatus {
-  NOT_STARTED
-  IN_PROGRESS
-  COMPLETED
-  FAILED
-}
-
-enum SessionStatus {
-  RUNNING
-  COMPLETED
-  FAILED
-  TIMEOUT
-  TERMINATED
-}
