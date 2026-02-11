@@ -13,14 +13,19 @@ const allowedOrigins = [
 
 const corsOptions = {
   origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true)
+    // Allow requests with no origin (like mobile apps, curl requests, or server-to-server)
+    if (!origin) {
+      console.log('CORS: Allowing request with no origin')
+      return callback(null, true)
+    }
     
     if (allowedOrigins.includes(origin)) {
+      console.log(`CORS: Allowing origin: ${origin}`)
       callback(null, true)
     } else {
-      console.log('CORS blocked origin:', origin)
-      callback(new Error('Not allowed by CORS'), false)
+      console.error(`CORS: Blocked origin: ${origin}`)
+      console.error(`CORS: Allowed origins: ${allowedOrigins.join(', ')}`)
+      callback(new Error(`Not allowed by CORS - Origin: ${origin}`), false)
     }
   },
   credentials: true,

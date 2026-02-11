@@ -1,7 +1,7 @@
 import express, { Application } from 'express';
-import cors from 'cors';
 import dotenv from 'dotenv';
 import routes from './routes';
+import corsConfig from './config/cors';
 
 // Load environment variables from .env
 dotenv.config();
@@ -23,14 +23,8 @@ export class App {
     // Standard middleware
     this.app.use(express.json());
 
-    // CRITICAL: Configure CORS to allow your Vite frontend
-    this.app.use(cors({
-      origin: [
-        'http://localhost:5173',           // Default Vite port
-        'https://lethcon-frontend.vercel.app'  // Your Vercel URL
-      ],
-      credentials: true
-    }));
+    // Use the comprehensive CORS configuration from config/cors.ts
+    this.app.use(corsConfig);
   }
 
   private configureRoutes(): void {
