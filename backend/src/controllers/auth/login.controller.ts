@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { prisma } from '../../config/database';
+import { prisma, isUsingNeonDatabase } from '../../config/database';
 import { validationResult } from 'express-validator';
+import config from '../../config/env';
 
 // Generate JWT tokens
 const generateTokens = (userId: string) => {
@@ -34,6 +35,10 @@ export const login = async (req: Request, res: Response) => {
     }
 
     const { email, password, username } = req.body;
+
+    // Log database being used for debugging
+    console.log(`Login attempt - Using ${isUsingNeonDatabase() ? 'Neon' : 'Local'} database`);
+    console.log(`Environment: ${config.NODE_ENV}`);
 
     // Try to find user by email or username
     let user = null;
@@ -84,6 +89,8 @@ export const login = async (req: Request, res: Response) => {
       data: { lastLoginAt: new Date() }
     });
 
+    console.log(`User logged in successfully: ${user.email} (${isUsingNeonDatabase() ? 'Neon' : 'Local'} DB)`);
+
     return res.json({
       success: true,
       message: 'Login successful',
@@ -102,6 +109,17 @@ export const login = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Login error:', error);
+    
+    // Provide more specific error messages
+    if (error instanceof Error) {
+      if (error.message.includes('connection') || error.message.includes('database')) {
+        return res.status(503).json({
+          success: false,
+          message: 'Authentication service unavailable. Please try again later.'
+        });
+      }
+    }
+    
     return res.status(500).json({
       success: false,
       message: 'Internal server error'

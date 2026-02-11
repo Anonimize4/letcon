@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
-// 1. Import userDB instead of PrismaClient
-import dbConfig from '../../config/database';
-const { prisma } = dbConfig;
+import { prisma, isUsingNeonDatabase } from '../../config/database';
 import { validationResult } from 'express-validator';
+import config from '../../config/env';
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -17,6 +16,10 @@ export const register = async (req: Request, res: Response) => {
     }
 
     const { email, username, password, firstName, lastName } = req.body;
+
+    // Log database being used for debugging
+    console.log(`Registration attempt - Using ${isUsingNeonDatabase() ? 'Neon' : 'Local'} database`);
+    console.log(`Environment: ${config.NODE_ENV}`);
 
     // Check if user already exists
     const existingUser = await prisma.user.findFirst({
@@ -35,8 +38,8 @@ export const register = async (req: Request, res: Response) => {
       });
     }
 
-    // Hash password
-    const saltRounds = parseInt(process.env.BCRYPT_ROUNDS || '10');
+    // Hash password with production-strength rounds
+    const saltRounds = config.BCRYPT_ROUNDS;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     // Create user
@@ -60,6 +63,8 @@ export const register = async (req: Request, res: Response) => {
       }
     });
 
+    console.log(`User registered successfully: ${user.email} (${isUsingNeonDatabase() ? 'Neon' : 'Local'} DB)`);
+
     return res.status(201).json({
       success: true,
       message: 'User registered successfully. You can now login.',
@@ -69,6 +74,24 @@ export const register = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error('Registration error:', error);
+    
+    // Provide more specific error messages
+    if (error instanceof Error) {
+      if (error.message.includes('Unique constraint')) {
+        return res.status(409).json({
+          success: false,
+          message: 'User with this email or username already exists'
+        });
+      }
+      
+      if (error.message.includes('connection') || error.message.includes('database')) {
+        return res.status(503).json({
+          success: false,
+          message: 'Database service unavailable. Please try again later.'
+        });
+      }
+    }
+    
     return res.status(500).json({
       success: false,
       message: 'Internal server error'

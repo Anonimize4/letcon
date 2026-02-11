@@ -1,13 +1,13 @@
-import { Router } from 'express';
+import { Router, Response } from 'express';
 import { prisma } from '../../config/database';
 import { authenticate } from '../../middleware/auth.middleware';
 
 const router = Router();
 
 // Get current user profile
-router.get('/profile', authenticate, async (req, res) => {
+router.get('/profile', authenticate, async (req: any, res: Response): Promise<void> => {
   try {
-    const userId = (req as any).user.userId;
+    const userId = req.user.userId;
     
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -36,10 +36,11 @@ router.get('/profile', authenticate, async (req, res) => {
     });
 
     if (!user) {
-      return res.status(404).json({
+      res.status(404).json({
         success: false,
         message: 'User not found'
       });
+      return;
     }
 
     res.json({
@@ -56,9 +57,9 @@ router.get('/profile', authenticate, async (req, res) => {
 });
 
 // Update user profile
-router.put('/profile', authenticate, async (req, res) => {
+router.put('/profile', authenticate, async (req: any, res: Response): Promise<void> => {
   try {
-    const userId = (req as any).user.userId;
+    const userId = req.user.userId;
     const { firstName, lastName, bio, company, location, website, avatar } = req.body;
 
     const updatedUser = await prisma.user.update({
@@ -103,9 +104,9 @@ router.put('/profile', authenticate, async (req, res) => {
 });
 
 // Get user's enrolled labs
-router.get('/enrollments', authenticate, async (req, res) => {
+router.get('/enrollments', authenticate, async (req: any, res: Response): Promise<void> => {
   try {
-    const userId = (req as any).user.userId;
+    const userId = req.user.userId;
 
     const enrollments = await prisma.enrollments.findMany({
       where: { userId },
@@ -146,9 +147,9 @@ router.get('/enrollments', authenticate, async (req, res) => {
 });
 
 // Get user's certificates
-router.get('/certificates', authenticate, async (req, res) => {
+router.get('/certificates', authenticate, async (req: any, res: Response): Promise<void> => {
   try {
-    const userId = (req as any).user.userId;
+    const userId = req.user.userId;
 
     const certificates = await prisma.certificates.findMany({
       where: { userId },
@@ -178,9 +179,9 @@ router.get('/certificates', authenticate, async (req, res) => {
 });
 
 // Get user's lab sessions
-router.get('/lab-sessions', authenticate, async (req, res) => {
+router.get('/lab-sessions', authenticate, async (req: any, res: Response): Promise<void> => {
   try {
-    const userId = (req as any).user.userId;
+    const userId = req.user.userId;
     const { limit = 10, offset = 0 } = req.query;
 
     const sessions = await prisma.lab_sessions.findMany({
@@ -213,9 +214,9 @@ router.get('/lab-sessions', authenticate, async (req, res) => {
 });
 
 // Get user's progress
-router.get('/progress', authenticate, async (req, res) => {
+router.get('/progress', authenticate, async (req: any, res: Response): Promise<void> => {
   try {
-    const userId = (req as any).user.userId;
+    const userId = req.user.userId;
 
     const progress = await prisma.user_progress.findMany({
       where: { userId },
