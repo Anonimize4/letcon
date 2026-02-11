@@ -14,7 +14,7 @@
     "db:seed": "ts-node prisma/seed.ts"
   },
   "prisma": {
-    "schema": "prisma/schema/neon.prisma",
+    "schema": "prisma/schema.prisma",
     "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
@@ -83,3 +83,4 @@
     "npm": ">=9.0.0"
   }
 }
+

@@ -1,14 +1,94 @@
-// This schema is for lab contents and learning data on local PostgreSQL
-// User management is handled by neon.prisma on Neon database
+// Unified Prisma Schema for LETHCON Platform
+// Combines user management, authentication, labs, and learning content
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../../node_modules/@prisma-lab/client"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("LOCAL_DATABASE_URL")
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// USER & AUTHENTICATION MODELS
+// ============================================
+
+model User {
+  id            String          @id @default(cuid())
+  email         String          @unique
+  username      String          @unique
+  password      String
+  firstName     String?
+  lastName      String?
+  role          UserRole        @default(USER)
+  avatar        String?
+  bio           String?
+  company       String?
+  location      String?
+  website       String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+  lastLoginAt   DateTime?
+  recorded      Boolean         @default(false)
+  
+  // Relations for authentication
+  api_keys      ApiKey[]
+  refreshTokens RefreshToken[]
+  tokens        Token[]
+
+  // Relations for labs and learning content
+  labInstances  LabInstance[]
+  submissions   ChallengeSubmission[]
+  certificates  Certificate[]
+  enrollments   Enrollment[]
+  labSessions   LabSession[]
+  userProgress  UserProgress[]
+  achievements  UserAchievement[]
+
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String    @id @default(cuid())
+  token     String    @unique
+  userId    String
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("refresh_tokens")
+}
+
+model Token {
+  id        String    @id @default(cuid())
+  token     String    @unique
+  type      TokenType
+  userId    String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("tokens")
+}
+
+model ApiKey {
+  id         String    @id
+  name       String
+  key        String    @unique
+  scopes     String[]
+  userId     String?
+  isActive   Boolean   @default(true)
+  expiresAt  DateTime?
+  lastUsedAt DateTime?
+  usageCount Int       @default(0)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime
+  user       User?     @relation(fields: [userId], references: [id])
+  
+  @@map("api_keys")
 }
 
 // ============================================
@@ -143,7 +223,7 @@ model Challenge {
 
 model LabInstance {
   id           String   @id @default(cuid())
-  userId       String   // Reference to user ID from Neon database
+  userId       String
   labId        String
   status       LabStatus @default(PENDING)
   startedAt    DateTime @default(now())
@@ -156,6 +236,7 @@ model LabInstance {
   updatedAt   DateTime @updatedAt
   
   // Relations
+  user         User @relation(fields: [userId], references: [id], onDelete: Cascade)
   lab          Lab @relation(fields: [labId], references: [id], onDelete: Cascade)
   submissions  ChallengeSubmission[]
   
@@ -165,7 +246,7 @@ model LabInstance {
 
 model ChallengeSubmission {
   id           String   @id @default(cuid())
-  userId       String   // Reference to user ID from Neon database
+  userId       String
   challengeId  String
   labInstanceId String
   answer       String
@@ -175,6 +256,7 @@ model ChallengeSubmission {
   metadata     Json?    // Submission metadata
   
   // Relations
+  user         User @relation(fields: [userId], references: [id], onDelete: Cascade)
   challenge    Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
   labInstance  LabInstance @relation(fields: [labInstanceId], references: [id], onDelete: Cascade)
   
@@ -182,12 +264,12 @@ model ChallengeSubmission {
 }
 
 // ============================================
-// USER-LAB RELATION MODELS (Reference Neon Users)
+// USER-LAB RELATION MODELS
 // ============================================
 
 model Certificate {
   id               String   @id @default(cuid())
-  userId           String   // Reference to user ID from Neon database
+  userId           String
   labId            String
   title            String
   description      String
@@ -201,7 +283,8 @@ model Certificate {
   updatedAt        DateTime @updatedAt
   
   // Relations
-  lab              Lab      @relation(fields: [labId], references: [id], onDelete: Cascade)
+  user             User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lab              Lab @relation(fields: [labId], references: [id], onDelete: Cascade)
   
   @@unique([userId, labId])
   @@map("certificates")
@@ -209,14 +292,15 @@ model Certificate {
 
 model Enrollment {
   id         String    @id @default(cuid())
-  userId     String    // Reference to user ID from Neon database
+  userId     String
   labId      String
   enrolledAt DateTime  @default(now())
   expiresAt  DateTime?
   isActive   Boolean   @default(true)
   
   // Relations
-  lab        Lab       @relation(fields: [labId], references: [id], onDelete: Cascade)
+  user       User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lab        Lab @relation(fields: [labId], references: [id], onDelete: Cascade)
   
   @@unique([userId, labId])
   @@map("enrollments")
@@ -224,7 +308,7 @@ model Enrollment {
 
 model LabSession {
   id          String        @id @default(cuid())
-  userId      String        // Reference to user ID from Neon database
+  userId      String
   labId       String
   containerId String?
   status      SessionStatus @default(RUNNING)
@@ -238,14 +322,15 @@ model LabSession {
   userAgent   String?
   
   // Relations
-  lab         Lab           @relation(fields: [labId], references: [id], onDelete: Cascade)
+  user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lab         Lab @relation(fields: [labId], references: [id], onDelete: Cascade)
   
   @@map("lab_sessions")
 }
 
 model UserProgress {
   id             String         @id @default(cuid())
-  userId         String         // Reference to user ID from Neon database
+  userId         String
   labId          String
   status         ProgressStatus @default(NOT_STARTED)
   score          Float          @default(0)
@@ -257,10 +342,49 @@ model UserProgress {
   completedAt    DateTime?
   
   // Relations
-  lab            Lab            @relation(fields: [labId], references: [id], onDelete: Cascade)
+  user           User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lab            Lab @relation(fields: [labId], references: [id], onDelete: Cascade)
   
   @@unique([userId, labId])
   @@map("user_progress")
+}
+
+// ============================================
+// ACHIEVEMENT MODELS
+// ============================================
+
+model Achievement {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  icon        String?
+  badge       String?  // Badge image URL
+  points      Int      @default(0)
+  type        AchievementType @default(BRONZE)
+  criteria    Json?    // Achievement criteria as JSON
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  users       UserAchievement[]
+  
+  @@map("achievements")
+}
+
+model UserAchievement {
+  id            String   @id @default(cuid())
+  userId        String
+  achievementId String
+  earnedAt      DateTime @default(now())
+  metadata      Json?
+  
+  // Relations
+  user          User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, achievementId])
+  @@map("user_achievements")
 }
 
 // ============================================
@@ -283,22 +407,6 @@ model Category {
   children    Category[] @relation("CategoryHierarchy")
   
   @@map("categories")
-}
-
-model Achievement {
-  id          String   @id @default(cuid())
-  title       String
-  description String
-  icon        String?
-  badge       String?  // Badge image URL
-  points      Int      @default(0)
-  type        AchievementType @default(BRONZE)
-  criteria    Json?    // Achievement criteria as JSON
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  @@map("achievements")
 }
 
 model LabCategory {
@@ -327,8 +435,47 @@ model SystemConfig {
 }
 
 // ============================================
+// SYSTEM LOGS
+// ============================================
+
+model SystemLog {
+  id        String   @id
+  level     LogLevel
+  message   String
+  metadata  Json?
+  userId    String?
+  action    String?
+  resource  String?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+  
+  @@map("system_logs")
+}
+
+// ============================================
 // ENUMS
 // ============================================
+
+enum UserRole {
+  USER
+  ADMIN
+  LABCREATOR
+}
+
+enum TokenType {
+  EMAIL_VERIFICATION
+  PASSWORD_RESET
+  ACCOUNT_ACTIVATION
+}
+
+enum LogLevel {
+  DEBUG
+  INFO
+  WARN
+  ERROR
+  FATAL
+}
 
 enum Difficulty {
   BEGINNER
