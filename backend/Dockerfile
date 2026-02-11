@@ -17,9 +17,8 @@ COPY tsconfig.json ./
 COPY prisma/ ./prisma/
 COPY src/ ./src/
 
-# Generate clients for the build step
-RUN npx prisma generate --schema=./prisma/schema/neon.prisma
-RUN npx prisma generate --schema=./prisma/schema/local.prisma
+# Generate Prisma client for the build step (using unified schema)
+RUN npx prisma generate --schema=./prisma/schema.prisma
 
 # Build TypeScript
 RUN npm run build
@@ -41,8 +40,7 @@ COPY --from=builder /app/prisma ./prisma
 
 # RE-GENERATE CLIENTS IN PRODUCTION
 # This fixes the "did not initialize" error by building engines for the final OS
-RUN npx prisma generate --schema=./prisma/schema/neon.prisma
-RUN npx prisma generate --schema=./prisma/schema/local.prisma
+RUN npx prisma generate --schema=./prisma/schema.prisma
 
 # Create storage directories
 RUN mkdir -p uploads logs
