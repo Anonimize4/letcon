@@ -4,6 +4,7 @@ import config from './env'
 // Support multiple origins for different environments
 const allowedOrigins = [
   'http://localhost:3000',
+  'http://localhost:5000', // Backend API server
   'http://localhost:5173', // Vite dev server
   'https://lethcon-frontend.vercel.app',
   'https://www.lethcon-frontend.vercel.app',

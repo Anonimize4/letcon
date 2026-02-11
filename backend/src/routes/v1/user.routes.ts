@@ -29,7 +29,7 @@ router.get('/profile', authenticate, async (req: any, res: Response): Promise<vo
           select: {
             enrollments: true,
             certificates: true,
-            lab_sessions: true
+            labSessions: true
           }
         }
       }
@@ -108,10 +108,10 @@ router.get('/enrollments', authenticate, async (req: any, res: Response): Promis
   try {
     const userId = req.user.userId;
 
-    const enrollments = await prisma.enrollments.findMany({
+    const enrollments = await prisma.enrollment.findMany({
       where: { userId },
       include: {
-        labs: {
+        lab: {
           select: {
             id: true,
             title: true,
@@ -120,7 +120,7 @@ router.get('/enrollments', authenticate, async (req: any, res: Response): Promis
             estimatedTime: true,
             tags: true,
             categoryId: true,
-            lab_categories: {
+            category: {
               select: {
                 id: true,
                 name: true,
@@ -151,10 +151,10 @@ router.get('/certificates', authenticate, async (req: any, res: Response): Promi
   try {
     const userId = req.user.userId;
 
-    const certificates = await prisma.certificates.findMany({
+    const certificates = await prisma.certificate.findMany({
       where: { userId },
       include: {
-        labs: {
+        lab: {
           select: {
             id: true,
             title: true,
@@ -184,10 +184,10 @@ router.get('/lab-sessions', authenticate, async (req: any, res: Response): Promi
     const userId = req.user.userId;
     const { limit = 10, offset = 0 } = req.query;
 
-    const sessions = await prisma.lab_sessions.findMany({
+    const sessions = await prisma.labSession.findMany({
       where: { userId },
       include: {
-        labs: {
+        lab: {
           select: {
             id: true,
             title: true,
@@ -218,16 +218,16 @@ router.get('/progress', authenticate, async (req: any, res: Response): Promise<v
   try {
     const userId = req.user.userId;
 
-    const progress = await prisma.user_progress.findMany({
+    const progress = await prisma.userProgress.findMany({
       where: { userId },
       include: {
-        labs: {
+        lab: {
           select: {
             id: true,
             title: true,
             difficulty: true,
             categoryId: true,
-            lab_categories: {
+            category: {
               select: {
                 id: true,
                 name: true,
@@ -254,3 +254,4 @@ router.get('/progress', authenticate, async (req: any, res: Response): Promise<v
 });
 
 export default router;
+
