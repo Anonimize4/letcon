@@ -26,7 +26,7 @@ export class App {
     this.app.use(cors({
       origin: [
         'http://localhost:5173',           // Default Vite port
-        'https://lethcon-frontend.vercel.app/ ' // Add your Vercel URL here later
+        https://lethcon-frontend.vercel.app/
       ],
       credentials: true
     }));
