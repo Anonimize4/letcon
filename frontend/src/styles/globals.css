@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* v4 equivalent of the 'content' array - replaces tailwind.config.ts content paths */
+@source "../index.html";
+@source "./**/*.{js,ts,jsx,tsx}";
+
 @theme {
   --color-htb-background: #1a2332;
   --color-htb-foreground: #a4b1cd;
