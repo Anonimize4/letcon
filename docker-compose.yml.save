@@ -1,32 +1,7 @@
-services:
-  postgres:
-    image: postgres:15-alpine
-    container_name: lethcon-postgres
-    ports:
-      - "5432:5432"
-    environment:
-      - POSTGRES_USER=johndoe
-      - POSTGRES_PASSWORD=mypassword
-      - POSTGRES_DB=cybersec_training
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - app-network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U johndoe -d cybersec_training"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  frontend:
-    build:
-      context: ./frontend
-
-  backend:
-
 volumes:
   postgres_data:
 
+services:
   frontend:
     build:
       context: ./frontend

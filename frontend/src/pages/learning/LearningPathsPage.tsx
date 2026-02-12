@@ -1,6 +1,8 @@
 const LearningPathsPage = () => {
-  // Color mapping to ensure Tailwind classes are detected at build time
-  const colorVariants: Record<string, {
+// Color mapping to ensure Tailwind classes are detected at build time
+type ColorVariantKey = 'htb-green' | 'htb-yellow' | 'htb-red';
+
+const colorVariants: Record<ColorVariantKey, {
     text: string;
     bg: string;
     gradient: string;
@@ -30,8 +32,23 @@ const LearningPathsPage = () => {
     }
   };
 
-  // Learning paths data organized by difficulty
-  const learningPaths = [
+  // Helper function to get color variant (ensures type safety)
+  const getColorVariant = (color: ColorVariantKey) => colorVariants[color];
+
+// Learning paths data organized by difficulty
+  const learningPaths: Array<{
+    id: string;
+    title: string;
+    description: string;
+    color: ColorVariantKey;
+    icon: string;
+    paths: Array<{
+      title: string;
+      description: string;
+      duration: string;
+      labs: number;
+    }>;
+  }> = [
     {
       id: 'beginner',
       title: 'Beginner',
@@ -153,10 +170,10 @@ const LearningPathsPage = () => {
             className="bg-htb-selection-background rounded-lg border border-gray-700 hover:border-gray-600 transition-all duration-300 hover:shadow-xl"
           >
             {/* Path Header */}
-            <div className={`p-6 rounded-t-lg bg-gradient-to-r ${colorVariants[path.color].gradient} to-transparent`}>
+            <div className={`p-6 rounded-t-lg bg-gradient-to-r ${getColorVariant(path.color).gradient} to-transparent`}>
               <div className="flex items-center mb-3">
                 <span className="text-3xl mr-3">{path.icon}</span>
-                <h2 className={`text-2xl font-bold ${colorVariants[path.color].text}`}>
+                <h2 className={`text-2xl font-bold ${getColorVariant(path.color).text}`}>
                   {path.title}
                 </h2>
               </div>
@@ -188,7 +205,7 @@ const LearningPathsPage = () => {
                           🧪 {item.labs} labs
                         </span>
                       </div>
-                      <button className={`${colorVariants[path.color].text} ${colorVariants[path.color].hoverText} transition-colors duration-200`}>
+                      <button className={`${getColorVariant(path.color).text} ${getColorVariant(path.color).hoverText} transition-colors duration-200`}>
                         Start →
                       </button>
                     </div>
@@ -199,7 +216,7 @@ const LearningPathsPage = () => {
 
             {/* Path Footer */}
             <div className="px-6 pb-6">
-              <button className={`w-full py-3 px-4 ${colorVariants[path.color].bg} text-htb-background font-semibold rounded-lg ${colorVariants[path.color].hoverBg} transition-colors duration-200`}>
+              <button className={`w-full py-3 px-4 ${getColorVariant(path.color).bg} text-htb-background font-semibold rounded-lg ${getColorVariant(path.color).hoverBg} transition-colors duration-200`}>
                 Explore {path.title} Path
               </button>
             </div>
@@ -238,6 +255,12 @@ const LearningPathsPage = () => {
         <div className="space-x-4">
           <button className="px-6 py-3 bg-htb-green text-htb-background font-semibold rounded-lg hover:bg-htb-bright-green transition-colors duration-200">
             Get Started Free
+
+
+
+
+
+            
           </button>
           <button className="px-6 py-3 border border-htb-bright-white text-htb-bright-white font-semibold rounded-lg hover:bg-htb-bright-white hover:text-htb-background transition-colors duration-200">
             View All Labs
