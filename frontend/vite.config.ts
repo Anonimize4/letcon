@@ -1,9 +1,10 @@
+o
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 
-// https://vitejs.dev/config/
+// https://vitejs.dev
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
@@ -30,6 +31,8 @@ export default defineConfig({
         target: 'http://localhost:5000',
         changeOrigin: true,
         secure: false,
+        // This removes /api from the URL before it hits your backend
+        rewrite: (path) => path.replace(/^\/api/, ''),
       },
       '/ws': {
         target: 'ws://localhost:5000',
