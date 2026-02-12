@@ -1,13 +1,60 @@
+
 // Unified Prisma Schema for LETHCON Platform
-// Combines user management, authentication, labs, and learning content
+// Corrected for PostgreSQL & Docker (Alpine)
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  // Essential for Docker Alpine images (node:18-alpine)
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// ENUMS
+// ============================================
+
+enum UserRole {
+  USER
+  ADMIN
+  INSTRUCTOR
+}
+
+enum TokenType {
+  ACCESS
+  REFRESH
+  PASSWORD_RESET
+  EMAIL_VERIFICATION
+}
+
+enum Difficulty {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
+}
+
+enum LessonType {
+  THEORY
+  VIDEO
+  QUIZ
+  PRACTICE
+}
+
+enum LabStatus {
+  PENDING
+  RUNNING
+  STOPPED
+  COMPLETED
+  FAILED
+}
+
+enum LabSessionStatus {
+  ACTIVE
+  PAUSED
+  FINISHED
 }
 
 // ============================================
@@ -32,12 +79,10 @@ model User {
   lastLoginAt   DateTime?
   recorded      Boolean         @default(false)
   
-  // Relations for authentication
+  // Relations
   api_keys      ApiKey[]
   refreshTokens RefreshToken[]
   tokens        Token[]
-
-  // Relations for labs and learning content
   labInstances  LabInstance[]
   submissions   ChallengeSubmission[]
   certificates  Certificate[]
@@ -75,7 +120,7 @@ model Token {
 }
 
 model ApiKey {
-  id         String    @id
+  id         String    @id @default(cuid())
   name       String
   key        String    @unique
   scopes     String[]
@@ -85,8 +130,8 @@ model ApiKey {
   lastUsedAt DateTime?
   usageCount Int       @default(0)
   createdAt  DateTime  @default(now())
-  updatedAt  DateTime
-  user       User?     @relation(fields: [userId], references: [id])
+  updatedAt  DateTime  @updatedAt
+  user       User?     @relation(fields: [userId], references: [id], onDelete: SetNull)
   
   @@map("api_keys")
 }
@@ -101,7 +146,7 @@ model LearningPath {
   description String?
   slug        String   @unique
   difficulty  Difficulty @default(BEGINNER)
-  duration    Int?     // Duration in minutes
+  duration    Int?
   isPublished Boolean  @default(false)
   isPremium   Boolean  @default(false)
   category    String?
@@ -110,7 +155,6 @@ model LearningPath {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   
-  // Relations
   modules     LearningModule[]
   prerequisites LearningPath[] @relation("PathPrerequisites")
   dependentPaths LearningPath[] @relation("PathPrerequisites")
@@ -123,13 +167,12 @@ model LearningModule {
   title         String
   description   String?
   order         Int
-  duration      Int?     // Duration in minutes
+  duration      Int?
   isPublished   Boolean  @default(false)
   learningPathId String
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
   
-  // Relations
   learningPath  LearningPath @relation(fields: [learningPathId], references: [id], onDelete: Cascade)
   lessons       Lesson[]
   
@@ -139,15 +182,14 @@ model LearningModule {
 model Lesson {
   id          String   @id @default(cuid())
   title       String
-  content     String   // Rich text content
+  content     String
   type        LessonType @default(THEORY)
   order       Int
-  duration    Int?     // Duration in minutes
+  duration    Int?
   moduleId    String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   
-  // Relations
   module      LearningModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
   
   @@map("lessons")
@@ -156,6 +198,15 @@ model Lesson {
 // ============================================
 // LAB MODELS
 // ============================================
+
+model LabCategory {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  labs        Lab[]
+
+  @@map("lab_categories")
+}
 
 model Lab {
   id             String          @id @default(cuid())
@@ -170,8 +221,8 @@ model Lab {
   thumbnail      String?
   dockerImage    String?
   port           Int?
-  commands       Json?           // Lab commands as JSON
-  environment    Json?           // Environment variables as JSON
+  commands       Json?
+  environment    Json?
   instructions   String?
   hints          String[]
   flag           String?
@@ -181,13 +232,11 @@ model Lab {
   createdAt      DateTime        @default(now())
   updatedAt      DateTime        @updatedAt
   
-  // Relations
   challenges     Challenge[]
   instances      LabInstance[]
   prerequisites  Lab[]           @relation("LabPrerequisites")
   dependentLabs  Lab[]           @relation("LabPrerequisites")
   
-  // Lab-specific relations
   certificates   Certificate[]
   enrollments    Enrollment[]
   labSessions    LabSession[]
@@ -207,14 +256,13 @@ model Challenge {
   hints       String[]
   difficulty  Difficulty @default(BEGINNER)
   points      Int      @default(100)
-  timeLimit   Int?     // Time limit in minutes
+  timeLimit   Int?
   labId       String
   order       Int
   isPublished Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   
-  // Relations
   lab         Lab @relation(fields: [labId], references: [id], onDelete: Cascade)
   submissions ChallengeSubmission[]
   
@@ -229,13 +277,12 @@ model LabInstance {
   startedAt    DateTime @default(now())
   completedAt  DateTime?
   expiresAt    DateTime?
-  containerId  String?  // Docker container ID
-  port         Int?     // Assigned port
-  metadata     Json?    // Additional instance data
+  containerId  String?
+  port         Int?
+  metadata     Json?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   
-  // Relations
   user         User @relation(fields: [userId], references: [id], onDelete: Cascade)
   lab          Lab @relation(fields: [labId], references: [id], onDelete: Cascade)
   submissions  ChallengeSubmission[]
@@ -253,9 +300,8 @@ model ChallengeSubmission {
   isCorrect    Boolean  @default(false)
   attempts     Int      @default(1)
   submittedAt  DateTime @default(now())
-  metadata     Json?    // Submission metadata
+  metadata     Json?
   
-  // Relations
   user         User @relation(fields: [userId], references: [id], onDelete: Cascade)
   challenge    Challenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
   labInstance  LabInstance @relation(fields: [labInstanceId], references: [id], onDelete: Cascade)
@@ -264,7 +310,7 @@ model ChallengeSubmission {
 }
 
 // ============================================
-// USER-LAB RELATION MODELS
+// TRACKING & REWARDS
 // ============================================
 
 model Certificate {
@@ -276,13 +322,12 @@ model Certificate {
   certificateUrl   String?
   verificationCode String?  @unique
   issuedAt         DateTime @default(now())
-  template         String?  // Certificate template URL
-  criteria         Json?    // Certificate criteria as JSON
+  template         String?
+  criteria         Json?
   isActive         Boolean  @default(true)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
   
-  // Relations
   user             User @relation(fields: [userId], references: [id], onDelete: Cascade)
   lab              Lab @relation(fields: [labId], references: [id], onDelete: Cascade)
   
@@ -298,7 +343,6 @@ model Enrollment {
   expiresAt  DateTime?
   isActive   Boolean   @default(true)
   
-  // Relations
   user       User @relation(fields: [userId], references: [id], onDelete: Cascade)
   lab        Lab @relation(fields: [labId], references: [id], onDelete: Cascade)
   
@@ -307,220 +351,43 @@ model Enrollment {
 }
 
 model LabSession {
-  id          String        @id @default(cuid())
-  userId      String
-  labId       String
-  containerId String?
-  status      SessionStatus @default(RUNNING)
-  startedAt   DateTime      @default(now())
-  endedAt     DateTime?
-  completedAt DateTime?
-  progress    Float         @default(0)
-  hintsUsed   Int           @default(0)
-  timeSpent   Int           @default(0)
-  ipAddress   String?
-  userAgent   String?
+  id         String           @id @default(cuid())
+  userId     String
+  labId      String
+  status     LabSessionStatus @default(ACTIVE)
+  startTime  DateTime         @default(now())
+  endTime    DateTime?
   
-  // Relations
-  user        User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  lab         Lab @relation(fields: [labId], references: [id], onDelete: Cascade)
-  
+  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lab        Lab              @relation(fields: [labId], references: [id], onDelete: Cascade)
+
   @@map("lab_sessions")
 }
 
 model UserProgress {
-  id             String         @id @default(cuid())
-  userId         String
-  labId          String
-  status         ProgressStatus @default(NOT_STARTED)
-  score          Float          @default(0)
-  attempts       Int            @default(0)
-  bestTime       Int?
-  totalTime      Int            @default(0)
-  firstAttemptAt DateTime?
-  lastAttemptAt  DateTime?
-  completedAt    DateTime?
-  
-  // Relations
-  user           User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  lab            Lab @relation(fields: [labId], references: [id], onDelete: Cascade)
-  
+  id          String   @id @default(cuid())
+  userId      String
+  labId       String
+  percentage  Int      @default(0)
+  lastAccess  DateTime @default(now())
+  isCompleted Boolean  @default(false)
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lab         Lab      @relation(fields: [labId], references: [id], onDelete: Cascade)
+
   @@unique([userId, labId])
   @@map("user_progress")
 }
 
-// ============================================
-// ACHIEVEMENT MODELS
-// ============================================
-
-model Achievement {
+model UserAchievement {
   id          String   @id @default(cuid())
+  userId      String
   title       String
   description String
-  icon        String?
-  badge       String?  // Badge image URL
-  points      Int      @default(0)
-  type        AchievementType @default(BRONZE)
-  criteria    Json?    // Achievement criteria as JSON
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  achievedAt  DateTime @default(now())
   
-  // Relations
-  users       UserAchievement[]
-  
-  @@map("achievements")
-}
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-model UserAchievement {
-  id            String   @id @default(cuid())
-  userId        String
-  achievementId String
-  earnedAt      DateTime @default(now())
-  metadata      Json?
-  
-  // Relations
-  user          User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
-  
-  @@unique([userId, achievementId])
   @@map("user_achievements")
-}
-
-// ============================================
-// CONTENT MANAGEMENT MODELS
-// ============================================
-
-model Category {
-  id          String   @id @default(cuid())
-  name        String   @unique
-  description String?
-  slug        String   @unique
-  parentId    String?
-  order       Int      @default(0)
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  // Relations
-  parent      Category? @relation("CategoryHierarchy", fields: [parentId], references: [id])
-  children    Category[] @relation("CategoryHierarchy")
-  
-  @@map("categories")
-}
-
-model LabCategory {
-  id          String  @id @default(cuid())
-  name        String  @unique
-  description String?
-  icon        String?
-  color       String?
-  
-  // Relations
-  labs        Lab[]
-  
-  @@map("lab_categories")
-}
-
-model SystemConfig {
-  id          String   @id @default(cuid())
-  key         String   @unique
-  value       Json
-  description String?
-  isPublic    Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  @@map("system_config")
-}
-
-// ============================================
-// SYSTEM LOGS
-// ============================================
-
-model SystemLog {
-  id        String   @id
-  level     LogLevel
-  message   String
-  metadata  Json?
-  userId    String?
-  action    String?
-  resource  String?
-  ipAddress String?
-  userAgent String?
-  createdAt DateTime @default(now())
-  
-  @@map("system_logs")
-}
-
-// ============================================
-// ENUMS
-// ============================================
-
-enum UserRole {
-  USER
-  ADMIN
-  LABCREATOR
-}
-
-enum TokenType {
-  EMAIL_VERIFICATION
-  PASSWORD_RESET
-  ACCOUNT_ACTIVATION
-}
-
-enum LogLevel {
-  DEBUG
-  INFO
-  WARN
-  ERROR
-  FATAL
-}
-
-enum Difficulty {
-  BEGINNER
-  INTERMEDIATE
-  ADVANCED
-  EXPERT
-}
-
-enum LessonType {
-  THEORY
-  PRACTICAL
-  QUIZ
-  VIDEO
-  READING
-}
-
-enum LabStatus {
-  PENDING
-  RUNNING
-  COMPLETED
-  FAILED
-  EXPIRED
-  STOPPED
-}
-
-enum AchievementType {
-  BRONZE
-  SILVER
-  GOLD
-  PLATINUM
-  DIAMOND
-}
-
-enum ProgressStatus {
-  NOT_STARTED
-  IN_PROGRESS
-  COMPLETED
-  FAILED
-}
-
-enum SessionStatus {
-  RUNNING
-  COMPLETED
-  FAILED
-  TIMEOUT
-  TERMINATED
 }
 

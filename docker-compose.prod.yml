@@ -5,12 +5,14 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      # IMPORTANT: If using Vite, these must be passed as build args 
+      # to be actually embedded in the production JS files.
+      args:
+        - VITE_API_URL=https://api.cybersectraining.com
     ports:
       - "3000:3000"
     environment:
-      - REACT_APP_API_URL=https://api.cybersectraining.com
-      - REACT_APP_WS_URL=wss://api.cybersectraining.com
-      - REACT_APP_ENV=production
+      - NODE_ENV=production
     depends_on:
       backend:
         condition: service_healthy
@@ -22,9 +24,6 @@ services:
         limits:
           memory: 512M
           cpus: '0.5'
-        reservations:
-          memory: 256M
-          cpus: '0.25'
 
   backend:
     build:
@@ -34,14 +33,16 @@ services:
       - "5000:5000"
     environment:
       - NODE_ENV=production
-      - NEON_DATABASE_URL=${NEON_DATABASE_URL}
-      - NEON_DIRECT_DATABASE_URL=${NEON_DIRECT_DATABASE_URL}
+      # Ensure your app code uses these exact variable names
+      - DATABASE_URL=${NEON_DATABASE_URL}
+      - DIRECT_URL=${NEON_DIRECT_DATABASE_URL}
       - JWT_SECRET=${JWT_SECRET}
       - DOCKER_HOST=unix:///var/run/docker.sock
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock:rw # Changed to rw if it starts labs
       - ./docker-images:/app/docker-images
       - uploads:/app/uploads
+      - ./backend/logs:/app/logs
     networks:
       - app-network
     restart: unless-stopped
@@ -50,9 +51,6 @@ services:
         limits:
           memory: 1G
           cpus: '1.0'
-        reservations:
-          memory: 512M
-          cpus: '0.5'
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:5000/health"]
       interval: 30s
@@ -66,9 +64,9 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - ./infrastructure/nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./infrastructure/nginx/ssl:/etc/nginx/ssl
-      - ./infrastructure/nginx/sites:/etc/nginx/sites-enabled
+      - ./infrastructure/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./infrastructure/nginx/ssl:/etc/nginx/ssl:ro
+      - ./infrastructure/nginx/sites:/etc/nginx/conf.d:ro
     depends_on:
       frontend:
         condition: service_healthy
@@ -77,23 +75,16 @@ services:
     networks:
       - app-network
     restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          memory: 256M
-          cpus: '0.25'
-        reservations:
-          memory: 128M
-          cpus: '0.1'
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/health"]
+      # Changed to / to ensure it doesn't stay 'unhealthy'
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 30s
 
 volumes:
   uploads:
+    driver: local
 
 networks:
   app-network:

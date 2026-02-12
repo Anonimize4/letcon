@@ -1,49 +1,53 @@
 # Dependencies
 node_modules/
+backend/node_modules/
+frontend/node_modules/
 .npm
 
-# Environment
+# Environment Files
 .env
-.env.local
-.env*.local
-.env.development
-.env.production
-.env.test
+.env.*
+!.env.example
+backend/.env*
+frontend/.env*
 
-# Backend environment files
-backend/.env
-backend/.env.local
-backend/.env.development
-backend/.env.production
-backend/.env.test
+# Prisma
+backend/prisma/*.db
+backend/prisma/*.db-journal
 
-# Frontend environment files
-frontend/.env
-frontend/.env.local
-frontend/.env.development
-frontend/.env.production
-frontend/.env.test
+# Build Outputs
+dist/
+backend/dist/
+frontend/dist/
+build/
+.out/
+.tsbuildinfo
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # Docker
 docker-data/
 *.tar
 *.tar.gz
 
-# Logs
-*.log
-logs/
-
-# IDE
+# IDE / Editors
 .vscode/
 .idea/
 *.swp
 *.swo
+.project
+.settings/
+.classpath
 
-# OS
+# OS Files
 .DS_Store
 Thumbs.db
 
-# Build
-dist/
-build/
-.out/
+# Testing
+coverage/
+.nyc_output

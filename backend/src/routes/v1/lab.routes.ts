@@ -1,13 +1,14 @@
 import { Router, Request, Response } from 'express';
 import { prisma } from '../../config/database';
-import { authenticate } from '../../middleware/auth.middleware';
 
 const router = Router();
 
+// Updated Interface to match your Auth requirements
 interface AuthenticatedRequest extends Request {
   user?: {
     userId: string;
     email: string;
+    role: string;
   };
 }
 
@@ -27,18 +28,18 @@ router.get('/', async (req: Request, res: Response) => {
       where.categoryId = categoryId;
     }
 
-    if (search) {
+    if (search && typeof search === 'string') {
       where.OR = [
         { title: { contains: search, mode: 'insensitive' } },
-        { description: { contains: search, mode: 'insensitive' } },
-        { tags: { hasSome: (tag: string) => tag === search } }
+        { description: { contains: search, mode: 'insensitive' } }
       ];
     }
 
-    const labs = await prisma.labs.findMany({
+    // FIXED: Using 'lab' (singular) and 'category' (relation name)
+    const labs = await prisma.lab.findMany({
       where,
       include: {
-        lab_categories: {
+        category: { 
           select: { id: true, name: true, color: true }
         }
       },
@@ -47,4 +48,21 @@ router.get('/', async (req: Request, res: Response) => {
       skip
     });
 
-    const total = await pr
+    const total = await prisma.lab.count({ where });
+
+    res.json({
+      labs,
+      pagination: {
+        total,
+        page: Number(page),
+        limit: Number(limit),
+        totalPages: Math.ceil(total / Number(limit))
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching labs:', error);
+    res.status(500).json({ message: 'Error fetching labs' });
+  }
+});
+
+export default router;

@@ -2,6 +2,7 @@ import express, { Application } from 'express';
 import dotenv from 'dotenv';
 import routes from './routes';
 import corsConfig from './config/cors';
+import healthCheck from './health';
 
 // Load environment variables from .env
 dotenv.config();
@@ -31,7 +32,10 @@ export class App {
     // Mount API routes with /api/v1 prefix
     this.app.use('/api/v1', routes);
     
-    // Health check endpoint
+    // Health check endpoint for docker-compose
+    this.app.get('/health', healthCheck);
+    
+    // Legacy health check endpoint
     this.app.get('/api/v1/health', (req, res) => {
       res.json({ status: 'ok', message: 'Backend is connected!' });
     });
