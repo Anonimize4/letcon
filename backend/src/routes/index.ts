@@ -9,7 +9,7 @@ import adminRoutes from './v1/admin.routes'
 import terminalRoutes from './v1/terminal.routes'
 import devRoutes from './v1/dev.routes'
 
-const router = express.Router()
+const router: express.Router = express.Router()
 
 // API routes
 router.use('/auth', authRoutes)

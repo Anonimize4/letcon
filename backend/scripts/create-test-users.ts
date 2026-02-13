@@ -9,7 +9,7 @@ interface TestUser {
   password: string
   firstName: string
   lastName: string
-  role: 'ADMIN' | 'USER' | 'LABCREATOR'
+  role: 'ADMIN' | 'USER' | 'LAB_CREATOR'
   recorded?: boolean
 }
 
@@ -36,7 +36,7 @@ const testUsers: TestUser[] = [
     password: 'Password123',
     firstName: 'Creator',
     lastName: 'LETHCON',
-    role: 'LABCREATOR',
+    role: 'LAB_CREATOR',
     recorded: true,
   },
 ]
@@ -87,7 +87,7 @@ async function createTestUsers() {
     console.log(`  Email: ${user.email}`)
     console.log(`  Password: ${user.password}`)
     console.log(`  Redirect: ${
-      user.role === 'ADMIN' ? '/admin' : user.role === 'LABCREATOR' ? '/dashboard/creator' : '/dashboard'
+      user.role === 'ADMIN' ? '/admin' : user.role === 'LAB_CREATOR' ? '/dashboard/creator' : '/dashboard'
     }`)
     console.log('')
   })

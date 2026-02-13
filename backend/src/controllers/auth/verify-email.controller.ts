@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import { prisma } from '../../config/database';
 export const verifyEmail = async (req: Request, res: Response) => {
   try {
-    const { token } = req.params;
+    const { token } = req.params as { token?: string };
 
     if (!token) {
       return res.status(400).json({

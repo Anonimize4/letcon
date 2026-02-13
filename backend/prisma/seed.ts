@@ -48,7 +48,7 @@ async function main() {
       password: labcreatorPassword,
       firstName: 'Lab',
       lastName: 'Creator',
-      role: 'LABCREATOR',
+      role: 'LAB_CREATOR',
     },
   })
   console.log('✅ Created labcreator user:', labcreator.username)

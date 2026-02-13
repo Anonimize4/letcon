@@ -19,7 +19,7 @@ import {
   tokenParamValidation
 } from '../../schemas/auth.validation';
 
-const router = Router();
+const router: Router = Router();
 
 // Register new user
 router.post('/register', registerValidation, register);

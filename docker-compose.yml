@@ -20,8 +20,8 @@ services:
 
   backend:
     build:
-      context: ./backend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: backend/Dockerfile
     container_name: lethcon-backend
     ports:
       - "5000:5000"
@@ -44,8 +44,8 @@ services:
 
   frontend:
     build:
-      context: ./frontend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: frontend/Dockerfile
     container_name: lethcon-frontend
     ports:
       - "3000:3000"

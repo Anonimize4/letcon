@@ -2,7 +2,7 @@ import { Router, Response } from 'express';
 import { prisma } from '../../config/database';
 import { authenticate } from '../../middleware/auth.middleware';
 
-const router = Router();
+const router: Router = Router();
 
 // Get current user profile
 router.get('/profile', authenticate, async (req: any, res: Response): Promise<void> => {
@@ -195,7 +195,7 @@ router.get('/lab-sessions', authenticate, async (req: any, res: Response): Promi
           }
         }
       },
-      orderBy: { startedAt: 'desc' },
+      orderBy: { startTime: 'desc' },
       take: Number(limit),
       skip: Number(offset)
     });
@@ -237,7 +237,7 @@ router.get('/progress', authenticate, async (req: any, res: Response): Promise<v
           }
         }
       },
-      orderBy: { lastAttemptAt: 'desc' }
+      orderBy: { lastAccess: 'desc' }
     });
 
     res.json({

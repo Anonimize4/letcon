@@ -1,7 +1,7 @@
 import express from 'express';
 import { Router } from 'express';
 
-const router = Router();
+const router: Router = Router();
 
 // Community routes
 router.get('/forums', (req, res) => {

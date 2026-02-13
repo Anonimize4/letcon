@@ -1,7 +1,7 @@
 import express from 'express';
 import { Router } from 'express';
 
-const router = Router();
+const router: Router = Router();
 
 // Challenge routes
 router.get('/', (req, res) => {

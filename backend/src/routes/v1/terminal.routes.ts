@@ -9,7 +9,7 @@ import {
 } from '../../controllers/terminal.controller'
 import { authenticate } from '../../middleware/auth.middleware'
 
-const router = Router()
+const router: Router = Router()
 
 /**
  * @route   POST /api/v1/terminal/sessions

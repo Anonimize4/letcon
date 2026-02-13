@@ -49,7 +49,7 @@ export const createTerminalSession = async (req: Request, res: Response) => {
  */
 export const getTerminalSession = async (req: Request, res: Response) => {
   try {
-    const { sessionId } = req.params;
+    const { sessionId } = req.params as { sessionId?: string };
     const userId = req.user?.userId;
 
     if (!userId) {
@@ -111,7 +111,7 @@ export const getTerminalSession = async (req: Request, res: Response) => {
  */
 export const terminateTerminalSession = async (req: Request, res: Response) => {
   try {
-    const { sessionId } = req.params;
+    const { sessionId } = req.params as { sessionId?: string };
     const userId = req.user?.userId;
 
     if (!userId) {

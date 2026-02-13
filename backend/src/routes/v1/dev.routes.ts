@@ -2,7 +2,7 @@ import { Router, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import config from '../../config/env';
 import { prisma } from '../../config/database';
-const router = Router();
+const router: Router = Router();
 
 // Guard all routes in this file behind env flag
 const ensureBypassEnabled = (req: Request, res: Response) => {

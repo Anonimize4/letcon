@@ -20,6 +20,7 @@ enum UserRole {
   USER
   ADMIN
   INSTRUCTOR
+  LAB_CREATOR
 }
 
 enum TokenType {
@@ -202,6 +203,7 @@ model Lesson {
 model LabCategory {
   id          String   @id @default(cuid())
   name        String   @unique
+  color       String?
   description String?
   labs        Lab[]
 

@@ -14,11 +14,6 @@ build
 .env.*
 !.env.example
 
-# Database files
-*.sqlite
-*.sqlite3
-*.db
-
 # Logs
 logs
 *.log
@@ -100,6 +95,8 @@ tests
 __tests__
 *.test.js
 *.spec.js
+*.test.tsx
+*.spec.tsx
 
 # Documentation
 docs
@@ -118,3 +115,6 @@ dev-tools
 Dockerfile*
 docker-compose*
 .dockerignore
+
+# Vite specific
+.vite

@@ -1,7 +1,7 @@
 import { Router, Request, Response } from 'express';
 import { prisma } from '../../config/database';
 
-const router = Router();
+const router: Router = Router();
 
 // Updated Interface to match your Auth requirements
 interface AuthenticatedRequest extends Request {

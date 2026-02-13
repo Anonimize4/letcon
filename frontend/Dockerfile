@@ -1,20 +1,30 @@
 # --- Stage 1: Build ---
-FROM node:18-alpine AS builder
+FROM node:22-alpine AS builder
+
+# Install build dependencies for Vite 7
+RUN apk add --no-cache libc6-compat
+
 WORKDIR /app
 
-# Copy package files first for better caching
-# (Make sure package-lock.json exists in your frontend folder!)
+# Copy root configs needed for inheritance
+COPY tsconfig.base.json ./
 COPY package*.json ./
-RUN npm ci
+COPY package-lock.json ./
 
-# Copy configuration and source
-COPY tsconfig*.json ./
-COPY vite.config.ts ./
-COPY public/ ./public/
-COPY src/ ./src/
+# Install root dependencies (includes TypeScript)
+RUN npm ci --legacy-peer-deps
 
-# Build steps
-RUN npm run type-check
+# Copy frontend specific metadata
+COPY frontend/package*.json ./frontend/
+
+# Install frontend dependencies
+WORKDIR /app/frontend
+RUN npm ci --legacy-peer-deps
+
+# Copy the rest of the frontend source
+COPY frontend/ ./
+
+# Build steps with Vite 7 compatibility
 RUN npm run build
 
 # --- Stage 2: Production ---
@@ -24,10 +34,10 @@ FROM nginx:alpine AS production
 RUN apk add --no-cache wget
 
 # Copy built static files to Nginx html directory
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/frontend/dist /usr/share/nginx/html
 
 # Copy nginx configuration
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY frontend/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Security: Set up non-root user and fix permissions for Nginx folders
 RUN touch /var/run/nginx.pid && \

@@ -2,7 +2,7 @@ import express from 'express';
 import { Router } from 'express';
 import { authenticate, authorize } from '../../middleware/auth.middleware';
 
-const router = Router();
+const router: Router = Router();
 
 // All admin routes require authentication and admin role
 router.use(authenticate);
